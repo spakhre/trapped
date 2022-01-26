@@ -1,3 +1,5 @@
+package com.trapped;
+
 public class GameEngine {
 
     public void startGame(){

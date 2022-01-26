@@ -1,3 +1,5 @@
+package com.trapped.utilities;
+
 public class Puzzles {
     String name;
     String location;
