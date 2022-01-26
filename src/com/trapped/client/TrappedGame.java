@@ -1,6 +1,12 @@
+package com.trapped.client;
+
+import com.trapped.player.Player;
+import com.trapped.utilities.Furnitures;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.*;
+import java.util.List;
+import java.util.Scanner;
 
 public class TrappedGame {
     ArrayList<Furnitures> map;
@@ -23,8 +29,8 @@ public class TrappedGame {
             Scanner input = new Scanner(System.in);
 
             System.out.println("Welcome to Trapped game, in this game you have certain quests and you can pick options each time. " +
-                    "There are different furnitures where you can inspect and pickup items and use items to solve puzzles.  "
-                    + "If you solve all the puzzles, you will get all clues to unlock the door.");
+                    "\nThere are different furnitures where you can inspect and pickup items and use items to solve puzzles.  "
+                    + "\nIf you solve all the puzzles, you will get all clues to unlock the door.");
             System.out.println("--------------------------------");
 
             System.out.println("What is your name: ");

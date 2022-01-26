@@ -1,3 +1,8 @@
+package com.trapped.player;
+
+import com.trapped.utilities.Furnitures;
+import com.trapped.utilities.Items;
+
 import java.util.HashMap;
 import java.util.Map;
 

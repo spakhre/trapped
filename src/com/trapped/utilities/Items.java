@@ -1,4 +1,4 @@
-// Items class defines furnitures, items players gonna use to solve puzzles, and puzzles.
+package com.trapped.utilities;// com.trapped.utilities.Items class defines furnitures, items players gonna use to solve puzzles, and puzzles.
 
 public class Items {
     String name;
