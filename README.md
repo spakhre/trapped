@@ -19,7 +19,7 @@ The game takes place in a mysterious room. The player has to explore the room, l
 - ...
 - ..
 
-## Used Programming skills
+## Release Version
 * V1.0
 
 ## Contributors
