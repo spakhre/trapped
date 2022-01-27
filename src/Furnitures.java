@@ -1,5 +1,3 @@
-package com.trapped.utilities;
-
 import java.util.List;
 
 public class Furnitures {
