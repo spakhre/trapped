@@ -1,9 +1,13 @@
 package com.trapped.utilities;
 
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Scanner;
+
 
 /*
  * File manager can read data from files
@@ -16,10 +20,12 @@ public class FileManager {
     private FileOutputStream out = null;
     private Scanner scanner = new Scanner(System.in);
 
-    public void getResource (String fileName) throws IOException {
+    public static void getResource(String fileName) throws IOException {
         String art = "resources/" + fileName;
         var out = new BufferedOutputStream(System.out);
         Files.copy(Path.of(art), out);
         out.flush();
     }
+
 }
+

@@ -3,40 +3,75 @@ package com.trapped.client;
 import com.trapped.player.Player;
 import com.trapped.utilities.Furnitures;
 
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import java.awt.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Stream;
 
 public class TrappedGame {
+
     ArrayList<Furnitures> map;
     Player player;
+
 
     List<String> commands = new ArrayList<>(Arrays.asList("look","inspect","pick up","use","left","right"));
     List<String> items_needed = new ArrayList<>(Arrays.asList("crowbar","yellow key","blank paper"));
 
-    //constructor
-    public TrappedGame(){
-        this.map = new ArrayList<Furnitures>();
-        map.add(new Furnitures("bed","a oak color bed that you wake up from",List.of("laptop","match"),List.of(""),"door","window","",""));
-        map.add(new Furnitures("door","a door which is locked",List.of("laptop","match"),List.of(""),"lock","window","bed",""));
-        map.add(new Furnitures("window","a window which is locked",List.of("laptop","match"),List.of(""),"bed","door","",""));
+
+    public static void main(String[] args) throws IOException, InterruptedException {
+            startGame();
+            Player.move();
+    }
+
+
+    public static void readMessageSlowly(String message, int sec) throws InterruptedException {
+        char[] chars = message.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            System.out.print(chars[i]);
+            Thread.sleep(sec);
+        }
+    }
+
+    public static void startGame() throws IOException, InterruptedException {
+        Scanner input = new Scanner(System.in);
+        String greeting = convertTxtToString("greeting.txt");
+        readMessageSlowly(greeting,20);
+
+
+        System.out.println();
+        System.out.println("--------------------------------");
+
+        System.out.println("What is your name: ");
+        String name = input.next();
+        System.out.println();
+        System.out.println("--------------------------------");
+
+        String intro = convertTxtToString("introstory.txt");
+        readMessageSlowly(intro,10);
 
     }
 
-    public static void main(String[] args) {
+    public static String convertTxtToString(String fileName){
+        String file = "resources/" + fileName;
+        Path path = Paths.get(file);
 
-            Scanner input = new Scanner(System.in);
+        StringBuilder sb = new StringBuilder();
 
-            System.out.println("Welcome to Trapped game, in this game you have certain quests and you can pick options each time. " +
-                    "\nThere are different furnitures where you can inspect and pickup items and use items to solve puzzles.  "
-                    + "\nIf you solve all the puzzles, you will get all clues to unlock the door.");
-            System.out.println("--------------------------------");
 
-            System.out.println("What is your name: ");
-            String name = input.next();
-            System.out.println("--------------------------------");
+        try (Stream<String> stream = Files.lines(path)) {
+            stream.forEach(s -> sb.append(s).append("\n"));
+        } catch (IOException ex) {
+            // Handle exception
+        }
 
             int opt[] = {1,2,3,4};
             String menuDesc[] = {"Something1", "Something2","Continue", "Quit" };
@@ -70,6 +105,9 @@ public class TrappedGame {
         }
         System.out.println("what do you want to do");
 
+
+        String contents = sb.toString();
+        return contents;
     }
 
 
