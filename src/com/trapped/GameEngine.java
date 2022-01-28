@@ -13,19 +13,19 @@ public class GameEngine {
     public static void startGame() throws IOException, InterruptedException {
         Scanner scanner = new Scanner(System.in);   //setting up for user input
         while (true) {
-            fileManager.getResource("splash_screen.txt");   // displaying splash screen
+            fileManager.getResource("./splash_screen.txt");   // displaying splash screen
 
             System.out.println("\nPlease select an option from the menu.");
             int userInput = scanner.nextInt();
 
             switch (userInput) {
                 case 1:   //currently, being occupied by the quit option
-                    FileManager.readMessageSlowly("greeting.txt", 0);
+                    FileManager.readMessageSlowly("greeting.txt", 10);
                     System.out.println("\n--------------------------------");
                     System.out.println("What is your name: ");
                     String name = scanner.next();
                     System.out.println("\n--------------------------------");
-                    FileManager.readMessageSlowly("introstory.txt", 0);
+                    FileManager.readMessageSlowly("introstory.txt", 10);
                     playGame();
                 case 2:
                     System.out.println("Exiting the game. Thank you for playing");
