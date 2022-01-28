@@ -11,40 +11,50 @@ import java.util.*;
 public class Player {
     //Map<String, Items> inventory = new HashMap<String, Items>(); // player's inventory
     public static String location = "bed";
-    String[] inventory = {};
+    static List<String> inventory = new ArrayList<>();
+
+    // read Json file
+    static Gson gson = new Gson();
+    static Reader reader;
+
+    static {
+        try {
+            reader = Files.newBufferedReader(Paths.get("resources/everything.json"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    static Map<String, Map<String, Object>> map = gson.fromJson(reader, Map.class);
 
     // constructor
-    public Player() {
+    public Player() throws IOException {
 
     }
 
-    public void inspectItem() {
-
+    public static void inspectItem() {
+        Map<String, Object> furniture = map.get(location);
+        System.out.println("Inspecting...\nYou found: "+ furniture.get("items"));
     }
 
-    public void pickUpItem() {
 
-    }
 
     // eg. use key with Window; solve puzzle
     public void useItem() {
 
     }
 
-    public void checkCurrentInventory() {
-
+    public static void checkCurrentInventory() {
+        inventory.add("matches");
+        System.out.println(inventory);
     }
 
     public static void move() throws IOException {
         String[] validDirection = {"left", "right", "up", "down"};
-        // read Json file
-        Gson gson = new Gson();
-        Reader reader = Files.newBufferedReader(Paths.get("resources/everything.json"));
-        Map<String, Map<String, Object>> map = gson.fromJson(reader, Map.class);
 
         // Extract the current furniture to get the inner available directions
         Map<String, Object> furniture = map.get(location);
-        List availableDirections = (ArrayList<String>) furniture.get("availableDirections");
+        List availableDirections = (ArrayList<String>)furniture.get("availableDirections");
         String desc = (String) furniture.get("desc");
 
 
@@ -56,7 +66,8 @@ public class Player {
         boolean contain = availableDirections.contains(dir);
         if (Arrays.asList(validDirection).contains(dir)) {
             if (contain) {
-                location = (String) furniture.get(dir);
+                String newlocation = (String) furniture.get(dir);
+                location = newlocation;
                 System.out.println("Now you are in front of " + location);
             } else {
                 System.out.println("Sorry, you can't go that way. Please select again.");
@@ -65,10 +76,19 @@ public class Player {
             System.out.println("invalid input, please try again.");
         }
 
-    }
 
-    public static String checkCurrentLocation() {
-        return location;
+    }
+    public static void pickUpItem() {
+        Map<String, Object> furniture = map.get(location);
+
+        ArrayList<Object> items = (ArrayList<Object>)furniture.get("items");
+        ArrayList<String> strList = (ArrayList<String>)(ArrayList<?>)(items);
+        inventory.addAll(strList);
+
+        System.out.println("Added "+ strList + "to your inventory");
+    }
+    public static void checkCurrentLocation() {
+        System.out.println(location);
     }
 
     public static String checkResult() {
