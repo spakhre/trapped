@@ -20,7 +20,7 @@ The game takes place in a mysterious room. The player has to explore the room, l
 - ..
 
 ## Release Version
-* V1.0
+* V1.1
 
 ## Contributors
 * Justin Hammel, Sushma Pakhreen, Zoe Ji
@@ -28,6 +28,6 @@ The game takes place in a mysterious room. The player has to explore the room, l
 ## Quickstart
 * Clone the project and `cd` into it in your terminal
 * Run project:
-- On **MacOS** run`xxxxxxxx` and follow the instruction on the screen
-- On **Windows** run `xxxxxxx` in order for the program to run correctly
-* _Note:_ The project runs on Java 11.
+- On **MacOS** run`Main.java` and follow the instruction on the screen
+- On **Windows** run `Main.java` in order for the program to run correctly
+* _Note:_ The project runs on Java 11. Need to add GSON 2.8.9 as a library.

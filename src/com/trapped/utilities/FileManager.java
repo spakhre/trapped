@@ -23,7 +23,7 @@ public class FileManager {
     private Scanner scanner = new Scanner(System.in);
 
     public static void getResource(String fileName) throws IOException {
-        String art = "resources/" + fileName;
+        String art = "./resources/" + fileName;
         var out = new BufferedOutputStream(System.out);
         Files.copy(Path.of(art), out);
         out.flush();
@@ -37,7 +37,7 @@ public class FileManager {
         }
     }
     public static String convertTxtToString(String fileName){
-        String file = "resources/" + fileName;
+        String file = "./resources/" + fileName;
         Path path = Paths.get(file);
         StringBuilder sb = new StringBuilder();
 
