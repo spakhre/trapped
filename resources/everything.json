@@ -3,24 +3,44 @@
     "desc" : "a light oak bed",
     "availableDirections":["left","right"],
     "left": "door",
-    "right": "window",
-    "items": "match"
+    "right": "picture with safe",
+    "items": ["match"]
     },
  "door": {
     "name": "door",
     "desc" : "a locked door, it has a lock which require a 3-digit password to unlock it",
     "availableDirections":["left","right"],
-    "left": "window",
+    "left": "window with curtain",
     "right": "bed",
-    "items": "lock"
+    "items": "lock",
+    "puzzle": "input password"
  },
- "window": {
+ "window with curtain": {
     "name": "window",
     "desc": "a locked glass window",
     "availableDirections":["left","right"],
-    "left": "bed",
+    "left": "desk with drawers",
     "right": "door",
-    "items": "yellow key"
- }
-
- }
+    "items": ["a yellow key","a hook"],
+    "puzzle": "open the window (with crowbar to get the key), open the curtain(to get the hook)"
+ },
+  "desk with drawers": {
+    "name": "desk",
+    "desc": "a desk",
+    "availableDirections":["left","right"],
+    "left": "picture with safe",
+    "right": "window with curtain",
+    "items": ["laptop","candle","phone","a piece of blank paper"],
+    "puzzle": "solve the riddles"
+  },
+  "picture with safe": {
+    "name": "picture",
+    "desc": "a picture",
+    "availableDirections":["left","right"],
+    "left": "bed",
+    "right": "desk with drawers",
+    "items": ["a crowbar"],
+    "status": "open",
+    "puzzle": "math puzzle"
+  }
+}

@@ -1,13 +1,8 @@
 package com.trapped.client;
 
 import com.trapped.GameEngine;
-import com.trapped.player.Player;
-import com.trapped.utilities.FileManager;
-import com.trapped.utilities.Furnitures;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Scanner;
 
 public class TrappedGame {
 //    ArrayList<Furnitures> map;
@@ -16,6 +11,7 @@ public class TrappedGame {
     public static void main(String[] args) throws IOException, InterruptedException {
         GameEngine game = new GameEngine();
         game.startGame();
+
     }
 
 //    public static void startGame() throws IOException, InterruptedException {

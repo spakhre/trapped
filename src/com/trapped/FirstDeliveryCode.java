@@ -1,6 +1,5 @@
 //package com.trapped;
 //
-//import com.trapped.client.TrappedGame;
 //import com.trapped.player.Player;
 //
 //import java.io.IOException;
@@ -8,7 +7,7 @@
 //
 //public class FirstDeliveryCode {
 //     public static void main(String[] args) throws IOException, InterruptedException {
-//      TrappedGame.startGame();
+//      GameEngine.startGame();
 //      Player.move();
 //
 //      Scanner scan = new Scanner(System.in);
