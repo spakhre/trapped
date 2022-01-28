@@ -39,11 +39,10 @@ public class GameEngine {
     }
 
     public static void playGame() throws IOException {
-        Player.move();
-        Player.checkCurrentLocation();
-        Player.pickUpItem();
-        Player.checkCurrentInventory();
+        while(true) {
+            Player.move();
 
+        }
     }
 
     public void gameMenu() {

@@ -1,46 +1,55 @@
 {"bed": {
     "name": "bed",
     "desc" : "a light oak bed",
-    "availableDirections":["left","right"],
-    "left": "door",
-    "right": "picture with safe",
-    "items": ["match"]
+    "availableDirections":["go left","go right"],
+    "go left": "door",
+    "go right": "picture with safe",
+    "items": ["matches"],
+    "puzzle": []
     },
  "door": {
     "name": "door",
     "desc" : "a locked door, it has a lock which require a 3-digit password to unlock it",
-    "availableDirections":["left","right"],
-    "left": "window with curtain",
-    "right": "bed",
-    "items": "lock",
-    "puzzle": "input password"
+   "availableDirections":["go left","go right"],
+    "go left": "window with curtain",
+    "go right": "bed",
+    "items": ["lock"],
+    "puzzle":[],
+    "final_puzzle": "input password",
+    "final_answer": "104",
+    "reward": "You've got it right! The door is now unlocked!"
  },
  "window with curtain": {
     "name": "window",
     "desc": "a locked glass window",
-    "availableDirections":["left","right"],
-    "left": "desk with drawers",
-    "right": "door",
+   "availableDirections":["go left","go right"],
+    "go left": "desk with drawers",
+    "go right": "door",
     "items": ["a yellow key","a hook"],
-    "puzzle": "open the window (with crowbar to get the key), open the curtain(to get the hook)"
+    "puzzle":[]
  },
   "desk with drawers": {
     "name": "desk",
     "desc": "a desk",
-    "availableDirections":["left","right"],
-    "left": "picture with safe",
-    "right": "window with curtain",
-    "items": ["laptop","candle","phone","a piece of blank paper"],
-    "puzzle": "solve the riddles"
+    "availableDirections":["go left","go right"],
+    "go left": "picture with safe",
+    "go right": "window with curtain",
+    "items": ["laptop", "candle", "phone", "a piece of blank paper"],
+    "puzzle": ["please enter result of 789*456","please enter pinyin for 你好","What did the Romans call Scotland?"],
+    "puzzle_easy": "please enter result of 2+2",
+    "answer": ["359784","nihao","Caledonia"],
+    "answer_easy": "4",
+    "reward": "You are right! You unlocked the drawer",
+    "reward_item": ["a notes with a number: 104"]
   },
   "picture with safe": {
     "name": "picture",
     "desc": "a picture",
-    "availableDirections":["left","right"],
-    "left": "bed",
-    "right": "desk with drawers",
+    "availableDirections":["go left","go right"],
+    "go left": "bed",
+    "go right": "desk with drawers",
     "items": ["a crowbar"],
     "status": "open",
-    "puzzle": "math puzzle"
+    "puzzle":[]
   }
 }
