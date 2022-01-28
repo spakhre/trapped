@@ -1,6 +1,7 @@
 {"bed": {
     "name": "bed",
     "desc" : "a light oak bed",
+    "picture": "doorWall.txt",
     "availableDirections":["go left","go right"],
     "go left": "door",
     "go right": "picture with safe",

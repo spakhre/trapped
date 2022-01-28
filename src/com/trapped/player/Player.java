@@ -1,6 +1,7 @@
 package com.trapped.player;
 
 import com.google.gson.Gson;
+import com.trapped.utilities.FileManager;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -62,19 +63,25 @@ public class Player {
         // Extract the current furniture to get the inner available directions
         Map<String, Object> furniture = map.get(location);
         List availableDirections = (ArrayList<String>)furniture.get("availableDirections");
+
+        if (furniture.containsKey("picture")){
+            String picture = (String) furniture.get("picture");
+            FileManager.getResource(picture);
+        }
+
         String desc = (String) furniture.get("desc");
 
-
-
         Scanner scan = new Scanner(System.in);
-        System.out.println("You are currently in front of " + location);
+        System.out.println("\nYou are currently in front of " + location);
+
         System.out.println("It is "+ desc);
         inspectItem(location);
         pickUpItem(location);
         checkCurrentInventory();
         checkIfPuzzle();
-        System.out.println("Which direction do you want to go? Available directions: " + availableDirections);
+        System.out.println("Which direction do you want to go? Available directions: " + availableDirections + " (or enter [quit] to quit game)");
         String dir = scan.nextLine();
+        quitGame(dir);
 
 
         boolean contain = availableDirections.contains(dir);
@@ -180,6 +187,11 @@ public class Player {
     public static String checkResult() {
         return "";
     }
-
+    public static void quitGame(String input){
+        if (input.equals("quit")){
+            System.out.println("Quiting game... Have a nice day!");
+            System.exit(0);
+        }
+    }
 }
 

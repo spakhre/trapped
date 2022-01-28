@@ -20,12 +20,12 @@ public class GameEngine {
 
             switch (userInput) {
                 case 1:   //currently, being occupied by the quit option
-                    FileManager.readMessageSlowly("greeting.txt", 10);
+                    FileManager.readMessageSlowly("greeting.txt", 0);
                     System.out.println("\n--------------------------------");
                     System.out.println("What is your name: ");
                     String name = scanner.next();
                     System.out.println("\n--------------------------------");
-                    FileManager.readMessageSlowly("introstory.txt", 10);
+                    FileManager.readMessageSlowly("introstory.txt", 0);
                     playGame();
                 case 2:
                     System.out.println("Exiting the game. Thank you for playing");
