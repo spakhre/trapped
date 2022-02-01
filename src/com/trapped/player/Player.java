@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.trapped.GameEngine;
 import com.trapped.utilities.FileManager;
 import com.trapped.utilities.Sounds;
+import com.trapped.utilities.TextColor;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -21,6 +22,7 @@ public class Player implements Serializable{
     public static String location="bed";
     static List<String> inventory = new ArrayList<>();
     static GameEngine game = new GameEngine();
+    static Scanner scan = new Scanner(System.in);
 
     // read Json file
     static Gson gson = new Gson();
@@ -94,7 +96,7 @@ public class Player implements Serializable{
 
         String furniture_desc = (String) furniture.get("furniture_desc");
 
-        Scanner scan = new Scanner(System.in);
+
         if(furniture.keySet().contains(furniture.get("furniture_sounds"))) {
             if (!furniture.get("furniture_sounds").equals("")) {
                 String soundFileName = (String) furniture.get("furniture_sounds");
@@ -103,16 +105,16 @@ public class Player implements Serializable{
                 ;
             }
         }
-        System.out.println("\nYou are currently in front of " + location);
+        System.out.println("\nYou are currently in front of " + TextColor.YELLOW_BACKGROUND + TextColor.RED + location + TextColor.RESET);
 
         System.out.println(furniture_desc);
         inspectItem(location);
         pickUpItem(location);
         checkCurrentInventory();
         solvePuzzle(location);
-        System.out.println("Which direction do you want to go? Available directions: " + furniture_available_directions + " (or enter [quit] to quit game, " +
-                "[play again] to replay the game,[drop] an item from current inventory)");
+        System.out.println("Which direction do you want to go? Available directions: " + furniture_available_directions + " (or type HELP for additional information)");
         String dir = scan.nextLine();
+        gameMenu(dir);
         //quitGame(dir);
         //playAgain(dir);
 
@@ -140,12 +142,18 @@ public class Player implements Serializable{
         Map<String, Object> furniture = map.get(location);
         String furniture_items = (String)furniture.get("furniture_items");;
 
-        if(inventory.contains(furniture_items)){
+        if(furniture_items.isEmpty()){
             System.out.println(location + " is empty. Nothing can be added.");
-        } else{
-            System.out.println("You've found: "+furniture_items+" from " + location);
-                System.out.println(furniture_items + " has been picked up and added to your inventory");
-                inventory.add(furniture_items);
+        } else if(!inventory.contains(furniture_items)){
+                System.out.println("\nYou've found: "+furniture_items+" from " + "\nDo you want to add it? [Y/N]");
+                String response = scan.nextLine();
+                if(response.equalsIgnoreCase("Y")){
+                    System.out.println(furniture_items + " has been picked up and added to your inventory");
+                    inventory.add(furniture_items);
+                }else if(response.equalsIgnoreCase("N")){
+                    System.out.println("You did not pick anything from " + location );
+                }
+
             }
     }
     public static void checkCurrentLocation() {
@@ -157,10 +165,26 @@ public class Player implements Serializable{
     public static String checkResult() {
         return "";
     }
-    public static void quitGame(String input){
-            System.out.println("Quiting game... Have a nice day!");
-            System.exit(0);
 
+    public static void gameMenu(String input) throws IOException, UnsupportedAudioFileException, LineUnavailableException, URISyntaxException, InterruptedException {
+
+        if(input.equalsIgnoreCase("Help")){
+            System.out.println("-----------------------");
+            System.out.println("\nHere are your options?");
+            FileManager.getResource("helperMenu.txt");
+
+            System.out.println("\nWhat do you want to do?");
+            String selection = scan.nextLine();
+            if (selection.equalsIgnoreCase("where am I?") || selection.equals("1")) {
+                System.out.println("you are at " + location );
+            } else if (selection.equalsIgnoreCase("Restart")|| selection.equals("2")) {
+                System.out.println("Game Restarting");
+                GameEngine.startGame();
+            } else if (selection.equalsIgnoreCase("exit")|| selection.equals("4"))  {
+                System.out.println("Quitting the Game. See you next time.");
+                System.exit(0);
+            }
+        }
     }
     public static void playAgain(String input) throws IOException, URISyntaxException, InterruptedException, UnsupportedAudioFileException, LineUnavailableException {
         if (input.equals("again") || (input.equals("play again"))){
@@ -294,7 +318,8 @@ public class Player implements Serializable{
 
         if (verb.equals(quit) || quit_value.toString().contains(verb)) {
             if (noun.equals("game") || (noun.equals(""))) {
-                quitGame("quit");
+                //TODO- Review quit game strategy
+                //quitGame("quit");
             }
         }
 

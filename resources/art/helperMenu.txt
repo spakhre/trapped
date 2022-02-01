@@ -1,0 +1,4 @@
+1. Where am I?
+2. Restart
+3. Continue the game
+4. Quit Game
