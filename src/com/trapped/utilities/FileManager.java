@@ -32,7 +32,7 @@ public class FileManager {
      */
 
     public static void getResource(String fileName) throws IOException {
-        String art = "./resources/" + fileName;
+        String art = "./resources/art/" + fileName;
         var out = new BufferedOutputStream(System.out);
         Files.copy(Path.of(art), out);
         out.flush();
@@ -77,7 +77,7 @@ public class FileManager {
      * Usage example: Map<String, ArrayList<String>> map = FileManager.loadJson("filename.json")
      */
     public static Map<String, ArrayList<String>> loadJson(String fileName) throws IOException {
-        String file = "./resources/" + fileName;
+        String file = "./resources/cfg/" + fileName;
         Reader reader = Files.newBufferedReader(Paths.get(file));
         Gson gson = new Gson();
         Map<String, ArrayList<String>> map = gson.fromJson(reader, Map.class);
