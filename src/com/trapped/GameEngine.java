@@ -3,6 +3,7 @@ package com.trapped;
 import com.trapped.player.Player;
 import com.trapped.utilities.FileManager;
 import com.trapped.utilities.Sounds;
+import com.trapped.utilities.TextColor;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -20,8 +21,9 @@ public class GameEngine implements Serializable {
         while (true) {
             fileManager.getResource("./splash_screen.txt");   // displaying splash screen
 
-            System.out.println("\nPlease select an option from the menu.");
+            System.out.println(TextColor.RED + "\nPlease select an option from the menu." + TextColor.RESET);
             int userInput = scanner.nextInt();
+
 
             switch (userInput) {
                 case 1:   //currently, being occupied by the quit option
