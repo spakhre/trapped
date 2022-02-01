@@ -1,18 +1,15 @@
 package com.trapped.utilities;
 
-import java.io.*;
+import com.google.gson.Gson;
 
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Stream;
-
-import com.google.gson.*;
-import com.google.gson.internal.LinkedTreeMap;
 
 /*
  * File manager can read data from files
@@ -80,10 +77,10 @@ public class FileManager {
         String file = "./resources/cfg/" + fileName;
         Reader reader = Files.newBufferedReader(Paths.get(file));
         Gson gson = new Gson();
-        Map<String, ArrayList<String>> map = gson.fromJson(reader, Map.class);
+        Map<String, ArrayList<String>> map1 = gson.fromJson(reader, Map.class);
         reader.close();
 
-        return map;
+        return map1;
     }
 
     /*
@@ -91,4 +88,3 @@ public class FileManager {
      */
 
 }
-
