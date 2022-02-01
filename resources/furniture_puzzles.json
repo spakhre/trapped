@@ -8,7 +8,7 @@
       "right"
     ],
     "left": "door",
-    "right": "picture with safe",
+    "right": "safe",
     "furniture_items": "matches",
     "puzzle_exist": "N"
   },
@@ -16,7 +16,7 @@
     "name": "door",
     "furniture_desc": "a locked door with a keypad, it has a lock which require a 3-digit password to unlock it",
     "furniture_available_directions": ["left", "right"],
-    "left": "window with curtain",
+    "left": "window",
     "right": "bed",
     "furniture_objects": ["keypad"],
     "furniture_sounds": "door_close.wav",
@@ -32,8 +32,8 @@
     "puzzle_sounds": "",
     "puzzle_picture_filename": ""
   },
-  "window with curtain": {
-    "name": "window with curtain",
+  "window": {
+    "name": "window",
     "furniture_desc": "a locked glass window",
     "furniture_available_directions": [
       "left",
@@ -41,7 +41,7 @@
     ],
     "left": "drawer",
     "right": "door",
-    "furniture_items": "keyD",
+    "furniture_items": "",
     "furniture_sounds": "",
     "objects": [
       "lock"
@@ -62,13 +62,14 @@
   "drawer": {
     "name": "drawer",
     "furniture_desc": "a locked drawer",
+    "furniture_items": "",
     "puzzle_desc": "You need to open the drawer",
     "furniture_available_directions": [
       "left",
       "right"
     ],
-    "left": "picture with safe",
-    "right": "window with curtain",
+    "left": "safe",
+    "right": "window",
     "puzzle_exist": "Y",
     "puzzle_filename": [],
     "puzzle_hint": "you probably need a key",
@@ -81,7 +82,7 @@
     "puzzle_sounds": "",
     "puzzle_picture_filename": ""
   },
-  "picture with safe": {
+  "safe": {
     "name": "safe",
     "furniture_available_directions": [
       "left",
@@ -89,22 +90,23 @@
     ],
     "left": "bed",
     "right": "drawer",
+    "furniture_items": "",
     "furniture_desc": "a high security safe",
     "puzzle_exist": "Y",
     "puzzle_desc": "Please solve the following puzzle to open the safe:",
     "puzzle_filename": [
-      "riddles1",
-      "riddles2",
-      "riddles3"
+      "riddles1.txt",
+      "riddles2.txt",
+      "riddles3.txt"
     ],
     "puzzle_reward": "You opened the safe...",
     "puzzle_verb": "",
     "puzzle_itemsNeeded": "",
     "puzzle_reward_item": "crowbar",
     "multiple_puzzle_answer": [
-      6,
-      2,
-      0
+      "6",
+      "2",
+      "0"
     ],
     "puzzle_sounds": "",
     "puzzle_picture_filename": ""
