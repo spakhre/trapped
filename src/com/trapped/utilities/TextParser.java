@@ -40,20 +40,51 @@ public class TextParser {
 
         parsedArr = parseText(userInput);
         //keywords from JSON as LinkedTreeMap
-        Map<String, ArrayList<String>> keywordMap = FileManager.loadJson("keywords.json");
+        Map<String, ArrayList<String>> keywordMap = FileManager.loadJson("verbs.json");
 
         assert parsedArr != null;
         for (String word: parsedArr) {
-            if(keywordMap.containsKey(word)) {
+            if(keywordMap.containsKey(word)) {  // if userinput matches specific keyword
                 return word;
             }
-
+            // checking synonyms, then return keyword if there is a match
             for(Map.Entry<String, ArrayList<String>> entry:  keywordMap.entrySet()) {
                 if (entry.getValue().contains(word.toLowerCase())) {
                     return entry.getKey();
                 }
             }
         }
-        return "Command not found in list of keywords";
+        // TODO: maybe change this to return null instead of message
+        return null;
+    }
+
+    /*
+     * accepts userInput string, parses to leave verbs and nouns,
+     * then move through parsed array removing the nouns
+     * will return an array with verb keywords removed
+     */
+
+    public static ArrayList<String> getNouns (String userInput) throws IOException {
+        ArrayList<String> parsedArr;
+        ArrayList<String> nouns = new ArrayList<>();
+        parsedArr = parseText(userInput);
+        //keywords from JSON as LinkedTreeMap
+        Map<String, ArrayList<String>> verbMap = FileManager.loadJson("verbs.json");
+        Map<String, ArrayList<String>> nounMap = FileManager.loadJson("nouns.json");
+
+        assert parsedArr != null;
+        String word;
+        for (int i = 0; i < parsedArr.size(); i++) {
+            word = parsedArr.get(i);
+            if(nounMap.containsKey(word)) {
+                nouns.add(word);
+            }
+            for (Map.Entry<String, ArrayList<String>> entry : nounMap.entrySet()) {
+                if (entry.getValue().contains(word.toLowerCase())) {
+                    nouns.add(entry.getKey());
+                }
+            }
+        }
+        return nouns;
     }
 }
