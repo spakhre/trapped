@@ -12,6 +12,8 @@ public class Main implements Serializable {
     public static void main(String[] args) throws IOException, InterruptedException, URISyntaxException, UnsupportedAudioFileException, LineUnavailableException {
         GameEngine game = new GameEngine();
         game.startGame();
+        //Player.playerInput();
+
 
 
 

@@ -113,8 +113,8 @@ public class Player implements Serializable{
         System.out.println("Which direction do you want to go? Available directions: " + furniture_available_directions + " (or enter [quit] to quit game, " +
                 "[play again] to replay the game,[drop] an item from current inventory)");
         String dir = scan.nextLine();
-        quitGame(dir);
-        playAgain(dir);
+        //quitGame(dir);
+        //playAgain(dir);
 
         boolean contain = furniture_available_directions.contains(dir);
         if (Arrays.asList(validDirection).contains(dir)) {
@@ -324,8 +324,6 @@ public class Player implements Serializable{
         if (verb.equals(inspect) || inspect_value.toString().contains(verb)) {
             inspectItem(noun);
         }
-
-
 
 
         reader.close();
