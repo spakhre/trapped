@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.trapped.GameEngine;
 import com.trapped.utilities.FileManager;
 import com.trapped.utilities.Sounds;
+import com.trapped.utilities.TextColor;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -36,12 +37,12 @@ public class Player implements Serializable{
 
     static Map<String, Map<String, Object>> map = gson.fromJson(reader, Map.class);
 
-    // constructor
+    // constructor1
     public Player() throws IOException {
 
     }
     public static void viewRoom() throws UnsupportedAudioFileException, LineUnavailableException, IOException, URISyntaxException, InterruptedException {
-        System.out.println("\nYou are currently in front of bed" );
+        System.out.println("\nYou are currently in front of " + TextColor.RED  + location + TextColor.RESET);
 //        inspectItem(location);
 //        pickUpItem(location);
 
@@ -82,7 +83,7 @@ public class Player implements Serializable{
                     System.out.println("Inspecting...\n" + something + " is empty.");
                     solvePuzzle(something);
                 } else {
-                    System.out.println("Inspecting...\nYou found: " + furniture_items);
+                    System.out.println("Inspecting...\nYou found: " + TextColor.RED  + furniture_items+ TextColor.RESET);
 //                    pickUpItem(something);
                     playerInput();
                     if (puzzle_exist.equals("Y")){
@@ -143,7 +144,7 @@ public class Player implements Serializable{
                 ;
             }
         }
-        System.out.println("\nYou are currently in front of " + fromLocation);
+        System.out.println("\nYou are currently in front of " +  TextColor.RED + fromLocation + TextColor.RESET);
 
         System.out.println(furniture_desc);
         inspectItem(fromLocation);

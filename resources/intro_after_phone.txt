@@ -9,3 +9,13 @@ You tried random numbers, but neither works.
 Fine....
 
 You decided to try....
+
+********HERE ARE THE LIST OF COMMANDS YOU CAN TYPE TO PROCEED*************
+> check inventory                 - to check current inventory of the player
+> go direction(left, right, door) - player can go left or right
+> inspect furniture(eg bed, desk) - player can inspect the items
+> pick item (key, wallet...)      - player can pick item
+> use item(key,wallet)			  - player can use item to open the item
+> drop item 					  - to drop the item from inventory
+> help                            - to check the help menu
+***************************************************************************
