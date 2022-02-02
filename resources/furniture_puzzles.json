@@ -2,7 +2,7 @@
   "bed": {
     "name": "bed",
     "furniture_desc": "It is a light oak bed",
-    "furniture_picture": "doorWall.txt",
+    "furniture_picture": "bed.txt",
     "furniture_available_directions": [
       "left",
       "right"
@@ -29,8 +29,8 @@
     "furniture_items": "",
     "puzzle_verb": "",
     "puzzle_answer": "104",
-    "puzzle_sounds": "",
-    "puzzle_picture_filename": ""
+    "puzzle_sounds": "open_door.wav",
+    "puzzle_picture_filename": "door.txt"
   },
   "window": {
     "name": "window",
@@ -55,8 +55,8 @@
     "puzzle_reward_item": "keyD",
     "puzzle_verb": "use",
     "puzzle_answer": "",
-    "puzzle_sounds": "",
-    "puzzle_picture_filename": ""
+    "puzzle_sounds": "glass_breaking.wav",
+    "puzzle_picture_filename": "window.txt"
   },
 
   "drawer": {
@@ -79,8 +79,8 @@
     "puzzle_reward_item": "a piece of paper with number 104",
     "reward_item_desc": "it has smell of lemons",
     "puzzle_answer": "",
-    "puzzle_sounds": "",
-    "puzzle_picture_filename": ""
+    "puzzle_sounds": "drawer_opening.wav",
+    "puzzle_picture_filename": "drawer.txt"
   },
   "safe": {
     "name": "safe",
@@ -108,10 +108,10 @@
       "2",
       "0"
     ],
-    "puzzle_sounds": "",
+    "puzzle_sounds": "safe_open.wav",
     "easy_question": "What is the last day of ILT, please enter MMDDYYYY",
     "easy_answer": "02222022",
-    "puzzle_picture_filename": ""
+    "puzzle_picture_filename": "safe.txt"
   },
   "lamp": {
     "name": "lamp",
@@ -130,8 +130,8 @@
     "furniture_items": "",
     "puzzle_verb": "",
     "puzzle_answer": "",
-    "puzzle_sounds": "",
-    "puzzle_picture_filename": ""
+    "puzzle_sounds": "lamp.wav",
+    "puzzle_picture_filename": "lamp.txt"
   },
   "chair": {
     "name": "chair",
@@ -150,7 +150,7 @@
     "puzzle_itemsNeeded": "",
     "puzzle_verb": "",
     "puzzle_answer": "",
-    "puzzle_sounds": "",
-    "puzzle_picture_filename": ""
+    "puzzle_sounds": "chair.wav",
+    "puzzle_picture_filename": "chair.txt"
   }
 }
