@@ -57,38 +57,48 @@ public class Player implements Serializable{
         playerInput();
     }
     public static void inspectItem(String something) throws UnsupportedAudioFileException, LineUnavailableException, IOException, URISyntaxException, InterruptedException {
-        Map<String, Object> furniture_inspectItem = map.get(location);
-        String furniture_items1 = (String)furniture_inspectItem.get("furniture_items");
+        //Map<String, Object> furniture_inspectItem = map.get(location);
+       // String furniture_items1 = (String)furniture_inspectItem.get("furniture_items");
+        location = something;
+        Map<String, Object> furniture = map.get(something);
+        String furniture_items = (String)furniture.get("furniture_items");
+        String furniture_desc = (String) furniture.get("furniture_desc");
+        String puzzle_exist = (String) furniture.get("puzzle_exist");
+
+
         // if user means inspecting furniture
         if (map.keySet().contains(something)){
-            Map<String, Object> furniture = map.get(something);
-            String furniture_name = (String) furniture.get("furniture_name");
-            String furniture_items = (String)furniture.get("furniture_items");
-            String furniture_desc = (String) furniture.get("furniture_desc");
-            String puzzle_exist = (String) furniture.get("puzzle_exist");
-            if(furniture_items.equals("")){
+            if((inventory.contains(furniture_items))||(inventory.contains("keyD") && something.equals("safe")) || (inventory.contains("a piece of paper with number 104") && something.equals("keyD")) ||
+                    (inventory.contains("a piece of paper with number 104") && something.equals("safe"))){
+                System.out.println("Inspecting...\nNo items found here.");
+                solvePuzzle(something);
+            }
+            else if(furniture_items.equals("")){
                 System.out.println(furniture_desc);
                 System.out.println("Inspecting...\nNo items found here.");
-                if (puzzle_exist.equals("Y")){
-                    System.out.println("A puzzle has been found in "+something+".");
-                    solvePuzzle(something);
-                }
-            }else if(!furniture_items.equals("")){
+                solvePuzzle(something);
+            }else {
                 if (inventory.contains(furniture_items)) {
                     System.out.println("Inspecting...\n" + something + " is empty.");
+                    solvePuzzle(something);
                 } else {
                     System.out.println("Inspecting...\nYou found: " + furniture_items);
-                    System.out.println("What would you want to do?");
+//                    pickUpItem(something);
+                    playerInput();
+                    if (puzzle_exist.equals("Y")){
+                        System.out.println("A puzzle has been found in "+something+".");
+                        solvePuzzle(something);
+                    }
                     playerInput();
 
                 }
             }
+
         }
 
-
         // if user means inspecting item of current location
-        else if ((furniture_items1.contains(something))) {
-            System.out.println("it's just a " + furniture_items1);
+        else if ((furniture_items.contains(something))) {
+            System.out.println("it's just a " + furniture_items);
         }
         System.out.println("What would you like to do?");
         playerInput();
@@ -96,11 +106,8 @@ public class Player implements Serializable{
 
 
     // item disappear from inventory and json
-    public static void useItem(String item) {
-        Map<String, Object> furniture = map.get(location);
-        inventory.remove(item);
-        String item_used = (String)furniture.get(location);
-        item_used.replace(item_used,"");
+    public static void useItem(String item, String loc) {
+       inventory.remove(item);
     }
 
     public static void checkCurrentInventory() throws UnsupportedAudioFileException, LineUnavailableException, IOException, URISyntaxException, InterruptedException {
@@ -146,7 +153,7 @@ public class Player implements Serializable{
         System.out.println("Which direction do you want to go? Available directions: " + furniture_available_directions + " (or enter [quit] to quit game, " +
                 "[play again] to replay the game,[drop] an item from current inventory)");
         String dir = scan.nextLine();
-        gameMenu(dir);
+
         //quitGame(dir);
         //playAgain(dir);
 
@@ -170,24 +177,29 @@ public class Player implements Serializable{
 
 
     }
-    public static void pickUpItem(String location) {
+    public static void pickUpItem(String location) throws UnsupportedAudioFileException, LineUnavailableException, IOException, URISyntaxException, InterruptedException {
         Map<String, Object> furniture = map.get(location);
-        String furniture_items = (String)furniture.get("furniture_items");;
+        String furniture_items = (String)furniture.get("furniture_items");
+        if(inventory.size()==3){
+            System.out.println("inventory cannot take 4 or more items. Please drop one item.");
+            playerInput();
+        } else {
+            if (furniture_items.isEmpty()) {
+                System.out.println(location + " is empty. Nothing can be added.");
+            } else if (!inventory.contains(furniture_items)) {
+                System.out.println("\nDo you want to add " +furniture_items+ " to inventory? [Y/N]");
+                Scanner scan = new Scanner(System.in);
+                String response = scan.nextLine();
+                if (response.equalsIgnoreCase("Y")) {
+                    System.out.println(furniture_items + " has been picked up and added to your inventory");
+                    inventory.add(furniture_items);
+                } else if (response.equalsIgnoreCase("N")) {
+                    System.out.println("You did not pick anything from " + location);
+                }
 
-        if(furniture_items.isEmpty()){
-            System.out.println(location + " is empty. Nothing can be added.");
-        } else if(!inventory.contains(furniture_items)){
-            System.out.println("\nYou've found: "+furniture_items+" from " + location + "\nDo you want to add it? [Y/N]");
-            Scanner scan = new Scanner(System.in);
-            String response = scan.nextLine();
-            if(response.equalsIgnoreCase("Y")){
-                System.out.println(furniture_items + " has been picked up and added to your inventory");
-                inventory.add(furniture_items);
-            }else if(response.equalsIgnoreCase("N")){
-                System.out.println("You did not pick anything from " + location );
             }
-
         }
+
 //        Map<String, Object> furniture = map.get(location);
 //        String furniture_items = (String)furniture.get("furniture_items");
 //
@@ -226,20 +238,18 @@ public class Player implements Serializable{
         if (inventory.contains(item)) {
             inventory.remove(item);
             System.out.println(item + " has been removed from your inventory. ");
-            checkCurrentInventory();
-
-        }
+            }
         else if(!inventory.contains(item)){
             System.out.println("Sorry, "+item + "is not in your inventory, it cannot be dropped");
         }
-        playerInput();
+
     }
 
 
 
     public static void solvePuzzle(String loc) throws IOException, InterruptedException, UnsupportedAudioFileException, LineUnavailableException, URISyntaxException {
         Map<String, Object> furniture = map.get(loc);
-
+        location = loc;
         String puzzle_desc = (String) furniture.get("puzzle_desc");
         String puzzle_exist = (String) furniture.get("puzzle_exist");
         String puzzle_verb = (String) furniture.get("puzzle_verb");
@@ -254,12 +264,19 @@ public class Player implements Serializable{
         ArrayList<String> converted_multiple_puzzle_answer = (ArrayList<String>) (ArrayList<?>) (multiple_puzzle_answer);
         String puzzle_reward_item = (String) furniture.get("puzzle_reward_item");
 
+
         //check if the furniture has puzzle
         // if furniture has "puzzle_desc"
         if (puzzle_exist.equals("Y")) {
+            if ((inventory.contains(puzzle_reward_item)) ||(inventory.contains("keyD") && loc.equals("safe"))||
+              (inventory.contains("a piece of paper with number 104") && loc.equals("keyD")) ||
+                    (inventory.contains("a piece of paper with number 104") && loc.equals("safe"))) {
+                        System.out.println("The puzzle has been solved. Please feel free to explore other furnitures :)");
+            }
+            else {
             System.out.println(puzzle_desc);
             Scanner solve = new Scanner(System.in);
-            System.out.println("would you like to solve this puzzle now? Y/N");
+            System.out.println("Would you like to solve this puzzle now? Y/N");
             String solve_ans = solve.nextLine();
             if (solve_ans.equals("Y")) {
                 // riddles
@@ -271,63 +288,102 @@ public class Player implements Serializable{
                     FileManager.getResource(randomPuzzle);
 
                     Scanner scan = new Scanner(System.in);
-                    System.out.println("Your answer: ");
+                    System.out.println("\nYour answer:      (If it's too hard to answer, please enter [easy] to get a easier question.)");
                     String ans = scan.next();
 
                     if (ans.equals(randomAnswer)) {
                         System.out.println(furniture.get("puzzle_reward"));
-                        System.out.println("You found "+puzzle_reward_item+". What you'd like to do");
-                        playerInput();
+                        System.out.println("You found " + puzzle_reward_item + ".");
+                        if(inventory.size()==3){
+                            System.out.println("Please drop one item. Inventory cannot take 4 or more items.");
+                            playerInput();
+                            if (inventory.size()<=2) {
+                            inventory.add(puzzle_reward_item);
+                            }
+                        } else if (inventory.size() < 3) {
+                            inventory.add(puzzle_reward_item);
+                        }
 
                         System.out.println("Added " + puzzle_reward_item + " to your inventory");
-                        checkCurrentInventory();
+                    } else if (ans.equals("easy")) {
+                        System.out.println(furniture.get("easy_question"));
+                        Scanner easy = new Scanner(System.in);
+                        String easyInput = easy.nextLine();
+                        if (easyInput.equals(furniture.get("easy_answer"))) {
+                            System.out.println(furniture.get("puzzle_reward"));
+                            System.out.println("You found " + puzzle_reward_item + ".");
+                            if(inventory.size()==3) {
+                                System.out.println("Please drop one item. Inventory cannot take 4 or more items.");
+                                System.out.println("Your current inventory: "+inventory);
+                                playerInput();
+                                inventory.add(puzzle_reward_item);
+                                System.out.println(puzzle_reward_item + "has been added to your inventory");
 
-                        if (inventory.contains(puzzle_reward_item)) {
-                            System.out.println(location + " is empty. Nothing can be added.");
-                        } else {
-                            inventory.add(puzzle_reward_item);
-                            System.out.println("Added " + puzzle_reward_item + "to your inventory");
+                            }else if (inventory.size() < 3) {
+                                inventory.add(puzzle_reward_item);
+                                System.out.println("Added " + puzzle_reward_item + " to your inventory");
+                            }
+
+
                         }
                     } else {
                         System.out.println("you didn't solve the puzzle. Try again later.");
                     }
-                } else {
-                    if (loc.equals("door")) {
-                        System.out.println(puzzle_desc);
-                        System.out.println("What's the password?");
-                        Scanner scan = new Scanner(System.in);
-                        String ans = scan.nextLine();
-                        if (ans.equals(puzzle_answer)) {
-                            System.out.println(puzzle_reward);
-                            System.out.println("You won the game! Thanks for playing!");
-                            System.exit(0);
-                        }
+                }
+                // door puzzle
+                else if (loc.equals("door")) {
+                    System.out.println(puzzle_desc);
+                    System.out.println("What's the password?     If you's like to try later, enter[later]");
+                    Scanner scan = new Scanner(System.in);
+                    String ans = scan.nextLine();
+                    if (ans.equals(puzzle_answer)) {
+                        System.out.println(puzzle_reward);
+                        System.out.println("You won the game! Thanks for playing!");
+                        System.exit(0);
+                    } else if (ans.equals("later")) {
+                        System.out.println("No worries! Try next time!");
+                        playerInput();
                     } else {
-                        System.out.println(puzzle_desc);
-                        checkCurrentInventory();
-                        System.out.println("You need to use an item from your inventory. What you'd like to use?");
-                        Scanner scan = new Scanner(System.in);
-                        String ans = scan.nextLine();
-                        if (inventory.contains(puzzle_itemsNeeded)) {
+                        System.out.println("Wrong password. Try again next time!");
+                        System.out.println("What would you like to do?");
+                        playerInput();
+                    }
+                }
+                // use item to solve puzzle
+                else if(furniture.get("puzzle_verb").equals("use")){
+                        System.out.println("You need to use an item from your inventory. Let's see if you got needed item in your inventory...");
+                        System.out.println("Your current inventory: "+inventory);
+                        if(!inventory.contains(puzzle_itemsNeeded)){
+                            System.out.println("Sorry, you don't have the tools. Explore the room and see if you can find anything");
+                            playerInput();
+                        }
+                        else if (inventory.contains(puzzle_itemsNeeded)) {
+                            Scanner scan = new Scanner(System.in);
+                            String ans = scan.nextLine();
                             if (ans.equals(puzzle_verb + " " + puzzle_itemsNeeded)) {
-                                System.out.println(puzzle_reward);
-                                inventory.add(puzzle_reward_item);
+                                System.out.println(puzzle_reward+ " and you've found "+puzzle_reward_item);
+                                if(inventory.size()==3){
+                                    System.out.println("Please drop one item. Inventory cannot take 4 or more items.");
+                                    System.out.println("Your current inventory: "+inventory);
+                                    playerInput();
+                                    inventory.add(puzzle_reward_item);
+                                    System.out.println("Added " + puzzle_reward_item + " to your inventory");
+
+                                }else if (inventory.size() < 3) {
+                                    inventory.add(puzzle_reward_item);
+                                    System.out.println("Added " + puzzle_reward_item + " to your inventory");
+                                }
                                 inventory.remove(puzzle_itemsNeeded);
                             }
                         }
-                        else if (!inventory.contains(puzzle_itemsNeeded)){
-                            System.out.println("Sorry, you don't have the tools. Explore the room and see if you can find anything");
-                            location = loc;
-                            playerInput();
-                        }
                     }
-                }
 
-            }else if(solve_ans.equals("N")){
-                location = loc;
+
+            } else if (solve_ans.equals("N")) {
+                ;
 
             }
-        }
+        } }
 
 
     }
@@ -414,6 +470,14 @@ public class Player implements Serializable{
         if (verb.equals(help) || help_value.toString().contains(verb)) {
             gameMenu(noun);
             playerInput();
+        }
+
+        // use
+        Object use = map1.keySet().toArray()[6];
+        Object use_value = map1.get(help);
+
+        if (verb.equals(use) || use_value.toString().contains(verb)) {
+            useItem(noun,location);
         }
 
 
