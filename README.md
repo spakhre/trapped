@@ -20,7 +20,7 @@ The game takes place in a mysterious room. The player has to explore the room, l
 - ..
 
 ## Release Version
-* V1.1
+* V1.2
 
 ## Contributors
 * Justin Hammel, Sushma Pakhreen, Zoe Ji
