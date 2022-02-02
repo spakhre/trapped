@@ -172,7 +172,7 @@ public class Player implements Serializable{
     public static void pickUpItem(String location) throws UnsupportedAudioFileException, LineUnavailableException, IOException, URISyntaxException, InterruptedException {
         Map<String, Object> furniture = map.get(location);
         String furniture_items = (String)furniture.get("furniture_items");
-        if(inventory.size()==4){
+        if(inventory.size()==5){
             System.out.println("inventory cannot take 5 or more items. Please drop one item.");
             playerInput();
         } else {
@@ -286,13 +286,13 @@ public class Player implements Serializable{
                     if (ans.equals(randomAnswer)) {
                         System.out.println(furniture.get("puzzle_reward"));
                         System.out.println("You found " + puzzle_reward_item + ".");
-                        if(inventory.size()==4){
+                        if(inventory.size()==5){
                             System.out.println("Please drop one item. Inventory cannot take 5 or more items.");
                             playerInput();
-                            if (inventory.size()<4) {
+                            if (inventory.size()<5) {
                             inventory.add(puzzle_reward_item);
                             }
-                        } else if (inventory.size() < 4) {
+                        } else if (inventory.size() < 5) {
                             inventory.add(puzzle_reward_item);
                         }
 
@@ -304,14 +304,14 @@ public class Player implements Serializable{
                         if (easyInput.equals(furniture.get("easy_answer"))) {
                             System.out.println(furniture.get("puzzle_reward"));
                             System.out.println("You found " + puzzle_reward_item + ".");
-                            if(inventory.size()==4) {
+                            if(inventory.size()==5) {
                                 System.out.println("Please drop one item. Inventory cannot take 5 or more items.");
                                 System.out.println("Your current inventory: "+inventory);
                                 playerInput();
                                 inventory.add(puzzle_reward_item);
                                 System.out.println(puzzle_reward_item + "has been added to your inventory");
 
-                            }else if (inventory.size() < 4) {
+                            }else if (inventory.size() < 5) {
                                 inventory.add(puzzle_reward_item);
                                 System.out.println("Added " + puzzle_reward_item + " to your inventory");
                             }
@@ -354,14 +354,14 @@ public class Player implements Serializable{
                             String ans = scan.nextLine();
                             if (ans.equals(puzzle_verb + " " + puzzle_itemsNeeded)) {
                                 System.out.println(puzzle_reward+ " and you've found "+puzzle_reward_item);
-                                if(inventory.size()==4){
+                                if(inventory.size()==5){
                                     System.out.println("Please drop one item. Inventory cannot take 5 or more items.");
                                     System.out.println("Your current inventory: "+inventory);
                                     playerInput();
                                     inventory.add(puzzle_reward_item);
                                     System.out.println("Added " + puzzle_reward_item + " to your inventory");
 
-                                }else if (inventory.size() < 4) {
+                                }else if (inventory.size() < 5) {
                                     inventory.add(puzzle_reward_item);
                                     System.out.println("Added " + puzzle_reward_item + " to your inventory");
                                 }
