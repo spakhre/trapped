@@ -17,7 +17,8 @@
     "pickup",
     "pick",
     "grab",
-    "take"
+    "take",
+    "add"
   ],
   "inspect": [
     "look at",
