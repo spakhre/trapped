@@ -416,6 +416,7 @@ public class Player implements Serializable{
             }
         }
 
+
         // quit
         Object quit = map1.keySet().toArray()[1];
         Object quit_value = map1.get(quit);
@@ -459,9 +460,7 @@ public class Player implements Serializable{
         if (verb.equals(inspect) || inspect_value.toString().contains(verb)) {
             inspectItem(noun);
         }
-//        else if() {
-//            System.out.println("invalid entry, please enter again");
-//        }
+
 
         // help
         Object help = map1.keySet().toArray()[6];
@@ -492,8 +491,13 @@ public class Player implements Serializable{
             checkCurrentInventory();
         }
 
-        if (verb.equals("check") && noun.equals("location"))
+        if (verb.equals("check") && noun.equals("location")) {
             checkCurrentLocation();
+        }
+
+        else{
+            System.out.println("Sorry the entry is invalid, please enter again. Try to use a verb + noun.");
+        }
 
         reader.close();
 
