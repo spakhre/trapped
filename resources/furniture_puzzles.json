@@ -8,20 +8,20 @@
       "right"
     ],
     "left": "door",
-    "right": "picture with safe",
+    "right": "safe",
     "furniture_items": "matches",
     "puzzle_exist": "N"
   },
   "door": {
     "name": "door",
-    "furniture_desc": "a locked door with a keypad, it has a lock which require a 3-digit password to unlock it",
+    "furniture_desc": "It is a locked door with a keypad, it has a lock which require a 3-digit password to unlock it",
     "furniture_available_directions": ["left", "right"],
-    "left": "window with curtain",
+    "left": "window",
     "right": "bed",
     "furniture_objects": ["keypad"],
     "furniture_sounds": "door_close.wav",
     "puzzle_exist": "Y",
-    "puzzle_desc": "Please enter 3-digit passcode",
+    "puzzle_desc": "Please enter 3-digit passcode. ",
     "puzzle_hint": "the number is somewhere in this room",
     "puzzle_reward": "You've got it right! The door is now unlocked!",
     "puzzle_filename": [],
@@ -32,25 +32,25 @@
     "puzzle_sounds": "",
     "puzzle_picture_filename": ""
   },
-  "window with curtain": {
-    "name": "window with curtain",
-    "furniture_desc": "a locked glass window",
+  "window": {
+    "name": "window",
+    "furniture_desc": "It is a glass window, for some reason you cannot open it",
     "furniture_available_directions": [
       "left",
       "right"
     ],
     "left": "drawer",
     "right": "door",
-    "furniture_items": "keyD",
+    "furniture_items": "",
     "furniture_sounds": "",
     "objects": [
       "lock"
     ],
     "puzzle_exist": "Y",
-    "puzzle_desc": "a key hanging out side of the window, you need to unlock the window.",
+    "puzzle_desc": "a key is hanging out side of the window, you need to open the window to get it.",
     "puzzle_filename": [],
-    "puzzle_hint": "maybe you need a key",
-    "puzzle_reward": "You opened the window,",
+    "puzzle_hint": "maybe you need a tool",
+    "puzzle_reward": "You opened the window.",
     "puzzle_itemsNeeded": "crowbar",
     "puzzle_reward_item": "keyD",
     "puzzle_verb": "use",
@@ -61,14 +61,15 @@
 
   "drawer": {
     "name": "drawer",
-    "furniture_desc": "a locked drawer",
+    "furniture_desc": "It is a locked drawer",
+    "furniture_items": "wallet",
     "puzzle_desc": "You need to open the drawer",
     "furniture_available_directions": [
       "left",
       "right"
     ],
-    "left": "picture with safe",
-    "right": "window with curtain",
+    "left": "safe",
+    "right": "window",
     "puzzle_exist": "Y",
     "puzzle_filename": [],
     "puzzle_hint": "you probably need a key",
@@ -81,7 +82,7 @@
     "puzzle_sounds": "",
     "puzzle_picture_filename": ""
   },
-  "picture with safe": {
+  "safe": {
     "name": "safe",
     "furniture_available_directions": [
       "left",
@@ -89,24 +90,27 @@
     ],
     "left": "bed",
     "right": "drawer",
-    "furniture_desc": "a high security safe",
+    "furniture_items": "candle",
+    "furniture_desc": "It is a high security safe",
     "puzzle_exist": "Y",
-    "puzzle_desc": "Please solve the following puzzle to open the safe:",
+    "puzzle_desc": "You need to answer a question to open the safe:",
     "puzzle_filename": [
-      "riddles1",
-      "riddles2",
-      "riddles3"
+      "riddles1.txt",
+      "riddles2.txt",
+      "riddles3.txt"
     ],
     "puzzle_reward": "You opened the safe...",
     "puzzle_verb": "",
     "puzzle_itemsNeeded": "",
     "puzzle_reward_item": "crowbar",
     "multiple_puzzle_answer": [
-      6,
-      2,
-      0
+      "6",
+      "2",
+      "0"
     ],
     "puzzle_sounds": "",
+    "easy_question": "What is the last day of ILT, please enter MMDDYYYY",
+    "easy_answer": "02222022",
     "puzzle_picture_filename": ""
   }
 }

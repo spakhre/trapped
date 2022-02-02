@@ -1,5 +1,6 @@
 package com.trapped;
 
+import com.trapped.player.Player;
 import com.trapped.utilities.FileManager;
 import com.trapped.utilities.Sounds;
 import com.trapped.utilities.TextColor;
@@ -50,7 +51,7 @@ public class GameEngine implements Serializable {
 
     public static void playGame() throws IOException, URISyntaxException, InterruptedException, UnsupportedAudioFileException, LineUnavailableException {
         while (true) {
-           // Player.move();
+            Player.viewRoom();
 
         }
     }
