@@ -45,7 +45,7 @@ public class Player implements Serializable{
 //        inspectItem(location);
 //        pickUpItem(location);
 
-        System.out.println("Look around this room. There is a door, a window with curtain, a drawer, picture with safe. Where do you want to do?");
+        System.out.println("Look around this room. There is a door, a window, a drawer, a safe. What do you want to do?");
 //        Scanner scan = new Scanner(System.in);
 //        String gowhere = scan.nextLine();
 //        if (map.keySet().contains(gowhere)){
@@ -479,7 +479,6 @@ public class Player implements Serializable{
             useItem(noun,location);
         }
 
-
         // drop item
         Object drop = map1.keySet().toArray()[7];
         Object drop_value = map1.get(drop);
@@ -495,9 +494,6 @@ public class Player implements Serializable{
             checkCurrentLocation();
         }
 
-        else{
-            System.out.println("Sorry the entry is invalid, please enter again. Try to use a verb + noun.");
-        }
 
         reader.close();
 
@@ -517,6 +513,7 @@ public class Player implements Serializable{
         Map<String, Object> furniture = map.get(destinationaLoc);
         String furniture_desc = (String) furniture.get("furniture_desc");
         System.out.println("\nYou are currently in front of " + destinationaLoc);
+        location = destinationaLoc;
         System.out.println(furniture_desc);
         System.out.println("What would you like to do?");
         playerInput();
