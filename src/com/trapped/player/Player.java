@@ -13,6 +13,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 
+import static com.trapped.utilities.TextColor.*;
+
 public class Player implements Serializable{
     // Needed to move, were out of scope in one section
     public static String userInput;
@@ -21,6 +23,12 @@ public class Player implements Serializable{
     //Map<String, Items> inventory = new HashMap<String, Items>(); // player's inventory
     public static String location="bed";
     static List<String> inventory = new ArrayList<>();
+
+    static GameEngine game = new GameEngine();
+    static boolean incorrectPass = true; // scope
+    static int max_attempts = 3;
+
+
 
     // read Json file
     //static Gson gson = new Gson();
@@ -379,21 +387,40 @@ public class Player implements Serializable{
                 // door puzzle
                 else if (loc.equals("door")) {
                     System.out.println(puzzle_desc);
-                    System.out.println("What's the password?     If you's like to try later, enter[later]");
-                    //Scanner scan = new Scanner(System.in);
-                    String ans = Prompts.getStringInput();
-                    if (ans.equals(puzzle_answer)) {
-                        System.out.println(puzzle_reward);
-                        System.out.println("You won the game! Thanks for playing!");
-                        System.exit(0);
-                    } else if (ans.equals("later")) {
+
+                    System.out.println("What's the password? You have " +MAGENTA_UNDERLINE+ max_attempts +RESET +  " attempts remaining. If you's like to try later, enter[later]");
+                    Scanner scan = new Scanner(System.in);
+                    String ans = scan.nextLine();
+
+                    if (ans.trim().equals("later")|| ans.trim().equals("")){
                         System.out.println("No worries! Try next time!");
-                        System.out.println("What you'd like to do next?");
                         playerInput();
-                    } else {
-                        System.out.println("Wrong password. Try again next time!");
-                        System.out.println("What would you like to do next?");
-                        playerInput();
+
+                    } else{
+                        while( max_attempts-- > 0 ){ 
+                            if (ans.trim().equals(puzzle_answer)) {
+                                System.out.println(puzzle_reward);
+                                System.out.println("You won the game! Thanks for playing!");
+                                System.exit(0);
+
+                            } else if (max_attempts <= 0){
+                                System.out.println("You loss the game! Do you want to play again?");
+                                String reply = scan.nextLine();
+                                if(reply.equalsIgnoreCase("Y") || reply.equalsIgnoreCase("yes")){
+                                    //restart the game
+                                    //clearScreen();
+                                    //GameEngine.startGame();
+                                }else{
+
+                                    System.exit(0);
+                                }
+
+                            } else {
+                                System.out.println("Wrong password. Try again next time! " +MAGENTA_UNDERLINE+ max_attempts +RESET + " attempts remaining");
+                                System.out.println("What would you like to do?");
+                                playerInput();
+                            }
+                        }
                     }
                 }
                 // use item to solve puzzle
@@ -441,6 +468,8 @@ public class Player implements Serializable{
 
 
     }
+
+
 
 
     //solve puzzle

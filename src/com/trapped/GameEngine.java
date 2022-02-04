@@ -8,6 +8,8 @@ import com.trapped.utilities.TextColor;
 
 import java.io.Serializable;
 
+import static com.trapped.utilities.TextColor.*;
+
 public class GameEngine implements Serializable {
     private boolean quitGame = false;
 
@@ -26,8 +28,9 @@ public class GameEngine implements Serializable {
                     FileManager.readMessageSlowly("greeting.txt", 0);
                     System.out.println("\n--------------------------------");
                     System.out.println("What is your name: ");
-                    String name = Prompts.getStringInput();
-                    System.out.println("\n--------------------------------");
+                    String name = scanner.next();
+                    System.out.println("\n\nHello, " + BLUE_BOLD + name.toUpperCase() + RESET);
+
                     FileManager.readMessageSlowly("introstory.txt", 0);
                     Sounds.playSounds("phone.wav", 4000);
 
@@ -50,9 +53,6 @@ public class GameEngine implements Serializable {
         }
     }
 
-    public void gameMenu() {
-
-    }
 
 }
 
