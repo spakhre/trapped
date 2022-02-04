@@ -11,10 +11,9 @@ public class TrappedGame {
 //    ArrayList<Furnitures> map;
 //    Player player;
 
-    public static void main(String[] args) throws IOException, InterruptedException, URISyntaxException, UnsupportedAudioFileException, LineUnavailableException {
+    public static void main(String[] args) {
         GameEngine game = new GameEngine();
         game.startGame();
-
     }
 
 //    public static void startGame() throws IOException, InterruptedException {
