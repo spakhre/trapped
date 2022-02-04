@@ -1,50 +1,56 @@
 package com.trapped.utilities;
-
-import com.google.gson.internal.LinkedTreeMap;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
 public class TextParser {
+
+    /*
+     * Takes userInput String and strips whitespace, anything not a letter, "the", and "to"
+     * then returns an ArrayList of the remaining words
+     * Returns empty list if there is nothing left after scrubbing text, or if the userInput is blank
+     */
+
     public static ArrayList<String> parseText (String userInput) {
-        String trimmed, strArr[];
+        String[] strArr;
         ArrayList<String> parsedArr = new ArrayList<>();
         String stripRegex = "[^A-Za-z]";
 
         if (userInput.isEmpty() || userInput == null) {
             System.out.println("Empty, or null string passed to parser");
-            return null;
+            return parsedArr;
         }
 
-        trimmed = userInput.trim();
+        strArr = userInput.trim().split(stripRegex);
 
-        strArr = trimmed.split(stripRegex);
+        for (String s : strArr) {
 
-        for (int i = 0; i < strArr.length; i++) {
-            if (strArr[i].equals("")) {
-                continue;
-            }
-            else if (strArr[i].equalsIgnoreCase("the")) {
-                continue;
-            }
+            // removing empty strings left by split()
+            if (s.equals(""));
+            // ignoring "the" and "to"
+            else if (s.equalsIgnoreCase("the"));
+            else if (s.equalsIgnoreCase("to"));
+            // add what's left back to the ArrayList
             else {
-                parsedArr.add(strArr[i]);
+                parsedArr.add(s);
             }
         }
         return parsedArr;
     }
 
-    public static String getVerb (String userInput) throws IOException {
-        ArrayList<String> parsedArr;
+    /*
+     * Returns verb if present in the ArrayList returned after parsing text
+     * returns null if there are no recognized verbs from the verbs.json
+     */
 
-        parsedArr = parseText(userInput);
-        //keywords from JSON as LinkedTreeMap
+    public static String getVerb (String userInput) {
+        ArrayList<String> parsedArr = parseText(userInput);
+
+        //keywords from JSON loaded to Map
         Map<String, ArrayList<String>> keywordMap = FileManager.loadJson("verbs.json");
 
-        assert parsedArr != null;
         for (String word: parsedArr) {
-            if(keywordMap.containsKey(word)) {  // if userinput matches specific keyword
+            assert keywordMap != null;
+            if(keywordMap.containsKey(word)) {  // if user input matches specific keyword no need to iterate Map synonyms
                 return word;
             }
             // checking synonyms, then return keyword if there is a match
@@ -54,7 +60,6 @@ public class TextParser {
                 }
             }
         }
-        // TODO: maybe change this to return null instead of message
         return null;
     }
 
@@ -64,19 +69,18 @@ public class TextParser {
      * will return an array with verb keywords removed
      */
 
-    public static ArrayList<String> getNouns (String userInput) throws IOException {
-        ArrayList<String> parsedArr;
+    public static ArrayList<String> getNouns (String userInput) {
+        ArrayList<String> parsedArr = parseText(userInput);
         ArrayList<String> nouns = new ArrayList<>();
-        parsedArr = parseText(userInput);
+        String word;
+
         //keywords from JSON as LinkedTreeMap
-        Map<String, ArrayList<String>> verbMap = FileManager.loadJson("verbs.json");
         Map<String, ArrayList<String>> nounMap = FileManager.loadJson("nouns.json");
 
-        assert parsedArr != null;
-        String word;
-        for (int i = 0; i < parsedArr.size(); i++) {
-            word = parsedArr.get(i);
-            if(nounMap.containsKey(word)) {
+        for (String s : parsedArr) {
+            word = s;
+            assert nounMap != null;
+            if (nounMap.containsKey(word)) {
                 nouns.add(word);
             }
             for (Map.Entry<String, ArrayList<String>> entry : nounMap.entrySet()) {
@@ -87,4 +91,6 @@ public class TextParser {
         }
         return nouns;
     }
+
+
 }
