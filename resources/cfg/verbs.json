@@ -32,7 +32,8 @@
     "review",
     "view",
     "study",
-    "view"
+    "view",
+    "check"
   ],
   "use": [
     "enter",
@@ -46,7 +47,6 @@
   "drop": [
     "discard"
   ],
-  "check": [
+  "save": []
 
-  ]
 }

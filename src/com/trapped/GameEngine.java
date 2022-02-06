@@ -4,11 +4,13 @@ import com.trapped.player.Player;
 import com.trapped.utilities.FileManager;
 import com.trapped.utilities.Prompts;
 import com.trapped.utilities.Sounds;
-import com.trapped.utilities.TextColor;
 
 import java.io.Serializable;
+import java.util.Timer;
+import java.util.TimerTask;
 
-import static com.trapped.utilities.TextColor.*;
+import static com.trapped.utilities.TextColor.BLUE_BOLD;
+import static com.trapped.utilities.TextColor.RESET;
 
 public class GameEngine implements Serializable {
     private boolean quitGame = false;
@@ -28,13 +30,23 @@ public class GameEngine implements Serializable {
                     FileManager.readMessageSlowly("greeting.txt", 0);
                     System.out.println("\n--------------------------------");
                     System.out.println("What is your name: ");
-                    String name = scanner.next();
-                    System.out.println("\n\nHello, " + BLUE_BOLD + name.toUpperCase() + RESET);
+                    String userName = Prompts.getStringInput();
+                    System.out.println("\n\nHello, " + BLUE_BOLD + userName.toUpperCase() + RESET);
 
                     FileManager.readMessageSlowly("introstory.txt", 0);
+
                     Sounds.playSounds("phone.wav", 4000);
 
                     FileManager.readMessageSlowly("intro_after_phone.txt", 0);
+                    Timer timer = new Timer();
+                    TimerTask task = new TimerTask(){
+                        @Override
+                        public void run(){
+                            System.out.println("You lost the game! See you next time!");
+                            System.exit(0);
+                        }
+                    };
+                    timer.schedule(task,120000);
 
                     playGame();
                 case 2: // quit game option
