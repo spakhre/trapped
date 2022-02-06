@@ -15,10 +15,10 @@ public class TextParser {
         ArrayList<String> parsedArr = new ArrayList<>();
         String stripRegex = "[^A-Za-z]";
 
-        if (userInput.isEmpty() || userInput == null) {
-            System.out.println("Empty, or null string passed to parser");
-            return parsedArr;
-        }
+//        if (userInput.isEmpty() || userInput == null) {
+//            System.out.println("Empty, or null string passed to parser");
+//            return parsedArr;
+//        }
 
         strArr = userInput.trim().split(stripRegex);
 
@@ -43,7 +43,7 @@ public class TextParser {
      */
 
     public static String getVerb (String userInput) {
-        ArrayList<String> parsedArr = parseText(userInput);
+        ArrayList<String> parsedArr = parseText(userInput.toLowerCase());
 
         //keywords from JSON loaded to Map
         Map<String, ArrayList<String>> keywordMap = FileManager.loadJson("verbs.json");
@@ -55,7 +55,7 @@ public class TextParser {
             }
             // checking synonyms, then return keyword if there is a match
             for(Map.Entry<String, ArrayList<String>> entry:  keywordMap.entrySet()) {
-                if (entry.getValue().contains(word.toLowerCase())) {
+                if (entry.getValue().contains(word)) {
                     return entry.getKey();
                 }
             }
@@ -70,7 +70,7 @@ public class TextParser {
      */
 
     public static ArrayList<String> getNouns (String userInput) {
-        ArrayList<String> parsedArr = parseText(userInput);
+        ArrayList<String> parsedArr = parseText(userInput.toLowerCase());
         ArrayList<String> nouns = new ArrayList<>();
         String word;
 
@@ -84,7 +84,7 @@ public class TextParser {
                 nouns.add(word);
             }
             for (Map.Entry<String, ArrayList<String>> entry : nounMap.entrySet()) {
-                if (entry.getValue().contains(word.toLowerCase())) {
+                if (entry.getValue().contains(word)) {
                     nouns.add(entry.getKey());
                 }
             }

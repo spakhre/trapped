@@ -1,0 +1,5 @@
+****************************************
+** You didn't escape within 2 minutes.**
+**         The room exploded.	      **
+** 	       You lost the game.	      **
+**************************************** 
