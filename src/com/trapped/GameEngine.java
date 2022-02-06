@@ -28,6 +28,7 @@ public class GameEngine implements Serializable {
             switch (userInput) {
                 case 1:
                     FileManager.readMessageSlowly("greeting.txt", 0);
+                    FileManager.readMessageSlowly("warning.txt", 0);
                     System.out.println("\n--------------------------------");
                     System.out.println("What is your name: ");
                     String userName = Prompts.getStringInput();
@@ -35,7 +36,7 @@ public class GameEngine implements Serializable {
 
                     FileManager.readMessageSlowly("introstory.txt", 0);
 
-                    Sounds.playSounds("phone.wav", 4000);
+                    Sounds.playSounds("phone.wav", 3000);
 
                     FileManager.readMessageSlowly("intro_after_phone.txt", 0);
                     Timer timer = new Timer();
@@ -43,6 +44,7 @@ public class GameEngine implements Serializable {
                         @Override
                         public void run(){
                             System.out.println("You lost the game! See you next time!");
+                            FileManager.readMessageSlowly("exploded.txt", 0);
                             System.exit(0);
                         }
                     };
