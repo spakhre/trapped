@@ -7,6 +7,7 @@ public class TextColor {
     // Plain and bold Text Color
     public static final String RED = "\u001B[31m";
     public static final String BLUE_BOLD = "\033[0;94m";
+    public static final String GREEN = "\033[1;32m";
     public static final String MAGENTA_UNDERLINE = "\033[4;35m"; //bold_underline
 
     //Background Colors

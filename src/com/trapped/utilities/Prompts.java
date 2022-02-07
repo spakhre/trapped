@@ -2,6 +2,8 @@ package com.trapped.utilities;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.lang.ProcessBuilder;
+
 
 public class Prompts {
     //static Scanner scan = new Scanner(System.in);
@@ -13,8 +15,9 @@ public class Prompts {
 
     public static String getStringInput() {
         Scanner scan = new Scanner(System.in);
-        scan.useDelimiter("\n");
+        scan.useDelimiter("\r\n");
         String userInput = scan.next();
+
         //scan.nextLine();
         //scan.close();
         return userInput;
@@ -60,6 +63,22 @@ public class Prompts {
 //        }
 //        scan.close();
           return 0;
+    }
+
+    //clear the console
+    public static void ClearConsole(){
+        try{
+            String operatingSystem = System.getProperty("os.name"); //Check the current operating system
+            if(operatingSystem.contains("Windows")){
+                ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "cls");
+                pb.inheritIO().start().waitFor();
+            } else {
+                ProcessBuilder pb = new ProcessBuilder("clear");
+                pb.inheritIO().start().waitFor();
+            }
+        }catch(Exception e){
+            System.out.println(e);
+        }
     }
     
 }
