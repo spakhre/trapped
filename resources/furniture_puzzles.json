@@ -1,7 +1,7 @@
 {
   "bed": {
     "name": "bed",
-    "furniture_desc": "The bed has a normal size, it’s made out of light oak, and it’s very sturdy, well built and durable. ",
+    "furniture_desc": "The bed has a normal size, it's made out of light oak, and it's very sturdy, well built and durable. ",
     "furniture_picture": "bed.txt",
     "furniture_available_directions": [
       "left",
@@ -32,7 +32,7 @@
   },
   "door": {
     "name": "door",
-    "furniture_desc": "This door has a keypad and it’s locked. The only way you get out of here is if you know the 3-digit password used to unlock it",
+    "furniture_desc": "This door has a keypad and it's locked. The only way you get out of here is if you know the 3-digit password used to unlock it",
     "furniture_available_directions": [
       "left",
       "right"
@@ -60,7 +60,7 @@
   },
   "window": {
     "name": "window",
-    "furniture_desc": "there is a glass window in this room too. You have no idea how to open it. You see a key that’s hanging outside of the window, but you must open the window to reach it. ",
+    "furniture_desc": "there is a glass window in this room too. You have no idea how to open it. You see a key that's hanging outside of the window, but you must open the window to reach it. ",
     "furniture_available_directions": [
       "left",
       "right"
