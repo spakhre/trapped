@@ -22,7 +22,7 @@ public class Player implements Serializable{
     //Map<String, Items> inventory = new HashMap<String, Items>(); // player's inventory
     public static String location="bed";
     static List<String> inventory = new ArrayList<>();
-    static List<String> rewarded_item = List.of(new String[]{"crowbar", "keyD", "a piece of paper with number 104"});
+    static List<String> rewarded_item = List.of(new String[]{"crowbar", "key", "a piece of paper with number 104"});
 
     static GameEngine game = new GameEngine();
     static boolean incorrectPass = true; // scope
@@ -281,7 +281,7 @@ public class Player implements Serializable{
 
             if (puzzle_type.equals("riddles")) {
                 //  if solved
-                if ((inventory.contains(puzzle_reward_item.get(0)))|| (inventory.contains("keyD") && loc.equals("safe")) ||
+                if ((inventory.contains(puzzle_reward_item.get(0)))|| (inventory.contains("key") && loc.equals("safe")) ||
                         (inventory.contains("a piece of paper with number 104") && loc.equals("window")) ||
                         (inventory.contains("a piece of paper with number 104") && loc.equals("safe"))){
                     System.out.println("The puzzle has been solved. Please feel free to explore other furnitures :)");
@@ -370,7 +370,7 @@ public class Player implements Serializable{
                 if (inventory.contains(puzzle_reward_item.get(0))) {
                     System.out.println("The puzzle has been solved. Please feel free to explore other furnitures :)");
                     new_command();
-                } else if ((inventory.contains("keyD") && loc.equals("safe")) ||
+                } else if ((inventory.contains("key") && loc.equals("safe")) ||
                         (inventory.contains("a piece of paper with number 104") && loc.equals("window")) ||
                         (inventory.contains("a piece of paper with number 104") && loc.equals("safe"))) {
                     System.out.println("The puzzle has been solved. Please feel free to explore other furniture :)");
