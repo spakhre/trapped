@@ -4,13 +4,13 @@ import com.trapped.player.Player;
 import com.trapped.utilities.FileManager;
 import com.trapped.utilities.Prompts;
 import com.trapped.utilities.Sounds;
+import com.trapped.utilities.TextColor;
 
 import java.io.Serializable;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.trapped.utilities.TextColor.BLUE_BOLD;
-import static com.trapped.utilities.TextColor.RESET;
+import static com.trapped.utilities.TextColor.*;
 
 public class GameEngine implements Serializable {
     private boolean quitGame = false;
@@ -20,21 +20,21 @@ public class GameEngine implements Serializable {
         while (true) {
             FileManager.getResource("./splash_screen.txt");   // displaying splash screen
 
-            //System.out.println(TextColor.RED + "\nPlease select an option from the menu." + TextColor.RESET);
             System.out.println("\nPlease select an option from the menu.");
 
             int userInput = Prompts.getIntInput();
 
             switch (userInput) {
                 case 1:
-                    FileManager.readMessageSlowly("greeting.txt", 0);
-                    FileManager.readMessageSlowly("warning.txt", 0);
+                    FileManager.readMessageSlowly("greeting.txt", 10);
+                    FileManager.readMessageSlowly("warning.txt", 10);
                     System.out.println("\n--------------------------------");
                     System.out.println("What is your name: ");
                     String userName = Prompts.getStringInput();
+                    Prompts.ClearConsole();
                     System.out.println("\n\nHello, " + BLUE_BOLD + userName.toUpperCase() + RESET);
 
-                    FileManager.readMessageSlowly("introstory.txt", 0);
+                    FileManager.readMessageSlowly("introstory.txt", 10);
 
                     Sounds.playSounds("phone.wav", 3000);
 
@@ -44,11 +44,11 @@ public class GameEngine implements Serializable {
                         @Override
                         public void run(){
                             System.out.println("You lost the game! See you next time!");
-                            FileManager.readMessageSlowly("exploded.txt", 0);
+                            FileManager.readMessageSlowly("exploded.txt", 10);
                             System.exit(0);
                         }
                     };
-                    timer.schedule(task,300000);
+                    timer.schedule(task,480000);
 
                     playGame();
                 case 2: // quit game option
