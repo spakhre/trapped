@@ -4,19 +4,19 @@ import com.trapped.player.Player;
 import com.trapped.utilities.FileManager;
 import com.trapped.utilities.Prompts;
 import com.trapped.utilities.Sounds;
-import com.trapped.utilities.TextColor;
 
 import java.io.Serializable;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.trapped.utilities.TextColor.*;
+import static com.trapped.utilities.TextColor.BLUE_BOLD;
+import static com.trapped.utilities.TextColor.RESET;
 
 public class GameEngine implements Serializable {
     private boolean quitGame = false;
 
 
-    public static void startGame() {
+    public static void startGame()  {
         while (true) {
             FileManager.getResource("./splash_screen.txt");   // displaying splash screen
 
@@ -26,7 +26,8 @@ public class GameEngine implements Serializable {
 
             switch (userInput) {
                 case 1:
-                    FileManager.readMessageSlowly("greeting.txt", 10);
+                    Sounds.playSounds("startsound.wav", 0);
+                    FileManager.readMessageSlowly("greeting.txt", 20);
                     FileManager.readMessageSlowly("warning.txt", 10);
                     System.out.println("\n--------------------------------");
                     System.out.println("What is your name: ");
