@@ -13,7 +13,7 @@ public class Prompts {
 
     public static String getStringInput() {
         Scanner scan = new Scanner(System.in);
-        scan.useDelimiter("\n");
+        scan.useDelimiter("\r\n");
         String userInput = scan.next();
         //scan.nextLine();
         //scan.close();

@@ -27,18 +27,18 @@ public class GameEngine implements Serializable {
 
             switch (userInput) {
                 case 1:
-                    FileManager.readMessageSlowly("greeting.txt", 0);
+                    FileManager.readMessageSlowly("greeting.txt", 20);
                     FileManager.readMessageSlowly("warning.txt", 0);
                     System.out.println("\n--------------------------------");
                     System.out.println("What is your name: ");
                     String userName = Prompts.getStringInput();
                     System.out.println("\n\nHello, " + BLUE_BOLD + userName.toUpperCase() + RESET);
 
-                    FileManager.readMessageSlowly("introstory.txt", 0);
+                    FileManager.readMessageSlowly("introstory.txt", 10);
 
                     Sounds.playSounds("phone.wav", 3000);
 
-                    FileManager.readMessageSlowly("intro_after_phone.txt", 0);
+                    FileManager.readMessageSlowly("intro_after_phone.txt", 10);
                     Timer timer = new Timer();
                     TimerTask task = new TimerTask(){
                         @Override
@@ -48,7 +48,7 @@ public class GameEngine implements Serializable {
                             System.exit(0);
                         }
                     };
-                    timer.schedule(task,300000);
+                    timer.schedule(task,480000);
 
                     playGame();
                 case 2: // quit game option

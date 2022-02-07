@@ -22,7 +22,7 @@ public class Player implements Serializable{
     //Map<String, Items> inventory = new HashMap<String, Items>(); // player's inventory
     public static String location="bed";
     static List<String> inventory = new ArrayList<>();
-    static List<String> rewarded_item = List.of(new String[]{"crowbar", "keyD", "a piece of paper with number 104"});
+    static List<String> rewarded_item = List.of(new String[]{"crowbar", "key", "a piece of paper with number 104"});
 
     static GameEngine game = new GameEngine();
     static boolean incorrectPass = true; // scope
@@ -66,39 +66,33 @@ public class Player implements Serializable{
             location = something;
             Map<String, Object> furniture = map.get(something);
             String furniture_desc = (String) furniture.get("furniture_desc");
+            String furniture_picture = (String) furniture.get("furniture_picture");
+
 
             if (furniture.get("furniture_items") != null) {
                 ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
                 if(!furniture_items.isEmpty()){
                     if (inventory.contains(furniture_items.get(0))){
+                        FileManager.getResource(furniture_picture);
                         System.out.println("Inspecting...\nNo items found here in "+something);
                         solvePuzzle(something);
                     }
                     else if (!inventory.contains(furniture_items.get(0))){
+                        FileManager.getResource(furniture_picture);
                         System.out.println("Inspecting...\nYou found: " + TextColor.RED + furniture_items.get(0) + TextColor.RESET);
                         pickUpItem(something);
                         solvePuzzle(something);
                     }
-//                    if ((inventory.contains(furniture_items.get(0)) ||  // original item has been picked up.
-//                            (inventory.contains("keyD") && something.equals("safe")) || //
-//                            (inventory.contains("a piece of paper with number 104") && something.equals("keyD")) ||
-//                            (inventory.contains("a piece of paper with number 104") && something.equals("safe")))) {
-//                        System.out.println("Inspecting...\nNo items found here in "+something);
-//                        solvePuzzle(something);
-//                    }
 
-//                else if (furniture_items.isEmpty()) {
-//                    System.out.println(furniture_desc);
-//                    System.out.println("Inspecting...\nNo items found here in "+something);
-//                    solvePuzzle(something);
-//                }
             }
                 if(furniture_items.isEmpty()){
+                    FileManager.getResource(furniture_picture);
                     System.out.println("Inspecting...\nNo items found here.");
                     solvePuzzle(something);
                 }
             }
             else if (furniture.get("furniture_items") == null){
+                FileManager.getResource(furniture_picture);
                 System.out.println("Inspecting...\nNo items found here.");
                 solvePuzzle(something);
             }
@@ -288,7 +282,7 @@ public class Player implements Serializable{
 
             if (puzzle_type.equals("riddles")) {
                 //  if solved
-                if ((inventory.contains(puzzle_reward_item.get(0)))|| (inventory.contains("keyD") && loc.equals("safe")) ||
+                if ((inventory.contains(puzzle_reward_item.get(0)))|| (inventory.contains("key") && loc.equals("safe")) ||
                         (inventory.contains("a piece of paper with number 104") && loc.equals("window")) ||
                         (inventory.contains("a piece of paper with number 104") && loc.equals("safe"))){
                     System.out.println("The puzzle has been solved. Please feel free to explore other furnitures :)");
@@ -363,7 +357,6 @@ public class Player implements Serializable{
                         }
                     } else if (solve_ans.equalsIgnoreCase("N")) {
                         new_command();
-
                     }
                     else {
                         System.out.println("Sorry I don't understand your command. The puzzle has not been solved. Please come back later.");
@@ -377,7 +370,7 @@ public class Player implements Serializable{
                 if (inventory.contains(puzzle_reward_item.get(0))) {
                     System.out.println("The puzzle has been solved. Please feel free to explore other furnitures :)");
                     new_command();
-                } else if ((inventory.contains("keyD") && loc.equals("safe")) ||
+                } else if ((inventory.contains("key") && loc.equals("safe")) ||
                         (inventory.contains("a piece of paper with number 104") && loc.equals("window")) ||
                         (inventory.contains("a piece of paper with number 104") && loc.equals("safe"))) {
                     System.out.println("The puzzle has been solved. Please feel free to explore other furniture :)");
