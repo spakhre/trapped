@@ -2,545 +2,660 @@ package com.trapped.player;
 
 import com.google.gson.Gson;
 import com.trapped.GameEngine;
-import com.trapped.utilities.FileManager;
-import com.trapped.utilities.Sounds;
-import com.trapped.utilities.TextColor;
+import com.trapped.utilities.*;
 
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Serializable;
-import java.lang.reflect.Array;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 
+import static com.trapped.utilities.TextColor.*;
+
+
 public class Player implements Serializable{
+    // Needed to move, were out of scope in one section
+    public static String userInput;
+    public static String verb;
+    public static ArrayList<String> nouns = new ArrayList<>();
     //Map<String, Items> inventory = new HashMap<String, Items>(); // player's inventory
     public static String location="bed";
     static List<String> inventory = new ArrayList<>();
+    static List<String> rewarded_item = List.of(new String[]{"crowbar", "key", "a piece of paper with number 104"});
+
     static GameEngine game = new GameEngine();
+    static boolean incorrectPass = true; // scope
+    static int max_attempts = 3;
 
-    // read Json file
-    static Gson gson = new Gson();
-    static Reader reader;
 
-    static {
+
+    static Map<String, Map<String, Object>> map = furniturePuzzleGenerator();
+
+    //Utility class for the map generated above, trying to ensure json file is closed
+    public static Map<String, Map<String, Object>> furniturePuzzleGenerator() {
+        Gson gson = new Gson();
         try {
-            reader = Files.newBufferedReader(Paths.get("resources/furniture_puzzles.json"));
+            Reader reader = Files.newBufferedReader(Paths.get("resources/furniture_puzzles.json"));
+            Map<String, Map<String, Object>> map = gson.fromJson(reader, Map.class);
+            reader.close();
+            return map;
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
-    static Map<String, Map<String, Object>> map = gson.fromJson(reader, Map.class);
 
-    // constructor1
-    public Player() throws IOException {
 
-    }
-    public static void viewRoom() throws UnsupportedAudioFileException, LineUnavailableException, IOException, URISyntaxException, InterruptedException {
+    // After the intro story, player will see current location and the view of the whole room.
+    public static void viewRoom() {
         System.out.println("\nYou are currently in front of " + TextColor.RED  + location + TextColor.RESET);
-//        inspectItem(location);
-//        pickUpItem(location);
-
-        System.out.println("Look around this room. There is a door, a window, a drawer, a safe. What do you want to do?");
-//        Scanner scan = new Scanner(System.in);
-//        String gowhere = scan.nextLine();
-//        if (map.keySet().contains(gowhere)){
-//            goFurniture(gowhere);
-//        }
-//        else if(gowhere.equals("left")|| gowhere.equals("right")){
-//            move(gowhere);
-//        }
-        playerInput();
-    }
-    public static void inspectItem(String something) throws UnsupportedAudioFileException, LineUnavailableException, IOException, URISyntaxException, InterruptedException {
-        //Map<String, Object> furniture_inspectItem = map.get(location);
-       // String furniture_items1 = (String)furniture_inspectItem.get("furniture_items");
-        location = something;
-        Map<String, Object> furniture = map.get(something);
-        String furniture_items = (String)furniture.get("furniture_items");
-        String furniture_desc = (String) furniture.get("furniture_desc");
-        String puzzle_exist = (String) furniture.get("puzzle_exist");
-
-
-        // if user means inspecting furniture
-        if (map.keySet().contains(something)){
-            if((inventory.contains(furniture_items))||(inventory.contains("keyD") && something.equals("safe")) || (inventory.contains("a piece of paper with number 104") && something.equals("keyD")) ||
-                    (inventory.contains("a piece of paper with number 104") && something.equals("safe"))){
-                System.out.println("Inspecting...\nNo items found here.");
-                solvePuzzle(something);
-            }
-            else if(furniture_items.equals("")){
-                System.out.println(furniture_desc);
-                System.out.println("Inspecting...\nNo items found here.");
-                solvePuzzle(something);
-            }else {
-                if (inventory.contains(furniture_items)) {
-                    System.out.println("Inspecting...\n" + something + " is empty.");
-                    solvePuzzle(something);
-                } else {
-                    System.out.println("Inspecting...\nYou found: " + TextColor.RED  + furniture_items+ TextColor.RESET);
-//                    pickUpItem(something);
-                    playerInput();
-                    if (puzzle_exist.equals("Y")){
-                        System.out.println("A puzzle has been found in "+something+".");
-                        solvePuzzle(something);
-                    }
-                    playerInput();
-
-                }
-            }
-
-        }
-
-        // if user means inspecting item of current location
-        else if ((furniture_items.contains(something))) {
-            System.out.println("it's just a " + furniture_items);
-        }
-        System.out.println("What would you like to do?");
+        System.out.println(TextColor.GREEN + "\nWhat you'd like to do next? (type [commands] to check available commands and [help] to see other help items)" + TextColor.RESET);
         playerInput();
     }
 
-
-    // item disappear from inventory and json
-    public static void useItem(String item, String loc) {
-       inventory.remove(item);
-    }
-
-    public static void checkCurrentInventory() throws UnsupportedAudioFileException, LineUnavailableException, IOException, URISyntaxException, InterruptedException {
-        System.out.println("Your current inventory: " + inventory);
-        playerInput();
-    }
-
-
-
-
-    public static void move(String fromLocation) throws IOException, URISyntaxException, InterruptedException, UnsupportedAudioFileException, LineUnavailableException {
-
-        String[] validDirection = {"left", "right", "up", "down"};
-
-        // Extract the current furniture to get the inner available directions
-        Map<String, Object> furniture = map.get(fromLocation);
-        List furniture_available_directions = (ArrayList<String>)furniture.get("furniture_available_directions");
-
-
-        if (furniture.containsKey("picture")){
-            String picture = (String) furniture.get("picture");
-            FileManager.getResource(picture);
-        }
-
-        String furniture_desc = (String) furniture.get("furniture_desc");
-
-        Scanner scan = new Scanner(System.in);
-        if(furniture.keySet().contains(furniture.get("furniture_sounds"))) {
-            if (!furniture.get("furniture_sounds").equals("")) {
-                String soundFileName = (String) furniture.get("furniture_sounds");
-                Sounds.playSounds(soundFileName);
-            } else {
-                ;
-            }
-        }
-        System.out.println("\nYou are currently in front of " +  TextColor.RED + fromLocation + TextColor.RESET);
-
-        System.out.println(furniture_desc);
-        inspectItem(fromLocation);
-        pickUpItem(fromLocation);
-        checkCurrentInventory();
-        solvePuzzle(fromLocation);
-        System.out.println("Which direction do you want to go? Available directions: " + furniture_available_directions + " (or enter [quit] to quit game, " +
-                "[play again] to replay the game,[drop] an item from current inventory)");
-        String dir = scan.nextLine();
-
-        //quitGame(dir);
-        //playAgain(dir);
-
-        boolean contain = furniture_available_directions.contains(dir);
-        if (Arrays.asList(validDirection).contains(dir)) {
-            if (contain) {
-                String newlocation = (String) furniture.get(dir);
-                fromLocation = newlocation;
-                System.out.println("Now you are in front of " + fromLocation);
-            } else {
-                System.out.println("Sorry, you can't go that way. Please select again.");
-            }
-        }
-        else if(dir.equals("drop")){
-            //  dropItem();
+    // inspect room, player can inspect either a furniture or an itgoem. If inspect a furniture, the output gonna have: Description of this furniture, items in here.
+    // And if the furniture has a puzzle, it will show the puzzle's description.
+    public static void inspectItem(String something) {
+        //furniture
+        //furniture
+        Prompts.ClearConsole();
+        if(something.equals("inventory")){
             checkCurrentInventory();
         }
-        else {
-            System.out.println("invalid input, please try again.");
-        }
 
+        else if (map.containsKey(something)) {
+            location = something;
+            Map<String, Object> furniture = map.get(something);
+            String furniture_desc = (String) furniture.get("furniture_desc");
+            String furniture_picture = (String) furniture.get("furniture_picture");
+            if (furniture.get("furniture_items") != null) {
+                ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
+                if (!furniture_items.isEmpty()) {
+                    if (inventory.contains(furniture_items.get(0))) {
+                        FileManager.getResource(furniture_picture);
+                        System.out.println("Inspecting...\nNo items found here in " + something);
+                        solvePuzzle(something);
+                    } else if (!inventory.contains(furniture_items.get(0))) {
+                        FileManager.getResource(furniture_picture);
+                        System.out.println("Inspecting...\nYou found: " + TextColor.RED + furniture_items.get(0) + TextColor.RESET);
+                        pickUpItem(something);
+                        solvePuzzle(something);
+                    }
 
-    }
-    public static void pickUpItem(String location) throws UnsupportedAudioFileException, LineUnavailableException, IOException, URISyntaxException, InterruptedException {
-        Map<String, Object> furniture = map.get(location);
-        String furniture_items = (String)furniture.get("furniture_items");
-        if(inventory.size()==3){
-            System.out.println("inventory cannot take 4 or more items. Please drop one item.");
-            playerInput();
-        } else {
-            if (furniture_items.isEmpty()) {
-                System.out.println(location + " is empty. Nothing can be added.");
-            } else if (!inventory.contains(furniture_items)) {
-                System.out.println("\nDo you want to add " +furniture_items+ " to inventory? [Y/N]");
-                Scanner scan = new Scanner(System.in);
-                String response = scan.nextLine();
-                if (response.equalsIgnoreCase("Y")) {
-                    System.out.println(furniture_items + " has been picked up and added to your inventory");
-                    inventory.add(furniture_items);
-                } else if (response.equalsIgnoreCase("N")) {
-                    System.out.println("You did not pick anything from " + location);
                 }
-
+                if (furniture_items.isEmpty()) {
+                    FileManager.getResource(furniture_picture);
+                    System.out.println("Inspecting...\nNo items found here.");
+                    solvePuzzle(something);
+                }
+            } else if (furniture.get("furniture_items") == null) {
+                FileManager.getResource(furniture_picture);
+                System.out.println("Inspecting...\nNo items found here.");
+                solvePuzzle(something);
             }
         }
 
-//        Map<String, Object> furniture = map.get(location);
-//        String furniture_items = (String)furniture.get("furniture_items");
-//
-//
-//        if(inventory.contains(furniture_items)){
-//            System.out.println(location + " is empty. Nothing can be added.");
-//        } else{
-//            //System.out.println("You've found: "+furniture_items+" from " + location);
-//                System.out.println(furniture_items + " has been picked up and added to your inventory");
-//                inventory.add(furniture_items);
-//            }
+        //item
+
+        else if (map.get(location).get("furniture_items") != null) {
+            ArrayList<String> furniture_items = (ArrayList<String>) map.get(location).get("furniture_items");
+            if (furniture_items.contains(something)) {
+                System.out.println("It's just a " + something);
+                new_command();
+            }
+            else if (inventory.contains(something)){
+                System.out.println("It's just a " + something);
+                new_command();
+            }
+            else {
+                System.out.println("Sorry, I don't understand your input, please enter again. ");
+                FileManager.getResource("commands.txt");
+                playerInput();
+            }
+
+        }
+        else{
+            System.out.println("Sorry, I don't understand your input, please enter again. ");
+            FileManager.getResource("commands.txt");
+            playerInput();
+        }
+
+
     }
 
-    public static void checkCurrentLocation() throws UnsupportedAudioFileException, LineUnavailableException, IOException, URISyntaxException, InterruptedException {
+
+    // item disappear from inventory
+    public static void useItem(String item) {
+        inventory.remove(item);
+    }
+
+    // check current inventory
+    public static void checkCurrentInventory() {
+        System.out.println("Your current inventory: " + inventory);
+        new_command();
+    }
+
+
+
+    // pickup item method.
+    public static void pickUpItem(String location) {
+
+        if (map.get(location) != null) {
+            Map<String, Object> furniture = map.get(location);
+            ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
+            // if inventory is full. player need to drop an item, then item found in current location will be added to inventory.
+            if (inventory.size() >= 5) {
+                System.out.println("inventory cannot take more than 5 items. Please drop one item.");
+                System.out.println("Which item you'd like to drop?");
+                String selection = Prompts.getStringInput();
+                while (!inventory.contains(selection.toLowerCase())) {
+                    System.out.println("Sorry, the item you entered is not in inventory, please select again.");
+                    selection = Prompts.getStringInput();
+                }
+                inventory.remove(selection);
+                Sounds.playSounds("drop.wav",1000);
+                System.out.println(selection + " has been dropped from your inventory.");
+                inventory.add(furniture_items.get(0));
+                System.out.println(furniture_items.get(0) + " has been added to your inventory");
+                Sounds.playSounds("pick.wav",1000);
+            }
+            // if inventory is not full
+            else {
+                //if furniture has no item available to be picked up
+                if (furniture_items.isEmpty()) {
+                    System.out.println(location + " is empty. Nothing can be added.");
+                }
+                //if furniture has an item available to be picked up
+                else if (!inventory.contains(furniture_items.get(0))) {
+                    System.out.println("\nDo you want to add " + furniture_items.get(0) + " to inventory? [Y/N]");
+                    Scanner scan = new Scanner(System.in);
+                    String response = scan.nextLine();
+                    if (response.isEmpty()) {
+                        System.out.println("Sorry, I don't understand your entry. You did not pick anything from " + location);
+                    } else if (response.equalsIgnoreCase("Y")) {
+                        System.out.println(furniture_items.get(0) + " has been picked up and added to your inventory");
+                        Sounds.playSounds("pick.wav", 1000);
+                        inventory.add(furniture_items.get(0));
+                    } else if (response.equalsIgnoreCase("N")) {
+                        System.out.println("You did not pick anything from " + location);
+                    } else {
+                        System.out.println("Sorry, I don't understand your entry. You did not pick anything from " + location);
+                    }
+                }
+            }
+        }
+    }
+
+    // check current location
+    public static void checkCurrentLocation() {
         System.out.println("Your current location: "+location);
         playerInput();
     }
 
-
-
-    public static String checkResult() {
-        return "";
-    }
-    public static void quitGame(String input){
-        System.out.println("Quiting game... Have a nice day!");
+    // quit game
+    public static void quitGame(){
+        System.out.println("Quitting the Game. See you next time.");
         System.exit(0);
-
     }
-    public static void playAgain(String input) throws IOException, URISyntaxException, InterruptedException, UnsupportedAudioFileException, LineUnavailableException {
+
+    // play again
+    public static void playAgain(String input) {
         if (input.equals("again") || (input.equals("play again"))){
             GameEngine.startGame();
         }
     }
 
-    public static void dropItem(String item) throws UnsupportedAudioFileException, LineUnavailableException, IOException, URISyntaxException, InterruptedException {
-        if (inventory.contains(item)) {
-            inventory.remove(item);
-            System.out.println(item + " has been removed from your inventory. ");
-            }
-        else if(!inventory.contains(item)){
-            System.out.println("Sorry, "+item + "is not in your inventory, it cannot be dropped");
-        }
+    // Drop item -- will provide current inventory first then let player pick. This method will be used when inventory is full and player being asked to drop an item.
+    public static void dropItem() {
 
+        System.out.println("Your inventory: " + inventory);
+
+        System.out.println("Which item you'd like to drop? Please enter item name. ");
+        String selected_drop = Prompts.getStringInput(); // scan.nextLine();
+        if (inventory.contains(selected_drop.toLowerCase())) {
+            if(rewarded_item.contains(selected_drop)){
+                if (rewarded_item.contains(selected_drop)) {
+                    System.out.println("Sorry, you cannot drop "+selected_drop +". It was automatically added by your solved puzzle");
+                    new_command();
+                }
+                else {
+                    inventory.remove(selected_drop);
+                    Sounds.playSounds("drop.wav",1000);
+                    System.out.println(selected_drop + " has been dropped from your inventory.");
+                    new_command();
+                }
+            }
+
+        } else {
+            System.out.println("Sorry, you cannot drop "+selected_drop +". It is not in your inventory");
+            new_command();
+        }
+    }
+
+    // Drop a specific item - this will be used when player input "drop xxx"
+    public static void dropSpecificItem(String item) {
+        if (inventory.contains(item.toLowerCase())) {
+            if (rewarded_item.contains(item)) {
+                System.out.println("Sorry, you cannot drop "+item +". It was automatically added by your solved puzzle");
+                new_command();
+            }
+            else{
+            inventory.remove(item);
+            Sounds.playSounds("drop.wav",1000);
+            System.out.println(item + " has been dropped from your inventory.");
+            new_command();
+            }
+        } else {
+            System.out.println("Sorry, the item you entered is not in your inventory.");
+            new_command();
+        }
     }
 
 
 
-    public static void solvePuzzle(String loc) throws IOException, InterruptedException, UnsupportedAudioFileException, LineUnavailableException, URISyntaxException {
+
+
+    // solve puzzle
+    public static void solvePuzzle(String loc) {
         Map<String, Object> furniture = map.get(loc);
         location = loc;
         String puzzle_desc = (String) furniture.get("puzzle_desc");
         String puzzle_exist = (String) furniture.get("puzzle_exist");
         String puzzle_verb = (String) furniture.get("puzzle_verb");
-        String puzzle_itemsNeeded = (String) furniture.get("puzzle_itemsNeeded");
+        ArrayList<String> puzzle_itemsNeeded = (ArrayList<String>) furniture.get("puzzle_itemsNeeded");
         String puzzle_reward = (String) furniture.get("puzzle_reward");
         ArrayList<Object> puzzle_filename = (ArrayList<Object>) furniture.get("puzzle_filename");
         ArrayList<String> converted_puzzle_filename = (ArrayList<String>) (ArrayList<?>) (puzzle_filename);
-
         String puzzle_answer = (String) furniture.get("puzzle_answer");
-
         ArrayList<Object> multiple_puzzle_answer = (ArrayList<Object>) furniture.get("multiple_puzzle_answer");
         ArrayList<String> converted_multiple_puzzle_answer = (ArrayList<String>) (ArrayList<?>) (multiple_puzzle_answer);
-        String puzzle_reward_item = (String) furniture.get("puzzle_reward_item");
+        ArrayList<String> puzzle_reward_item = (ArrayList<String>) furniture.get("puzzle_reward_item");
+        String puzzle_type = (String) furniture.get("puzzle_type");
+        String puzzle_sounds = (String) furniture.get("puzzle_sounds");
 
 
-        //check if the furniture has puzzle
-        // if furniture has "puzzle_desc"
+        // check if a location has puzzle
         if (puzzle_exist.equals("Y")) {
-            if ((inventory.contains(puzzle_reward_item)) ||(inventory.contains("keyD") && loc.equals("safe"))||
-              (inventory.contains("a piece of paper with number 104") && loc.equals("keyD")) ||
-                    (inventory.contains("a piece of paper with number 104") && loc.equals("safe"))) {
-                        System.out.println("The puzzle has been solved. Please feel free to explore other furnitures :)");
-            }
-            else {
-            System.out.println(puzzle_desc);
-            Scanner solve = new Scanner(System.in);
-            System.out.println("Would you like to solve this puzzle now? Y/N");
-            String solve_ans = solve.nextLine();
-            if (solve_ans.equals("Y")) {
-                // riddles
-                if (puzzle_filename.size() != 0) {
-                    Random r = new Random();
-                    int randomitem = r.nextInt(converted_puzzle_filename.size());
-                    String randomPuzzle = converted_puzzle_filename.get(randomitem);
-                    String randomAnswer = converted_multiple_puzzle_answer.get(randomitem);
-                    FileManager.getResource(randomPuzzle);
 
-                    Scanner scan = new Scanner(System.in);
-                    System.out.println("\nYour answer:      (If it's too hard to answer, please enter [easy] to get a easier question.)");
-                    String ans = scan.next();
-
-                    if (ans.equals(randomAnswer)) {
-                        System.out.println(furniture.get("puzzle_reward"));
-                        System.out.println("You found " + puzzle_reward_item + ".");
-                        if(inventory.size()==3){
-                            System.out.println("Please drop one item. Inventory cannot take 4 or more items.");
-                            playerInput();
-                            if (inventory.size()<=2) {
-                            inventory.add(puzzle_reward_item);
-                            }
-                        } else if (inventory.size() < 3) {
-                            inventory.add(puzzle_reward_item);
-                        }
-
-                        System.out.println("Added " + puzzle_reward_item + " to your inventory");
-                    } else if (ans.equals("easy")) {
-                        System.out.println(furniture.get("easy_question"));
-                        Scanner easy = new Scanner(System.in);
-                        String easyInput = easy.nextLine();
-                        if (easyInput.equals(furniture.get("easy_answer"))) {
-                            System.out.println(furniture.get("puzzle_reward"));
-                            System.out.println("You found " + puzzle_reward_item + ".");
-                            if(inventory.size()==3) {
-                                System.out.println("Please drop one item. Inventory cannot take 4 or more items.");
-                                System.out.println("Your current inventory: "+inventory);
-                                playerInput();
-                                inventory.add(puzzle_reward_item);
-                                System.out.println(puzzle_reward_item + "has been added to your inventory");
-
-                            }else if (inventory.size() < 3) {
-                                inventory.add(puzzle_reward_item);
-                                System.out.println("Added " + puzzle_reward_item + " to your inventory");
-                            }
-
-
-                        }
-                    } else {
-                        System.out.println("you didn't solve the puzzle. Try again later.");
-                    }
+            if (puzzle_type.equals("riddles")) {
+                //  if solved
+                if ((inventory.contains(puzzle_reward_item.get(0)))|| (inventory.contains("key") && loc.equals("safe")) ||
+                        (inventory.contains("a piece of paper with number 104") && loc.equals("window")) ||
+                        (inventory.contains("a piece of paper with number 104") && loc.equals("safe"))){
+                    System.out.println("The puzzle has been solved. Please feel free to explore other furnitures :)");
+                    new_command();
                 }
-                // door puzzle
-                else if (loc.equals("door")) {
+                // if not solved
+                else {
+                    System.out.println("A puzzle has been found in " + loc + ".");
                     System.out.println(puzzle_desc);
-                    System.out.println("What's the password?     If you's like to try later, enter[later]");
-                    Scanner scan = new Scanner(System.in);
-                    String ans = scan.nextLine();
-                    if (ans.equals(puzzle_answer)) {
-                        System.out.println(puzzle_reward);
-                        System.out.println("You won the game! Thanks for playing!");
-                        System.exit(0);
-                    } else if (ans.equals("later")) {
-                        System.out.println("No worries! Try next time!");
-                        playerInput();
-                    } else {
-                        System.out.println("Wrong password. Try again next time!");
-                        System.out.println("What would you like to do?");
-                        playerInput();
+                    System.out.println("Would you like to solve this puzzle now? Y/N");
+                    String solve_ans = Prompts.getStringInput();
+                    if (solve_ans.equalsIgnoreCase("Y")) {
+                        // riddles puzzle
+                        Random r = new Random();
+                        int randomitem = r.nextInt(converted_puzzle_filename.size());
+                        String randomPuzzle = converted_puzzle_filename.get(randomitem);
+                        ArrayList<String> randomAnswer = (ArrayList<String>) multiple_puzzle_answer.get(randomitem);
+                        FileManager.getResource(randomPuzzle);
+
+                        // Scanner scan = new Scanner(System.in);
+                        System.out.println("\nYour answer:      (If it's too hard to answer, please enter [easy] to get a easier question.)");
+                        String ans = Prompts.getStringInput();
+
+                        // if user input correct answer
+                        if (randomAnswer.contains(ans.toLowerCase())) {
+                            System.out.println(furniture.get("puzzle_reward"));
+                            Sounds.playSounds(puzzle_sounds,1000);
+                            System.out.println("You found " + puzzle_reward_item.get(0) + ".");
+                            pickUpItem(puzzle_reward_item.get(0));
+                            if (inventory.size() >= 5) {
+                                System.out.println("Please drop one item. Inventory cannot take more than 5 items.");
+                                dropItem();
+                                inventory.add(puzzle_reward_item.get(0));
+                                Sounds.playSounds("pick.wav",1000);
+                                System.out.println("Added " + puzzle_reward_item.get(0) + " to your inventory");
+                                new_command();
+                            } else if (inventory.size() < 5) {
+                                inventory.add(puzzle_reward_item.get(0));
+                                Sounds.playSounds("pick.wav",1000);
+                                System.out.println("Added " + puzzle_reward_item.get(0) + " to your inventory");
+                                new_command();
+                            }
+                            // if user pick easy question
+                        } else if (ans.equalsIgnoreCase("easy")) {
+                            System.out.println(furniture.get("easy_question"));
+                            //Scanner easy = new Scanner(System.in);
+                            String easyInput = Prompts.getStringInput();
+                            if (easyInput.equals(furniture.get("easy_answer"))) {
+                                System.out.println(furniture.get("puzzle_reward"));
+                                Sounds.playSounds(puzzle_sounds,1000);
+                                System.out.println("You found " + puzzle_reward_item.get(0) + ".");
+                                if (inventory.size() >= 5) {
+                                    System.out.println("Please drop one item. Inventory cannot take more than 5 items.");
+                                    System.out.println("Your current inventory: " + inventory);
+                                    playerInput();
+                                    inventory.add(puzzle_reward_item.get(0));
+                                    Sounds.playSounds("pick.wav",1000);
+                                    System.out.println(puzzle_reward_item.get(0) + "has been added to your inventory");
+                                    new_command();
+
+                                } else if (inventory.size() < 5) {
+                                    inventory.add(puzzle_reward_item.get(0));
+                                    Sounds.playSounds("pick.wav",1000);
+                                    System.out.println("Added " + puzzle_reward_item.get(0) + " to your inventory");
+                                    new_command();
+                                }
+                            }
+                        }// if answer is wrong
+                        else {
+                            System.out.println("you didn't solve the puzzle. Try again later.");
+                            new_command();
+                        }
+                    } else if (solve_ans.equalsIgnoreCase("N")) {
+                        new_command();
+
+                    }
+                    else {
+                        System.out.println("Sorry I don't understand your command. The puzzle has not been solved. Please come back later.");
+                        new_command();
                     }
                 }
-                // use item to solve puzzle
-                else if(furniture.get("puzzle_verb").equals("use")){
-                        System.out.println("You need to use an item from your inventory. Let's see if you got needed item in your inventory...");
-                        System.out.println("Your current inventory: "+inventory);
-                        if(!inventory.contains(puzzle_itemsNeeded)){
-                            System.out.println("Sorry, you don't have the tools. Explore the room and see if you can find anything");
-                            playerInput();
-                        }
-                        else if (inventory.contains(puzzle_itemsNeeded)) {
-                            Scanner scan = new Scanner(System.in);
-                            String ans = scan.nextLine();
-                            if (ans.equals(puzzle_verb + " " + puzzle_itemsNeeded)) {
-                                System.out.println(puzzle_reward+ " and you've found "+puzzle_reward_item);
-                                if(inventory.size()==3){
-                                    System.out.println("Please drop one item. Inventory cannot take 4 or more items.");
-                                    System.out.println("Your current inventory: "+inventory);
-                                    playerInput();
-                                    inventory.add(puzzle_reward_item);
-                                    System.out.println("Added " + puzzle_reward_item + " to your inventory");
 
-                                }else if (inventory.size() < 3) {
-                                    inventory.add(puzzle_reward_item);
-                                    System.out.println("Added " + puzzle_reward_item + " to your inventory");
+
+            } else if (puzzle_type.equals("use tool")) {
+                //  if solved
+                if (inventory.contains(puzzle_reward_item.get(0))) {
+                    System.out.println("The puzzle has been solved. Please feel free to explore other furnitures :)");
+                    new_command();
+                } else if ((inventory.contains("key") && loc.equals("safe")) ||
+                        (inventory.contains("a piece of paper with number 104") && loc.equals("window")) ||
+                        (inventory.contains("a piece of paper with number 104") && loc.equals("safe"))) {
+                    System.out.println("The puzzle has been solved. Please feel free to explore other furniture :)");
+                    new_command();
+                } else {
+                    System.out.println("A puzzle has been found in " + loc + ".");
+                    System.out.println(puzzle_desc);
+                    System.out.println("Would you like to solve this puzzle now? Y/N");
+                    String solve_ans = Prompts.getStringInput();
+                    if (solve_ans.equalsIgnoreCase("Y")) {
+                        System.out.println("You need to use an item from your inventory. Let's see if you got needed item in your inventory...");
+                        System.out.println("Your current inventory: " + inventory);
+                        if (!inventory.contains(puzzle_itemsNeeded.get(0))) {
+                            System.out.println("Sorry, you don't have the tools. Explore the room and see if you can find anything");
+                            new_command();
+                        } else if (inventory.contains(puzzle_itemsNeeded.get(0))) {
+                            //Scanner scan = new Scanner(System.in);
+                            System.out.println("Which of the item you'd like to use?");
+                            String ans = Prompts.getStringInput();
+                            if ((ans.equalsIgnoreCase(puzzle_verb + " " + puzzle_itemsNeeded.get(0)))|| ans.equalsIgnoreCase(puzzle_itemsNeeded.get(0))) {
+                                Sounds.playSounds(puzzle_sounds,1000);
+                                System.out.println(puzzle_reward + " and you've found " + puzzle_reward_item.get(0));
+                                    inventory.remove(puzzle_itemsNeeded.get(0));
+                                    inventory.add(puzzle_reward_item.get(0));
+                                    Sounds.playSounds("pick.wav",1000);
+                                    System.out.println("Added " + puzzle_reward_item.get(0) + " to your inventory");
+                                    new_command();
                                 }
-                                inventory.remove(puzzle_itemsNeeded);
+
+                            else if((inventory.contains(ans) &&(!ans.equals(puzzle_itemsNeeded)))){
+                                System.out.println("Wrong item. The puzzle has not been solved. Please come back later.");
+                                new_command();
+                            }
+                            else {
+                                System.out.println("Sorry I don't understand your command. The puzzle has not been solved. Please come back later.");
+                                new_command();
                             }
                         }
+                    } else if (solve_ans.equalsIgnoreCase("N")) {
+                        new_command();
+
+                    } else {
+                        System.out.println("Sorry I don't understand your command. The puzzle has not been solved. Please come back later.");
+                        new_command();
                     }
+                }
 
+            } else if (puzzle_type.equals("final")) {
+                System.out.println(puzzle_desc);
 
-            } else if (solve_ans.equals("N")) {
-                ;
+                System.out.println("What's the password? You have " + MAGENTA_UNDERLINE + max_attempts + RESET + " attempts remaining. If you's like to try later, enter[later]");
+                Scanner scan = new Scanner(System.in);
+                String ans = scan.nextLine();
+
+                if (ans.trim().equals("later") || ans.trim().equals("")) {
+                    System.out.println("No worries! Try next time!");
+                    new_command();
+
+                } else {
+                    while (max_attempts-- > 0) {
+                        if (ans.trim().equals(puzzle_answer)) {
+                            System.out.println(puzzle_reward);
+                            Sounds.playSounds(puzzle_sounds,2000);
+                            System.out.println("You won the game! Thanks for playing!");
+                            System.exit(0);
+
+                        } else if (max_attempts == 0) {
+                            System.out.println("You loss the game! You are Trapped. Please try again later.");
+                            System.exit(0);
+                        } else {
+                            System.out.println("Wrong password. Try again next time! " + MAGENTA_UNDERLINE + max_attempts + RESET + " attempts remaining");
+                            new_command();
+                        }
+                    }
+                }
+
 
             }
-        } }
+        }else if (puzzle_exist.equals("N")) {
+                new_command();
+            }
+        }
 
 
-    }
+    public static void playerInput() {
 
+        userInput = Prompts.getStringInput(); // gets userInput as a string from Prompts
+        // now extract verb/nouns from parsedInput
+        verb = TextParser.getVerb(userInput);
+        nouns = TextParser.getNouns(userInput);
 
-    //solve puzzle
-
-
-    public static void playerInput() throws IOException, UnsupportedAudioFileException, LineUnavailableException, URISyntaxException, InterruptedException {
-        Scanner scan = new Scanner(System.in);
-        String userInput = scan.nextLine();
-        String[] words = userInput.split(" ");
-        String verb = (String) Array.get(words, 0);
-        String noun = (String) Array.get(words, words.length - 1);
-
-        Reader reader = Files.newBufferedReader(Paths.get("./resources/cfg/verbs.json"));
-        Gson gson = new Gson();
-        Map<String, ArrayList<String>> map1 = gson.fromJson(reader, Map.class);
 
         Map<String, Object> furniture = map.get(location);
-        String furniture_items = (String) furniture.get("furniture_items");
-        String puzzle_reward_item = (String) furniture.get("puzzle_reward_item");
-
-        // start
-        Object start = map1.keySet().toArray()[0];
-        Object start_value = map1.get(start);
-        if (verb.equals(start) || start_value.toString().contains(verb)) {
-            if (noun.equals("game") || (noun.equals(""))) {
-                GameEngine.startGame();
-            }
+        ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
+        ArrayList<String> puzzle_reward_item = (ArrayList<String>) furniture.get("puzzle_reward_item");
+        if(verb==null && nouns.isEmpty()){
+            System.out.println("Sorry, I don't understand your input, please enter again.");
+            FileManager.getResource("commands.txt");
+            playerInput();
         }
-
-
-        // quit
-        Object quit = map1.keySet().toArray()[1];
-        Object quit_value = map1.get(quit);
-        if (verb.equals(quit) || quit_value.toString().contains(verb)) {
-            if (noun.equals("game") || (noun.equals(""))) {
-                quitGame("quit");
-            }
-        }
-
-        // go
-        Object go = map1.keySet().toArray()[2];
-        Object go_value = map1.get(go);
-        if (verb.equals(go) || go_value.toString().contains(verb)) {
-            if (map.keySet().contains(noun)) {
-                goFurniture(noun);
-            }
-            else if (noun.equals("left")||(noun.equals("right"))){
-                moveDirection(noun);
-            }
-        }
-
-        // get
-        Object get = map1.keySet().toArray()[3];
-        Object get_value = map1.get(get);
-        if (verb.equals(get) || get_value.toString().contains(verb)) {
-            if (furniture_items.contains(noun)) {
-                pickUpItem(location);
-            }
-            else if (puzzle_reward_item.contains(noun)){
-                inventory.add(noun);
-            }
-            else {
-                System.out.println("item not found. Please enter again");
-            }
-        }
-
-        // inspect
-        Object inspect = map1.keySet().toArray()[4];
-        Object inspect_value = map1.get(inspect);
-
-        if (verb.equals(inspect) || inspect_value.toString().contains(verb)) {
-            inspectItem(noun);
-        }
-
-
-        // help
-        Object help = map1.keySet().toArray()[6];
-        Object help_value = map1.get(help);
-
-        if (verb.equals(help) || help_value.toString().contains(verb)) {
-            gameMenu(noun);
+        else if(verb == null){
+            System.out.println("Sorry, I don't understand your input, please enter again.");
+            FileManager.getResource("commands.txt");
             playerInput();
         }
 
-        // use
-        Object use = map1.keySet().toArray()[6];
-        Object use_value = map1.get(help);
+        else if (verb != null) {
+//            if (verb.equalsIgnoreCase("start")) {    // || start_value.toString().contains(verb)) {
+//                if (nouns.contains("game") || (nouns.isEmpty())) {
+//                    GameEngine.startGame();
+//                }
+//            }
 
-        if (verb.equals(use) || use_value.toString().contains(verb)) {
-            useItem(noun,location);
+            if (verb.equals("commands")){
+                FileManager.getResource("commands.txt");
+                playerInput();
+            }
+
+            else if (verb.equals("quit")) {          // || quit_value.toString().contains(verb)) {
+                if (nouns.contains("game") || (nouns.isEmpty())) {
+                    quitGame();
+                }
+            }
+
+            // go
+            //Object go = map1.keySet().toArray()[2];
+            //Object go_value = map1.get(go);
+            else if (verb.equals("go")) {    // || go_value.toString().contains(verb)) {
+                // Currently this is only pointing to the first index of the parsed array
+                if (nouns.isEmpty()){
+                    System.out.println("Sorry, I don't understand your input, please enter again. ");
+                    FileManager.getResource("commands.txt");
+                    playerInput();
+                }
+                else if (map.containsKey(nouns.get(0))) {
+                    goFurniture(nouns.get(0));
+                } else if (nouns.get(0).equals("left") || (nouns.get(0).equals("right"))) {
+                    moveDirection(nouns.get(0));
+                }
+                else{
+                    System.out.println("Sorry, I don't understand your input, please enter again. ");
+                    FileManager.getResource("commands.txt");
+                    playerInput();
+                }
+            }
+
+            // get
+            //Object get = map1.keySet().toArray()[3];
+            //Object get_value = map1.get(get);
+            else if (verb.equals("get")) {   // || get_value.toString().contains(verb)) {
+                if (nouns.isEmpty()) {
+                    System.out.println("Sorry, I don't understand your input, please enter again. ");
+                    FileManager.getResource("commands.txt");
+                    playerInput();
+                } else {
+                    if (furniture_items.contains(nouns.get(0))) {
+                        pickUpItem(location);
+                        new_command();
+                    }
+                    else if (puzzle_reward_item.contains(nouns.get(0))) {
+                        inventory.add(nouns.get(0));
+                    }
+                    else{
+                        System.out.println("Sorry, I don't understand your input, please enter again. ");
+                        FileManager.getResource("commands.txt");
+                        playerInput();
+                    }
+
+
+                }
+            }
+
+
+            else if (verb.equals("inspect")) {   // || inspect_value.toString().contains(verb)) {
+                if (nouns.isEmpty()){
+                    System.out.println("Sorry, I don't understand your input, please enter again.");
+                    FileManager.getResource("commands.txt");
+                    playerInput();
+                }
+                else{
+                    inspectItem(nouns.get(0));
+                }
+
+            }
+
+            // help
+            //Object help = map1.keySet().toArray()[6];
+            //Object help_value = map1.get(help);
+
+            else if (verb.equals("help")) {  // || help_value.toString().contains(verb)) {
+                gameMenu();
+                playerInput();
+            }
+
+
+            else if (verb.equals("drop")) {  // || drop_value.toString().contains(verb)) {
+                if (inventory.isEmpty()) {
+                    System.out.println("Sorry, your inventory is empty now and you cannot drop item.");
+                    new_command();
+                }
+                else if (nouns.isEmpty()) {
+                    dropItem();
+                }
+                else {
+                    dropSpecificItem(nouns.get(0));
+                }
+            }
+
+         else if(userInput.equals(nouns.get(0))){
+                System.out.println("Sorry, I don't understand your input, please enter again.");
+                FileManager.getResource("commands.txt");
+                playerInput();
+            }
+
+
+
+            else {
+                System.out.println("Sorry, I don't understand your input, please enter again.");
+                FileManager.getResource("commands.txt");
+                playerInput();
+            }
+            //reader.close();
+
+
         }
 
-        // drop item
-        Object drop = map1.keySet().toArray()[7];
-        Object drop_value = map1.get(drop);
-        if (verb.equals(drop) || drop_value.toString().contains(verb)) {
-            dropItem(noun);
-        }
-
-        if (verb.equals("check") && noun.equals("inventory")){
-            checkCurrentInventory();
-        }
-
-        if (verb.equals("check") && noun.equals("location")) {
-            checkCurrentLocation();
-        }
-
-
-        reader.close();
 
     }
 
-    public static void moveDirection(String direction) throws UnsupportedAudioFileException, LineUnavailableException, IOException, URISyntaxException, InterruptedException {
-
+    public static void moveDirection(String direction) {
+        Prompts.ClearConsole();
         Map<String, Object> furniture = map.get(location);
-
         String newlocation = (String) furniture.get(direction);
         location = newlocation;
+        Map<String, Object> new_furniture = map.get(newlocation);
+        String furniture_desc = (String) new_furniture.get("furniture_desc");
+        String furniture_picture = (String) new_furniture.get("furniture_picture");
+        FileManager.getResource(furniture_picture);
         System.out.println("Now you are in front of " + newlocation);
-        playerInput();
+        System.out.println(furniture_desc);
+        new_command();
     }
 
-    public static void goFurniture(String destinationaLoc) throws UnsupportedAudioFileException, LineUnavailableException, IOException, URISyntaxException, InterruptedException {
+    public static void goFurniture(String destinationaLoc) {
+        Prompts.ClearConsole();
         Map<String, Object> furniture = map.get(destinationaLoc);
         String furniture_desc = (String) furniture.get("furniture_desc");
+        String furniture_picture = (String) furniture.get("furniture_picture");
+        FileManager.getResource(furniture_picture);
         System.out.println("\nYou are currently in front of " + destinationaLoc);
         location = destinationaLoc;
         System.out.println(furniture_desc);
-        System.out.println("What would you like to do?");
-        playerInput();
-
+        new_command();
     }
-    public static void gameMenu(String input) throws IOException, UnsupportedAudioFileException, LineUnavailableException, URISyntaxException, InterruptedException {
 
-        if(input.equalsIgnoreCase("Help")){
-            System.out.println("-----------------------");
-            System.out.println("\nHere are your options?");
-            FileManager.getResource("helperMenu.txt");
+    // Removed String as input, seemed redundant
+    public static void gameMenu() {
+        // no other if loop needed because help command already issued
+        // if(input.equalsIgnoreCase("Help")){
+        System.out.println("-----------------------");
+        System.out.println("\nHere are your options?");
+        FileManager.getResource("helperMenu.txt");
 
-            System.out.println("\nPlease select options above. enter number 1-4?");
-            Scanner scan = new Scanner(System.in);
-            String selection = scan.nextLine();
-            if (selection.equalsIgnoreCase("where am I?") || selection.equals("1")) {
-                System.out.println("you are at " + location );
-            } else if (selection.equalsIgnoreCase("Restart")|| selection.equals("2")) {
-                System.out.println("Game Restarting");
-                GameEngine.startGame();
-            } else if (selection.equalsIgnoreCase("exit")|| selection.equals("4"))  {
-                System.out.println("Quitting the Game. See you next time.");
-                System.exit(0);
-            }
+        System.out.println("\nPlease select options above. enter number 1-4?");
+        //Scanner scan = new Scanner(System.in);
+        int selection = Prompts.getIntInput();
+        if (selection == 1) {
+            System.out.println("you are at " + location);
+        } else if (selection == 2) {
+            checkCurrentInventory();
+
+        } else if (selection == 3) {
+            System.out.println("Returning to game");
+            new_command();
+        } else if (selection == 4) {
+            quitGame();
         }
+        new_command ();
+        Prompts.ClearConsole();
     }
+    public static void new_command (){
+        System.out.println(TextColor.GREEN + "\nWhat you'd like to do next? (type [commands] to check available commands and [help] to see other help items)" + TextColor.RESET);
+        playerInput();
+    }
+
 }
 
 

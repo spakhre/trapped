@@ -13,20 +13,6 @@
     "computer",
     "lap top"
   ],
-  "inspect": [
-    "look at",
-    "look",
-    "examine",
-    "see",
-    "check out",
-    "search",
-    "investigate",
-    "scan",
-    "review",
-    "view",
-    "study",
-    "view"
-  ],
   "paper": [
     "sheet",
     "form",
@@ -77,12 +63,11 @@
     "mattress",
     "bunk"
   ],
-  "curtains": [
-    "drapes",
-    "shade",
-    "drapery",
-    "curtain",
-    "drape"
+  "chair": [
+
+  ],
+  "lamp": [
+
   ],
   "window": [
 
@@ -100,5 +85,19 @@
     "canvas",
     "doodle",
     "panorama"
+  ],
+  "inventory": [
+    "stock",
+    "supply",
+    "cache",
+    "purse",
+    "hoard",
+    "stockpile"
+  ],
+  "left": [
+
+  ],
+  "right": [
+
   ]
 }

@@ -1,26 +1,15 @@
 package com.trapped.utilities;
 
 import com.google.gson.Gson;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.stream.Stream;
 
-/*
- * File manager can read data from files
- * getResource expects the text name of a file to be passed including file extension
- * the resource files need to be placed in the resources directory
- */
-
 public class FileManager {
-    private FileInputStream in = null;
-    private FileOutputStream out = null;
-    private Scanner scanner = new Scanner(System.in);
 
     /*
      * Reads data from file and directly outputs to screen with no delay for characters
@@ -28,11 +17,27 @@ public class FileManager {
      * Expects to be passed the filename as a string
      */
 
-    public static void getResource(String fileName) throws IOException {
+    public static void getResource(String fileName) {
         String art = "./resources/art/" + fileName;
-        var out = new BufferedOutputStream(System.out);
-        Files.copy(Path.of(art), out);
-        out.flush();
+        try (BufferedReader br = new BufferedReader(new FileReader(art))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+       /* var out = new BufferedOutputStream(System.out);
+        try {
+            if (Files.exists(Path.of(art))) {
+                Files.copy(Path.of(art), out);
+                out.flush();    // this sends the stream to default output stream
+                out.close();
+            }
+        }
+        catch (IOException e) {
+            System.out.println(fileName + "not found");
+        }*/
     }
 
     /*
@@ -41,12 +46,16 @@ public class FileManager {
      * Expects to be passed a string and a time delay for the text being displayed
      */
 
-    public static void readMessageSlowly(String fileName, int sec) throws InterruptedException {
+    public static void readMessageSlowly(String fileName, int sec) {
         String message = convertTxtToString(fileName);
         char[] chars = message.toCharArray();
-        for (int i = 0; i < chars.length; i++) {
-            System.out.print(chars[i]);
-            Thread.sleep(sec);
+        for (char aChar : chars) {
+            System.out.print(aChar);
+            try {
+                Thread.sleep(sec);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -63,28 +72,54 @@ public class FileManager {
 
         try (Stream<String> stream = Files.lines(path)) {
             stream.forEach(s -> sb.append(s).append("\n"));
-        } catch (IOException ex) {
+        } catch (IOException e) {
+            System.out.println("File not found.");
         }
-        String contents = sb.toString();
-        return contents;
+        return sb.toString();
     }
 
     /*
      * Returns a LinkedTreeMap object from read JSON file passed to method as name of file
      * Usage example: Map<String, ArrayList<String>> map = FileManager.loadJson("filename.json")
+     * will return null if file not found
      */
-    public static Map<String, ArrayList<String>> loadJson(String fileName) throws IOException {
-        String file = "./resources/cfg/" + fileName;
-        Reader reader = Files.newBufferedReader(Paths.get(file));
-        Gson gson = new Gson();
-        Map<String, ArrayList<String>> map1 = gson.fromJson(reader, Map.class);
-        reader.close();
 
-        return map1;
+    public static Map<String, ArrayList<String>> loadJson(String fileName) {
+        String file = "./resources/cfg/" + fileName;
+        Gson gson = new Gson();
+
+        try {
+            if (Files.exists(Path.of(file))) {
+                Reader reader = Files.newBufferedReader(Paths.get(file));
+                Map<String, ArrayList<String>> map = gson.fromJson(reader, Map.class);
+                reader.close();
+                return map;
+            }
+        }
+        catch(IOException e) {
+            System.out.println(file + " not found");
+        }
+        return null;
     }
 
-    /*
-     *
-     */
+    //Attempt at a more generic load json, assume at least the key would be a String with unknown value
+
+    public static Map<String, ?> fromJsonAsMap(String fileName) {
+        String file = "./resources/cfg/" + fileName;
+        Gson gson = new Gson();
+
+        try {
+            if (Files.exists(Path.of(file))) {
+                Reader reader = Files.newBufferedReader(Paths.get(file));
+                Map<String, ?> map = gson.fromJson(reader, Map.class);
+                reader.close();
+                return map;
+            }
+        }
+        catch(IOException e) {
+            System.out.println(file + " not found");
+        }
+        return null;
+    }
 
 }

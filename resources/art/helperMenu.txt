@@ -1,4 +1,4 @@
 1. Where am I?
-2. Restart
+2. Current inventory
 3. Continue the game
 4. Quit Game

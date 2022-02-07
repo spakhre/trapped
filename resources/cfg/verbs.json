@@ -24,7 +24,16 @@
     "look at",
     "look",
     "examine",
-    "see"
+    "see",
+    "check out",
+    "search",
+    "investigate",
+    "scan",
+    "review",
+    "view",
+    "study",
+    "view",
+    "check"
   ],
   "use": [
     "enter",
@@ -37,5 +46,8 @@
   ],
   "drop": [
     "discard"
-  ]
+  ],
+  "save": [],
+  "commands": ["command"]
+
 }
