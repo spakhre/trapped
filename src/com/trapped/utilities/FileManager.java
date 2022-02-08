@@ -27,17 +27,6 @@ public class FileManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-       /* var out = new BufferedOutputStream(System.out);
-        try {
-            if (Files.exists(Path.of(art))) {
-                Files.copy(Path.of(art), out);
-                out.flush();    // this sends the stream to default output stream
-                out.close();
-            }
-        }
-        catch (IOException e) {
-            System.out.println(fileName + "not found");
-        }*/
     }
 
     /*
@@ -101,25 +90,4 @@ public class FileManager {
         }
         return null;
     }
-
-    //Attempt at a more generic load json, assume at least the key would be a String with unknown value
-
-    public static Map<String, ?> fromJsonAsMap(String fileName) {
-        String file = "./resources/cfg/" + fileName;
-        Gson gson = new Gson();
-
-        try {
-            if (Files.exists(Path.of(file))) {
-                Reader reader = Files.newBufferedReader(Paths.get(file));
-                Map<String, ?> map = gson.fromJson(reader, Map.class);
-                reader.close();
-                return map;
-            }
-        }
-        catch(IOException e) {
-            System.out.println(file + " not found");
-        }
-        return null;
-    }
-
 }
