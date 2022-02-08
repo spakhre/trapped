@@ -63,7 +63,11 @@ public class GameEngine implements Serializable {
     }
 
     public static void playGame() {
+        int loopLevel=0;
+        loopLevel++;
+        System.out.println("You are " + loopLevel + " levels deep.");
         while (true) {
+
             Player.viewRoom();
         }
     }
