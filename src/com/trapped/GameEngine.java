@@ -35,7 +35,8 @@ public class GameEngine implements Serializable {
                     System.out.println("\n\nHello, " + BLUE_BOLD + userName.toUpperCase() + RESET);
 
                     FileManager.readMessageSlowly("introstory.txt", 10);
-
+                    System.out.println("Press Enter to Continue...");
+                    scan.nextLine();
                     Sounds.playSounds("phone.wav", 3000);
 
                     FileManager.readMessageSlowly("intro_after_phone.txt", 0);
