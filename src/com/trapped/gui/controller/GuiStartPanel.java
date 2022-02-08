@@ -44,7 +44,7 @@ public class GuiStartPanel extends GuiBackgroundImageLabelPanel {
         exitPanel.setBounds(400, 400, 200, 300);
         exitPanel.setOpaque(false); //content pane opaque is false, has no effect
 
-        Dimension dimension = new Dimension(200, 300);
+        Dimension dimension = new Dimension(400, 300);
         JButton exitButton = createExitButton(dimension);
         exitPanel.add(exitButton);
         exitButton.setFocusPainted(false);
@@ -84,9 +84,10 @@ public class GuiStartPanel extends GuiBackgroundImageLabelPanel {
 
     // action to perform when start button is clicked
     public class TitleScreen implements ActionListener {
-
         @Override
         public void actionPerformed(ActionEvent e) {
+            System.out.println("Start Screen Pressed.....");
+            //Create Game Screen
             getGui().createGameScreen();
         }
     }

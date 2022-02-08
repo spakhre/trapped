@@ -8,7 +8,7 @@ import java.awt.Font;
 
 public class Gui {
     public static JFrame gameWindow; // for main game window
-
+    private GuiPlayPanel guiPlayPanel;
     // Font and styling
     public static final Font btnFont = new Font("Times New Roman", Font.BOLD, 10); // ORIGINAL
 
@@ -33,7 +33,6 @@ public class Gui {
 
         //make frame visible
         gameWindow.setVisible(true);
-
     }
 
     private void setMainPanel(JPanel panel) {
@@ -49,7 +48,8 @@ public class Gui {
     }
 
     public void createGameScreen() {
-
+        guiPlayPanel = new GuiPlayPanel(this);
+        setMainPanel(guiPlayPanel);
     }
 
 }
