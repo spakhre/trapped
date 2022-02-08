@@ -19,8 +19,7 @@ public class Player implements Serializable {
     // Needed to move, were out of scope in one section
     public static String userInput;
     public static String verb;
-    public static ArrayList<String> noun = new ArrayList<>();
-    //Map<String, Items> inventory = new HashMap<String, Items>(); // player's inventory
+    public static String noun;
     public static String location = "bed";
     static List<String> inventory = new ArrayList<>();
     static List<String> rewarded_item = List.of(new String[]{"crowbar", "key", "a piece of paper with number 104"});
@@ -56,7 +55,7 @@ public class Player implements Serializable {
         playerInput();
     }
 
-    // inspect room, player can inspect either a furniture or an itgoem. If inspect a furniture, the output gonna have: Description of this furniture, items in here.
+    // inspect room, player can inspect either a furniture or an item. If inspect a furniture, the output gonna have: Description of this furniture, items in here.
     // And if the furniture has a puzzle, it will show the puzzle's description.
     public static void inspectItem(String something) {
         //furniture
@@ -446,10 +445,7 @@ public class Player implements Serializable {
         userInput = scan.nextLine(); // gets userInput as a string from Prompts
         // now extract verb/nouns from parsedInput
         verb = TextParser.getVerb(userInput);
-
-        String noun = TextParser.getNoun(userInput);
-
-
+        noun = TextParser.getNoun(userInput);
         Map<String, Object> furniture = map.get(location);
         ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
         ArrayList<String> puzzle_reward_item = (ArrayList<String>) furniture.get("puzzle_reward_item");
@@ -519,7 +515,7 @@ public class Player implements Serializable {
                 case "drop":
                     if (noun != null) {
                         if (inventory.isEmpty()) {
-                            System.out.println("Sorry, your inventory is empty now and you cannot drop item.");
+                            System.out.println("You have nothing to drop");
                             playerInput();
                         } else if (noun.isEmpty()) {
                             dropItem();

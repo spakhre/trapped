@@ -1,7 +1,7 @@
 {
   "bed": {
     "name": "bed",
-    "furniture_desc": "The bed has a normal size, it's made out of light oak, and it's very sturdy, well built and durable. ",
+    "furniture_desc": "The bed is a normal size, it's made out of light oak. It's very sturdy, well built, and durable. ",
     "furniture_picture": "bed.txt",
     "furniture_available_directions": [
       "left",
@@ -32,7 +32,7 @@
   },
   "door": {
     "name": "door",
-    "furniture_desc": "This door has a keypad and it's locked. The only way you get out of here is if you know the 3-digit password used to unlock it",
+    "furniture_desc": "This door has a keypad and is locked. The only way you can get out of here is if you know the 3-digit password used to unlock it",
     "furniture_available_directions": [
       "left",
       "right"
@@ -42,7 +42,7 @@
     "furniture_sounds": "door_close.wav",
     "puzzle_exist": "Y",
     "puzzle_type": "final",
-    "puzzle_desc": "Please enter 3-digit passcode. ",
+    "puzzle_desc": "Please enter the 3-digit passcode. ",
     "puzzle_hint": "the number is somewhere in this room",
     "puzzle_reward": "You've got it right! The door is now unlocked!",
     "puzzle_filename": [],
@@ -71,7 +71,7 @@
     "furniture_sounds": "",
     "puzzle_exist": "Y",
     "puzzle_type": "use tool",
-    "puzzle_desc": "a key is hanging out side of the window, you need to open the window to get it.",
+    "puzzle_desc": "a key is hanging outside the window, you need to open the window to get it.",
     "puzzle_filename": [],
     "puzzle_hint": "maybe you need a tool",
     "puzzle_reward": "You opened the window.",
@@ -133,7 +133,7 @@
     "left": "bed",
     "right": "drawer",
     "furniture_items": ["candle"],
-    "furniture_desc": "The safe is created with a lot of focus on quality and security. Since this is a very reliable safe and a high security one too, the only way you open it is if you answer a question.",
+    "furniture_desc": "The safe is a name brand with a lot of focus on quality and security. Since this is a very reliable and a high security brand, the only way you can open it is if you answer a question.",
     "puzzle_exist": "Y",
     "puzzle_type": "riddles",
     "puzzle_desc": "You need to answer a question to open the safe:",
@@ -208,7 +208,7 @@
   },
   "chair": {
     "name": "chair",
-    "furniture_desc": "the chair is made out of wood, it’s lightweight and it was painted in red. ",
+    "furniture_desc": "the chair is made out of wood, it’s lightweight and painted red. ",
     "furniture_available_directions": [
       "left",
       "right"
