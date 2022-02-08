@@ -2,10 +2,10 @@ package com.trapped;
 
 import com.trapped.player.Player;
 import com.trapped.utilities.FileManager;
-import com.trapped.utilities.Prompts;
 import com.trapped.utilities.Sounds;
 
 import java.io.Serializable;
+import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -14,7 +14,7 @@ import static com.trapped.utilities.TextColor.RESET;
 
 public class GameEngine implements Serializable {
     private boolean quitGame = false;
-
+    static Scanner scan = new Scanner(System.in);
 
     public static void startGame()  {
         while (true) {
@@ -22,17 +22,16 @@ public class GameEngine implements Serializable {
 
             System.out.println("\nPlease select an option from the menu.");
 
-            int userInput = Prompts.getIntInput();
+            String userInput = scan.nextLine();
 
             switch (userInput) {
-                case 1:
+                case "1":
                     Sounds.playSounds("startsound.wav", 0);
                     FileManager.readMessageSlowly("greeting.txt", 20);
                     FileManager.readMessageSlowly("warning.txt", 10);
                     System.out.println("\n--------------------------------");
                     System.out.println("What is your name: ");
-                    String userName = Prompts.getStringInput();
-                    Prompts.ClearConsole();
+                    String userName = scan.nextLine();
                     System.out.println("\n\nHello, " + BLUE_BOLD + userName.toUpperCase() + RESET);
 
                     FileManager.readMessageSlowly("introstory.txt", 10);
@@ -52,7 +51,7 @@ public class GameEngine implements Serializable {
                     timer.schedule(task,480000);
 
                     playGame();
-                case 2: // quit game option
+                case "2": // quit game option
                     System.out.println("Exiting the game. Thank you for playing");
                     System.exit(0);
 
