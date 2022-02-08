@@ -1,9 +1,12 @@
 package com.trapped.gui.controller;
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class GuiStartPanel extends GuiBackgroundImageLabelPanel {
 
@@ -69,7 +72,34 @@ public class GuiStartPanel extends GuiBackgroundImageLabelPanel {
         exitButton.setSize(dimension);
         exitButton.setFont(Gui.btnFont);
         exitButton.setOpaque(false);
-        exitButton.setForeground(Color);
+        exitButton.setForeground(Color.BLACK);
+        exitButton.setBackground(Color.GRAY);
 
+        //adding exit event listener
+
+        ExitScreen exitScreen = new ExitScreen();
+        exitButton.addActionListener(exitScreen);
+        return exitButton;
+    }
+
+    // action to perform when start button is clicked
+    public class TitleScreen implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            getGui().createGameScreen();
+        }
+    }
+
+    //action to execute when exit button is clicked
+
+    public class ExitScreen implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JOptionPane.showMessageDialog(GuiStartPanel.this.getGui().getMainWindow(), "Good Bye!");
+            System.out.println("Good Bye!");
+            System.exit(0);
+        }
     }
 }

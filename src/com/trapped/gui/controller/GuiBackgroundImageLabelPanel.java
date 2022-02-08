@@ -15,24 +15,25 @@ public class GuiBackgroundImageLabelPanel extends JPanel {
     private JLabel backgroundImageLabel;
 
     public GuiBackgroundImageLabelPanel(Gui gui) {
-        this.gui = gui;
 
+        this.gui = gui;
         JPanel backgroundPanel = createBackgroundPanel(gui.getMainWindow());
         this.add(backgroundPanel);
+
     }
 
     private JPanel createBackgroundPanel(JFrame gameWindow) {
         gameWindow.setResizable(false);
-        JPanel backgroundPanel = new JPanel(); //functions as a container to hold other components
+        JPanel backgroundPanel = new JPanel();
 
         backgroundPanel.setBounds(0, 0, gameWindow.getWidth(), gameWindow.getHeight());
 
-        //background label desigh
+        // background label design
         backgroundImageLabel = new JLabel();
         backgroundImageLabel.setSize(backgroundPanel.getWidth(), backgroundPanel.getHeight());
 
-        //setting background image
-        URL resource = GuiBackgroundImageLabelPanel.class.getResource("/resources/image/images.jpg");
+        // setting background image
+        URL resource = GuiBackgroundImageLabelPanel.class.getResource("/image//image.jpg");
         ImageIcon backgroundImage = new ImageIcon(new ImageIcon(resource).getImage()
                 .getScaledInstance(backgroundImageLabel.getWidth(), backgroundImageLabel.getHeight(), Image.SCALE_SMOOTH));
         backgroundImageLabel.setIcon(backgroundImage);
