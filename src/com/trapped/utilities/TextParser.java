@@ -1,6 +1,8 @@
 package com.trapped.utilities;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Map;
+import java.util.Scanner;
 
 public class TextParser {
 
@@ -88,6 +90,30 @@ public class TextParser {
             noun = nouns.get(0);
         }
         return noun;
+    }
+
+    public static int integerParse(){
+        int value;
+        try {
+            Scanner scan = new Scanner(System.in);
+            value = scan.nextInt();
+        }
+        catch(InputMismatchException e){
+            value=0;
+        }
+        return value;
+    }
+
+    public static float floatParse(){
+        float value;
+        try {
+            Scanner scan = new Scanner(System.in);
+            value = scan.nextFloat();
+        }
+        catch(InputMismatchException e){
+            value=7;
+        }
+        return value;
     }
 
 
