@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.trapped.GameEngine;
 import com.trapped.utilities.*;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Serializable;
@@ -27,6 +28,8 @@ public class Player implements Serializable{
     static GameEngine game = new GameEngine();
     static boolean incorrectPass = true; // scope
     static int max_attempts = 3;
+
+    static Scanner scan = new Scanner(System.in);
 
 
 
@@ -60,7 +63,7 @@ public class Player implements Serializable{
     public static void inspectItem(String something) {
         //furniture
         //furniture
-        Prompts.ClearConsole();
+//        Prompts.ClearConsole();
         if(something.equals("inventory")){
             checkCurrentInventory();
         }
@@ -149,10 +152,10 @@ public class Player implements Serializable{
             if (inventory.size() >= 5) {
                 System.out.println("inventory cannot take more than 5 items. Please drop one item.");
                 System.out.println("Which item you'd like to drop?");
-                String selection = Prompts.getStringInput();
+                String selection = scan.nextLine();
                 while (!inventory.contains(selection.toLowerCase())) {
                     System.out.println("Sorry, the item you entered is not in inventory, please select again.");
-                    selection = Prompts.getStringInput();
+                    selection = scan.nextLine();
                 }
                 inventory.remove(selection);
                 Sounds.playSounds("drop.wav",1000);
@@ -213,7 +216,7 @@ public class Player implements Serializable{
         System.out.println("Your inventory: " + inventory);
 
         System.out.println("Which item you'd like to drop? Please enter item name. ");
-        String selected_drop = Prompts.getStringInput(); // scan.nextLine();
+        String selected_drop = scan.nextLine();
         if (inventory.contains(selected_drop.toLowerCase())) {
             if(rewarded_item.contains(selected_drop)){
                 if (rewarded_item.contains(selected_drop)) {
@@ -292,7 +295,7 @@ public class Player implements Serializable{
                     System.out.println("A puzzle has been found in " + loc + ".");
                     System.out.println(puzzle_desc);
                     System.out.println("Would you like to solve this puzzle now? Y/N");
-                    String solve_ans = Prompts.getStringInput();
+                    String solve_ans = scan.nextLine();
                     if (solve_ans.equalsIgnoreCase("Y")) {
                         // riddles puzzle
                         Random r = new Random();
@@ -303,7 +306,7 @@ public class Player implements Serializable{
 
                         // Scanner scan = new Scanner(System.in);
                         System.out.println("\nYour answer:      (If it's too hard to answer, please enter [easy] to get a easier question.)");
-                        String ans = Prompts.getStringInput();
+                        String ans = scan.nextLine();
 
                         // if user input correct answer
                         if (randomAnswer.contains(ans.toLowerCase())) {
@@ -328,7 +331,7 @@ public class Player implements Serializable{
                         } else if (ans.equalsIgnoreCase("easy")) {
                             System.out.println(furniture.get("easy_question"));
                             //Scanner easy = new Scanner(System.in);
-                            String easyInput = Prompts.getStringInput();
+                            String easyInput = scan.nextLine();
                             if (easyInput.equals(furniture.get("easy_answer"))) {
                                 System.out.println(furniture.get("puzzle_reward"));
                                 Sounds.playSounds(puzzle_sounds,1000);
@@ -379,7 +382,7 @@ public class Player implements Serializable{
                     System.out.println("A puzzle has been found in " + loc + ".");
                     System.out.println(puzzle_desc);
                     System.out.println("Would you like to solve this puzzle now? Y/N");
-                    String solve_ans = Prompts.getStringInput();
+                    String solve_ans = scan.nextLine();
                     if (solve_ans.equalsIgnoreCase("Y")) {
                         System.out.println("You need to use an item from your inventory. Let's see if you got needed item in your inventory...");
                         System.out.println("Your current inventory: " + inventory);
@@ -389,7 +392,7 @@ public class Player implements Serializable{
                         } else if (inventory.contains(puzzle_itemsNeeded.get(0))) {
                             //Scanner scan = new Scanner(System.in);
                             System.out.println("Which of the item you'd like to use?");
-                            String ans = Prompts.getStringInput();
+                            String ans = scan.nextLine();
                             if ((ans.equalsIgnoreCase(puzzle_verb + " " + puzzle_itemsNeeded.get(0)))|| ans.equalsIgnoreCase(puzzle_itemsNeeded.get(0))) {
                                 Sounds.playSounds(puzzle_sounds,1000);
                                 System.out.println(puzzle_reward + " and you've found " + puzzle_reward_item.get(0));
@@ -457,7 +460,7 @@ public class Player implements Serializable{
 
     public static void playerInput() {
 
-        userInput = Prompts.getStringInput(); // gets userInput as a string from Prompts
+        userInput = scan.nextLine(); // gets userInput as a string from Prompts
         // now extract verb/nouns from parsedInput
         verb = TextParser.getVerb(userInput);
         nouns = TextParser.getNouns(userInput);
@@ -601,7 +604,7 @@ public class Player implements Serializable{
     }
 
     public static void moveDirection(String direction) {
-        Prompts.ClearConsole();
+//        Prompts.ClearConsole();
         Map<String, Object> furniture = map.get(location);
         String newlocation = (String) furniture.get(direction);
         location = newlocation;
@@ -615,7 +618,7 @@ public class Player implements Serializable{
     }
 
     public static void goFurniture(String destinationaLoc) {
-        Prompts.ClearConsole();
+//        Prompts.ClearConsole();
         Map<String, Object> furniture = map.get(destinationaLoc);
         String furniture_desc = (String) furniture.get("furniture_desc");
         String furniture_picture = (String) furniture.get("furniture_picture");
@@ -636,20 +639,20 @@ public class Player implements Serializable{
 
         System.out.println("\nPlease select options above. enter number 1-4?");
         //Scanner scan = new Scanner(System.in);
-        int selection = Prompts.getIntInput();
-        if (selection == 1) {
+        String selection = scan.nextLine();
+        if (selection.equals("1")) {
             System.out.println("you are at " + location);
-        } else if (selection == 2) {
+        } else if (selection.equals("2")) {
             checkCurrentInventory();
 
-        } else if (selection == 3) {
+        } else if (selection.equals("3")) {
             System.out.println("Returning to game");
             new_command();
-        } else if (selection == 4) {
+        } else if (selection.equals("4")) {
             quitGame();
         }
         new_command ();
-        Prompts.ClearConsole();
+//        Prompts.ClearConsole();
     }
     public static void new_command (){
         System.out.println(TextColor.GREEN + "\nWhat you'd like to do next? (type [commands] to check available commands and [help] to see other help items)" + TextColor.RESET);
