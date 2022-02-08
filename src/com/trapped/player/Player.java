@@ -640,16 +640,16 @@ public class Player implements Serializable{
 
         System.out.println("\nPlease select options above. enter number 1-4?");
         //Scanner scan = new Scanner(System.in);
-        String selection = scan.nextLine();
-        if (selection.equals("1")) {
+        int selection = scan.nextInt();
+        if (selection == 1) {
             System.out.println("you are at " + location);
-        } else if (selection.equals("2")) {
+        } else if (selection == 2) {
             checkCurrentInventory();
 
-        } else if (selection.equals("3")) {
+        } else if (selection == 3) {
             System.out.println("Returning to game");
             new_command();
-        } else if (selection.equals("4")) {
+        } else if (selection == 4) {
             quitGame();
         }
         new_command ();
