@@ -22,10 +22,10 @@ public class GameEngine implements Serializable {
 
             System.out.println("\nPlease select an option from the menu.");
 
-            String userInput = scan.nextLine();
+            int userInput = scan.nextInt();
 
             switch (userInput) {
-                case "1":
+                case 1:
                     Sounds.playSounds("startsound.wav", 0);
                     FileManager.readMessageSlowly("greeting.txt", 20);
                     FileManager.readMessageSlowly("warning.txt", 10);
@@ -51,7 +51,7 @@ public class GameEngine implements Serializable {
                     timer.schedule(task,480000);
 
                     playGame();
-                case "2": // quit game option
+                case 2: // quit game option
                     System.out.println("Exiting the game. Thank you for playing");
                     System.exit(0);
 
