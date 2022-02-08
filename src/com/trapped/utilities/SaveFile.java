@@ -35,9 +35,4 @@ public class SaveFile {
         }
 
     }
-
-    public static void main(String[] args) {
-        SaveFile saveFile = new SaveFile("test.txt");
-        saveFile.save("This is my file2");
-    }
 }
