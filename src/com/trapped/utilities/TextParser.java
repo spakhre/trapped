@@ -15,11 +15,6 @@ public class TextParser {
         ArrayList<String> parsedArr = new ArrayList<>();
         String stripRegex = "[^A-Za-z]";
 
-//        if (userInput.isEmpty() || userInput == null) {
-//            System.out.println("Empty, or null string passed to parser");
-//            return parsedArr;
-//        }
-
         strArr = userInput.trim().split(stripRegex);
 
         for (String s : strArr) {
@@ -69,11 +64,10 @@ public class TextParser {
      * will return an array with verb keywords removed
      */
 
-    public static ArrayList<String> getNouns (String userInput) {
+    public static String getNoun (String userInput) {
         ArrayList<String> parsedArr = parseText(userInput.toLowerCase());
         ArrayList<String> nouns = new ArrayList<>();
         String word;
-
         //keywords from JSON as LinkedTreeMap
         Map<String, ArrayList<String>> nounMap = FileManager.loadJson("nouns.json");
 
@@ -89,7 +83,11 @@ public class TextParser {
                 }
             }
         }
-        return nouns;
+        String noun = null;
+        if(!nouns.isEmpty()) {
+            noun = nouns.get(0);
+        }
+        return noun;
     }
 
 
