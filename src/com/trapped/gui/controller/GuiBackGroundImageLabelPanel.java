@@ -9,12 +9,12 @@ import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.net.URL;
 
-public class GuiBackGroundImageLabelPanel extends JPanel {
+public class GuiBackgroundImageLabelPanel extends JPanel {
 
     private Gui gui;
     private JLabel backgroundImageLabel;
 
-    public GuiBackGroundImageLabelPanel(Gui gui) {
+    public GuiBackgroundImageLabelPanel(Gui gui) {
         this.gui = gui;
 
         JPanel backgroundPanel = createBackgroundPanel(gui.getMainWindow());
@@ -32,7 +32,7 @@ public class GuiBackGroundImageLabelPanel extends JPanel {
         backgroundImageLabel.setSize(backgroundPanel.getWidth(), backgroundPanel.getHeight());
 
         //setting background image
-        URL resource = GuiBackGroundImageLabelPanel.class.getResource("/resources/image/images.jpg");
+        URL resource = GuiBackgroundImageLabelPanel.class.getResource("/resources/image/images.jpg");
         ImageIcon backgroundImage = new ImageIcon(new ImageIcon(resource).getImage()
                 .getScaledInstance(backgroundImageLabel.getWidth(), backgroundImageLabel.getHeight(), Image.SCALE_SMOOTH));
         backgroundImageLabel.setIcon(backgroundImage);
