@@ -1,4 +1,4 @@
 *****************************************
-*The room will be exploded in 8 minutes.*
-*       Escape or Loss game.	       	*
+*The room will explode in 8 minutes.    *
+*      Escape or Lose the game.	     	*
 *****************************************
