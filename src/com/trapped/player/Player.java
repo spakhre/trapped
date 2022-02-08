@@ -211,20 +211,14 @@ public class Player implements Serializable {
         String selected_drop = scan.nextLine();
         if (inventory.contains(selected_drop.toLowerCase())) {
             if (rewarded_item.contains(selected_drop)) {
-                if (rewarded_item.contains(selected_drop)) {
-                    System.out.println("Sorry, you cannot drop " + selected_drop + ". It was automatically added by your solved puzzle");
-
-                } else {
-                    inventory.remove(selected_drop);
-                    Sounds.playSounds("drop.wav", 1000);
-                    System.out.println(selected_drop + " has been dropped from your inventory.");
-
-                }
+                System.out.println("Sorry, you cannot drop " + selected_drop + ". It was automatically added by your solved puzzle");
+            } else {
+                inventory.remove(selected_drop);
+                Sounds.playSounds("drop.wav", 1000);
+                System.out.println(selected_drop + " has been dropped from your inventory.");
             }
-
         } else {
             System.out.println("Sorry, you cannot drop " + selected_drop + ". It is not in your inventory");
-
         }
         playerInput();
     }
@@ -443,6 +437,11 @@ public class Player implements Serializable {
 
 
     public static void playerInput() {
+        /*
+         * This seems to be the main logic loop for the game. It takes in the player's input and then calls functions
+         * based on the input results. We've swapped the massive if else block for a switch statement. -MS
+         */
+
         System.out.println("What would you like to do next?");
         userInput = scan.nextLine(); // gets userInput as a string from Prompts
         // now extract verb/nouns from parsedInput
@@ -471,10 +470,16 @@ public class Player implements Serializable {
                     break;
                 case "go":
                     // Currently, this is only pointing to the first index of the parsed array
-                    if (map.containsKey(noun)) {
-                        goFurniture(noun);
-                    } else if (noun.equals("left") || (noun.equals("right"))) {
-                        moveDirection(noun);
+                    if (noun != null) {
+                        if (map.containsKey(noun)) {
+                            goFurniture(noun);
+                        } else if (noun.equals("left") || (noun.equals("right"))) {
+                            moveDirection(noun);
+                        }else{
+                            System.out.println("Sorry, I don't understand your input, please enter again. ");
+                            FileManager.getResource("commands.txt");
+                            playerInput();
+                        }
                     } else {
                         System.out.println("Sorry, I don't understand your input, please enter again. ");
                         FileManager.getResource("commands.txt");
@@ -482,11 +487,17 @@ public class Player implements Serializable {
                     }
                     break;
                 case "get":
-                    if (furniture_items.contains(noun)) {
-                        pickUpItem(location);
-                        playerInput();
-                    } else if (puzzle_reward_item.contains(noun)) {
-                        inventory.add(noun);
+                    if (noun != null) {
+                        if (furniture_items.contains(noun)) {
+                            pickUpItem(location);
+                            playerInput();
+                        } else if (puzzle_reward_item.contains(noun)) {
+                            inventory.add(noun);
+                        } else {
+                            System.out.println("Sorry, I don't understand your input, please enter again. ");
+                            FileManager.getResource("commands.txt");
+                            playerInput();
+                        }
                     } else {
                         System.out.println("Sorry, I don't understand your input, please enter again. ");
                         FileManager.getResource("commands.txt");
@@ -494,19 +505,31 @@ public class Player implements Serializable {
                     }
                     break;
                 case "inspect":
-                    inspectItem(noun);
+                    if (noun != null) {
+                        inspectItem(noun);
+                    } else {
+                        System.out.println("Sorry, I don't understand your input, please enter again. ");
+                        FileManager.getResource("commands.txt");
+                        playerInput();
+                    }
                     break;
                 case "help":
                     helpMenu();
                     break;
                 case "drop":
-                    if (inventory.isEmpty()) {
-                        System.out.println("Sorry, your inventory is empty now and you cannot drop item.");
+                    if (noun != null) {
+                        if (inventory.isEmpty()) {
+                            System.out.println("Sorry, your inventory is empty now and you cannot drop item.");
+                            playerInput();
+                        } else if (noun.isEmpty()) {
+                            dropItem();
+                        } else
+                            dropSpecificItem(noun);
+                    } else {
+                        System.out.println("Sorry, I don't understand your input, please enter again. ");
+                        FileManager.getResource("commands.txt");
                         playerInput();
-                    } else if (noun.isEmpty()) {
-                        dropItem();
-                    } else
-                        dropSpecificItem(noun);
+                    }
                     break;
                 default:
                     System.out.println("Sorry, I don't understand your input, please enter again. ");
