@@ -15,6 +15,7 @@ public class Prompts {
 
     public static String getStringInput() {
         Scanner scan = new Scanner(System.in);
+
 //        scan.useDelimiter("\r\n");
         String userInput = scan.nextLine();
         //scan.nextLine();

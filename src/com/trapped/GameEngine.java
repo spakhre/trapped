@@ -49,7 +49,7 @@ public class GameEngine implements Serializable {
                             System.exit(0);
                         }
                     };
-                    timer.schedule(task,480000);
+                    //timer.schedule(task,480000);
 
                     playGame();
                 case 2: // quit game option

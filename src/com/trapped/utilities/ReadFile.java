@@ -52,10 +52,5 @@ public class ReadFile {
 		//return Arrays.toString(StringArray);Print out array on one line
 		return output;
 	}
-	
-	public static void main(String[] args)
-	{
-		ReadFile read = new ReadFile("test.txt");
-		System.out.println(read.toString());
-	}
+
 }

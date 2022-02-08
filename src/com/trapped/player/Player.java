@@ -13,7 +13,6 @@ import java.util.*;
 
 import static com.trapped.utilities.TextColor.*;
 
-
 public class Player implements Serializable{
     // Needed to move, were out of scope in one section
     public static String userInput;
@@ -252,10 +251,6 @@ public class Player implements Serializable{
             new_command();
         }
     }
-
-
-
-
 
     // solve puzzle
     public static void solvePuzzle(String loc) {
