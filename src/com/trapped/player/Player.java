@@ -190,7 +190,7 @@ public class Player implements Serializable{
 
     // check current location
     public static void checkCurrentLocation() {
-        System.out.println("Your current location: "+location);
+        System.out.println("Your current location: " + location);
         playerInput();
     }
 
@@ -538,8 +538,6 @@ public class Player implements Serializable{
                         FileManager.getResource("commands.txt");
                         playerInput();
                     }
-
-
                 }
             }
 

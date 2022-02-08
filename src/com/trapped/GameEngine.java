@@ -32,7 +32,7 @@ public class GameEngine implements Serializable {
                     System.out.println("\n--------------------------------");
                     System.out.println("What is your name: ");
                     String userName = Prompts.getStringInput();
-                    Prompts.ClearConsole();
+//                    Prompts.ClearConsole();
                     System.out.println("\n\nHello, " + BLUE_BOLD + userName.toUpperCase() + RESET);
 
                     FileManager.readMessageSlowly("introstory.txt", 10);
@@ -55,7 +55,6 @@ public class GameEngine implements Serializable {
                 case 2: // quit game option
                     System.out.println("Exiting the game. Thank you for playing");
                     System.exit(0);
-
                 default:
                     System.out.println("Invalid input! Please enter a number corresponding to one of the menu options.");
             }
