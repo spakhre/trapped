@@ -31,6 +31,8 @@ public class Player implements Serializable {
 
     static Scanner scan = new Scanner(System.in);
 
+    public static float volume;
+
 
     static Map<String, Map<String, Object>> map = furniturePuzzleGenerator();
 
@@ -316,7 +318,7 @@ public class Player implements Serializable {
                         // if user input correct answer
                         if (randomAnswer.contains(ans.toLowerCase())) {
                             System.out.println(furniture.get("puzzle_reward"));
-                            Sounds.playSounds(puzzle_sounds, 1000);
+                            Sounds.changeVolume(puzzle_sounds, 1000, volume);
                             System.out.println("You found " + puzzle_reward_item.get(0) + ".");
                             pickUpItem(puzzle_reward_item.get(0));
                             if (inventory.size() >= 5) {
@@ -347,7 +349,7 @@ public class Player implements Serializable {
                             String easyInput = scan.nextLine();
                             if (easyInput.equals(furniture.get("easy_answer"))) {
                                 System.out.println(furniture.get("puzzle_reward"));
-                                Sounds.playSounds(puzzle_sounds, 1000);
+                                Sounds.changeVolume(puzzle_sounds, 1000, volume);
                                 System.out.println("You found " + puzzle_reward_item.get(0) + ".");
                                 if (inventory.size() >= 5) {
                                     System.out.println("Please drop one item. Inventory cannot take more than 5 items.");
@@ -414,11 +416,11 @@ public class Player implements Serializable {
                             System.out.println("Which of the item you'd like to use?");
                             String ans = scan.nextLine();
                             if ((ans.equalsIgnoreCase(puzzle_verb + " " + puzzle_itemsNeeded.get(0))) || ans.equalsIgnoreCase(puzzle_itemsNeeded.get(0))) {
-                                Sounds.playSounds(puzzle_sounds, 1000);
+                                Sounds.changeVolume(puzzle_sounds, 1000, volume);
                                 System.out.println(puzzle_reward + " and you've found " + puzzle_reward_item.get(0));
                                 inventory.remove(puzzle_itemsNeeded.get(0));
                                 inventory.add(puzzle_reward_item.get(0));
-                                Sounds.playSounds("pick.wav", 1000);
+                                Sounds.changeVolume("pick.wav", 1000, volume);
                                 System.out.println("Added " + puzzle_reward_item.get(0) + " to your inventory");
                                 playerInput();
                             } else if ((inventory.contains(ans) && (!ans.equals(puzzle_itemsNeeded)))) {
@@ -453,7 +455,7 @@ public class Player implements Serializable {
                     while (max_attempts-- > 0) {
                         if (ans.trim().equals(puzzle_answer)) {
                             System.out.println(puzzle_reward);
-                            Sounds.playSounds(puzzle_sounds, 2000);
+                            Sounds.changeVolume(puzzle_sounds, 2000, volume);
                             System.out.println("You won the game! Thanks for playing!");
                             System.exit(0);
 
