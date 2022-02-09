@@ -29,6 +29,8 @@ public class Player implements Serializable {
     static boolean incorrectPass = true; // scope
     static int max_attempts = 3;
 
+
+
     static Scanner scan = new Scanner(System.in);
 
     public static float volume;
@@ -58,43 +60,31 @@ public class Player implements Serializable {
         playerInput();
     }
 
-    // inspect room, player can inspect either a furniture or an item. If inspect a furniture, the output gonna have: Description of this furniture, items in here.
+    // inspect room, player can inspect either a furniture or an item.
+    // If inspect a furniture, the output will have: Description of this furniture, items in here.
     // And if the furniture has a puzzle, it will show the puzzle's description.
     public static void inspectItem(String something) {
         //furniture
 
-        ArrayList<String> tempArr = new ArrayList<>();
+        Map<String, Object> furniture = map.get(something);
+
         if (something.equals("inventory")) {
             checkCurrentInventory();
         } else if (map.containsKey(something)) {
             location = something;
-            Map<String, Object> furniture = map.get(something);
             String furniture_desc = (String) furniture.get("furniture_desc");
             String furniture_picture = (String) furniture.get("furniture_picture");
+
             if (furniture.get("furniture_items") != null) {
                 ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
                 if (!furniture_items.isEmpty()) {
-                    FileManager.getResource(furniture_picture);
-                    System.out.println("Inspecting...\nYou found: " + TextColor.RED + furniture_items + TextColor.RESET);
-                    for (String item : furniture_items) {
-                        inventory.add(item);
-                        tempArr.add(item);
-                    }
-                    furniture_items.removeAll(tempArr);
-                    furniture.put("furniture_items", furniture_items);
-                    map.put("location", furniture);
-                    FileManager.writeJSON(map, furniturePuzzlesJsonPath);
-                    solvePuzzle(something);
+                    roomWithItems(something);
                 }
                 if (furniture_items.isEmpty()) {
-                    FileManager.getResource(furniture_picture);
-                    System.out.println("Inspecting...\nNo items found here.");
-                    solvePuzzle(something);
+                   noItemsInRoom(something);
                 }
             } else if (furniture.get("furniture_items") == null) {
-                FileManager.getResource(furniture_picture);
-                System.out.println("Inspecting...\nNo items found here.");
-                solvePuzzle(something);
+                noItemsInRoom(something);
             }
         }
 
@@ -120,6 +110,30 @@ public class Player implements Serializable {
         }
 
         playerInput();
+    }
+
+    public static void roomWithItems(String something){
+        Map<String, Object> furniture = map.get(something);
+        String furniture_picture = (String) furniture.get("furniture_picture");
+        ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
+        ArrayList<String> tempArr = new ArrayList<>();
+
+        FileManager.getResource(furniture_picture);
+        System.out.println("Inspecting...\nYou found: " + TextColor.RED + furniture_items + TextColor.RESET);
+        furniture_items.removeAll(tempArr);
+        furniture.put("furniture_items", furniture_items);
+        map.put("location", furniture);
+        FileManager.writeJSON(map, furniturePuzzlesJsonPath);
+        solvePuzzle(something);
+    }
+
+    public static void noItemsInRoom(String something){
+        Map<String, Object> furniture = map.get(something);
+        String furniture_picture = (String) furniture.get("furniture_picture");
+
+        FileManager.getResource(furniture_picture);
+        System.out.println("Inspecting...\nNo items found here.");
+        solvePuzzle(something);
     }
 
 
@@ -221,7 +235,8 @@ public class Player implements Serializable {
         }
     }
 
-    // Drop item -- will provide current inventory first then let player pick. This method will be used when inventory is full and player being asked to drop an item.
+    // Drop item -- will provide current inventory first then let player pick.
+    // This method will be used when inventory is full and player being asked to drop an item.
     public static void dropItem() {
         Map<String, Object> furniture = map.get(location);
         ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
@@ -256,10 +271,8 @@ public class Player implements Serializable {
                 map.put(location, furniture);
                 FileManager.writeJSON(map, furniturePuzzlesJsonPath);
                 System.out.println(item + " has been dropped from your inventory.");
-
             } else {
                 System.out.println("Sorry, the item you entered is not in your inventory.");
-
             }
             playerInput();
         }
@@ -294,7 +307,7 @@ public class Player implements Serializable {
                 if ((inventory.contains(puzzle_reward_item.get(0))) || (inventory.contains("key") && loc.equals("safe")) ||
                         (inventory.contains("a piece of paper with number 104") && loc.equals("window")) ||
                         (inventory.contains("a piece of paper with number 104") && loc.equals("safe"))) {
-                    System.out.println("The puzzle has been solved. Please feel free to explore other furnitures :)");
+                    System.out.println("The puzzle has been solved. Please feel free to explore other furniture :)");
                     playerInput();
                 }
                 // if not solved
@@ -393,7 +406,7 @@ public class Player implements Serializable {
             } else if (puzzle_type.equals("use tool")) {
                 //  if solved
                 if (inventory.contains(puzzle_reward_item.get(0))) {
-                    System.out.println("The puzzle has been solved. Please feel free to explore other furnitures :)");
+                    System.out.println("The puzzle has been solved. Please feel free to explore other furniture :)");
                     playerInput();
                 } else if ((inventory.contains("key") && loc.equals("safe")) ||
                         (inventory.contains("a piece of paper with number 104") && loc.equals("window")) ||
@@ -476,7 +489,6 @@ public class Player implements Serializable {
         }
     }
 
-
     public static void playerInput() {
         /*
          * This seems to be the main logic loop for the game. It takes in the player's input and then calls functions
@@ -508,64 +520,19 @@ public class Player implements Serializable {
                     break;
                 case "go":
                     // Currently, this is only pointing to the first index of the parsed array
-                    if (noun != null) {
-                        if (map.containsKey(noun)) {
-                            goFurniture(noun);
-                        } else if (noun.equals("left") || (noun.equals("right"))) {
-                            moveDirection(noun);
-                        } else {
-                            System.out.println("Sorry, I don't understand your input, please enter again. ");
-                            FileManager.getResource("commands.txt");
-                            playerInput();
-                        }
-                    } else {
-                        System.out.println("Sorry, I don't understand your input, please enter again. ");
-                        FileManager.getResource("commands.txt");
-                        playerInput();
-                    }
+                    move();
                     break;
                 case "get":
-                    if (noun != null) {
-                        if (furniture_items.contains(noun)) {
-                            pickUpItem(location, noun);
-                        } else if (puzzle_reward_item.contains(noun)) {
-                            inventory.add(noun);
-                        } else {
-                            System.out.println("Sorry, I don't understand your input, please enter again. ");
-                            FileManager.getResource("commands.txt");
-                        }
-                    } else {
-                        System.out.println("Sorry, I don't understand your input, please enter again. ");
-                        FileManager.getResource("commands.txt");
-                    }
-                    playerInput();
+                    get();
                     break;
                 case "inspect":
-                    if (noun != null) {
-                        inspectItem(noun);
-                    } else {
-                        System.out.println("Sorry, I don't understand your input, please enter again. ");
-                        FileManager.getResource("commands.txt");
-                        playerInput();
-                    }
+                    inspect();
                     break;
                 case "help":
                     helpMenu();
                     break;
                 case "drop":
-                    if (noun != null) {
-                        if (inventory.isEmpty()) {
-                            System.out.println("You have nothing to drop");
-                            playerInput();
-                        } else if (noun.isEmpty()) {
-                            dropItem();
-                        } else
-                            dropItem(noun);
-                    } else {
-                        System.out.println("Sorry, I don't understand your input, please enter again. ");
-                        FileManager.getResource("commands.txt");
-                        playerInput();
-                    }
+                    drop();
                     break;
                 default:
                     System.out.println("Sorry, I don't understand your input, please enter again. ");
@@ -574,6 +541,74 @@ public class Player implements Serializable {
             }
         }
     }
+
+    public static void drop() {
+        if (noun != null) {
+            if (inventory.isEmpty()) {
+                System.out.println("You have nothing to drop");
+                playerInput();
+            } else if (noun.isEmpty()) {
+                dropItem();
+            } else
+                dropItem(noun);
+        } else {
+            System.out.println("Sorry, I don't understand your input, please enter again. ");
+            FileManager.getResource("commands.txt");
+            playerInput();
+        }
+    }
+
+    public static void inspect(){
+        if (noun != null) {
+            inspectItem(noun);
+        } else {
+            System.out.println("Sorry, I don't understand your input, please enter again. ");
+            FileManager.getResource("commands.txt");
+            playerInput();
+        }
+    }
+
+    public static void get(){
+    Map<String, Object> furniture = map.get(location);
+    ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
+    ArrayList<String> puzzle_reward_item = (ArrayList<String>) furniture.get("puzzle_reward_item");
+
+        if (noun != null) {
+            if (furniture_items.contains(noun)) {
+                System.out.println("You added " + noun + " to your inventory");
+                pickUpItem(location, noun);
+            } else if (puzzle_reward_item.contains(noun)) {
+                inventory.add(noun);
+            } else {
+                System.out.println("Sorry, I don't understand your input, please enter again. ");
+                FileManager.getResource("commands.txt");
+            }
+        } else {
+            System.out.println("Sorry, I don't understand your input, please enter again. ");
+            FileManager.getResource("commands.txt");
+        }
+        playerInput();
+    }
+
+    public static void move(){
+        if (noun != null) {
+            if (map.containsKey(noun)) {
+                goFurniture(noun);
+            } else if (noun.equals("left") || (noun.equals("right"))) {
+                moveDirection(noun);
+            } else {
+                System.out.println("Sorry, I don't understand your input, please enter again. ");
+                FileManager.getResource("commands.txt");
+                playerInput();
+            }
+        } else {
+            System.out.println("Sorry, I don't understand your input, please enter again. ");
+            FileManager.getResource("commands.txt");
+            playerInput();
+        }
+    }
+
+
 
     public static void moveDirection(String direction) {
 //        Prompts.ClearConsole();
@@ -627,11 +662,9 @@ public class Player implements Serializable {
                 break;
             default:
                 System.out.println("Sorry you did not select a number from 1-4.");
-
         }
         playerInput();
     }
-
 }
 
 
