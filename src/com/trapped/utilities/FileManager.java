@@ -18,7 +18,7 @@ public class FileManager {
      */
 
     public static void getResource(String fileName) {
-        String art = "./resources/art/" + fileName;
+        String art = "resources/art/" + fileName;
         try (BufferedReader br = new BufferedReader(new FileReader(art))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -55,7 +55,7 @@ public class FileManager {
      */
 
     public static String convertTxtToString(String fileName){
-        String file = "./resources/" + fileName;
+        String file = "resources/" + fileName;
         Path path = Paths.get(file);
         StringBuilder sb = new StringBuilder();
 
@@ -74,7 +74,7 @@ public class FileManager {
      */
 
     public static Map<String, ArrayList<String>> loadJson(String fileName) {
-        String file = "./resources/cfg/" + fileName;
+        String file = "resources/cfg/" + fileName;
         Gson gson = new Gson();
 
         try {
@@ -89,5 +89,42 @@ public class FileManager {
             System.out.println(file + " not found");
         }
         return null;
+    }
+
+    public static void writeJSON(Map<String, Map<String, Object>> file, String path){
+        try(Writer w = new FileWriter(path)){
+            new Gson().toJson(file,w);
+            w.flush();
+        }catch(IOException e){
+            System.err.print(e);
+        }
+    }
+    public static void writeJSONDefaults(Map<String, Map<String, Object>> file, String path){
+        try(Writer w = new FileWriter(path)){
+            new Gson().toJson(file,w);
+            w.flush();
+        }catch(IOException e){
+            System.err.print(e);
+        }
+    }
+
+    public static Map<String, Map<String, Object>> loadFurniturePuzzlesTestJson(String path) {
+        Gson gson = new Gson();
+        try {
+            Reader reader = Files.newBufferedReader(Path.of(path));
+            Map<String, Map<String, Object>> map = gson.fromJson(reader, Map.class);
+            reader.close();
+            return map;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static void writeDefaults(){
+        String dirtyFilePath = "resources/furniture_puzzles.json";
+        String cleanFilePath = "resources/defaults/furniture_puzzles_test_defaults.json";
+        Map<String, Map<String, Object>> cleanFile = loadFurniturePuzzlesTestJson(cleanFilePath);
+        writeJSONDefaults(cleanFile,dirtyFilePath);
     }
 }

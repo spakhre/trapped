@@ -19,8 +19,8 @@ public class GameEngine implements Serializable {
     static float volume;
 
 
-
     public static void startGame()  {
+        FileManager.writeDefaults();
         FileManager.getResource("./splash_screen.txt");   // displaying splash screen
 
         System.out.println("\nPlease select an option from the menu.");
