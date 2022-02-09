@@ -67,11 +67,11 @@ public class GameEngine implements Serializable {
         String userName = scanner.nextLine();
         System.out.println("\n\nHello, " + BLUE_BOLD + userName.toUpperCase() + RESET);
 
-        FileManager.readMessageSlowly("introstory.txt", 10);
-        Sounds.changeVolume("phone.wav", 3000, volume);
-        System.out.println("Press Enter to Continue...");
-        scanner.nextLine();
-        FileManager.readMessageSlowly("intro_after_phone.txt", 0);
+//        FileManager.readMessageSlowly("introstory.txt", 10);
+//        Sounds.changeVolume("phone.wav", 3000, volume);
+//        System.out.println("Press Enter to Continue...");
+//        scanner.nextLine();
+//        FileManager.readMessageSlowly("intro_after_phone.txt", 0);
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
             @Override
