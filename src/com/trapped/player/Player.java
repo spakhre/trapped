@@ -492,7 +492,7 @@ public class Player implements Serializable {
         if (noun != null) {
             if (furniture_items.contains(noun)) {
                 System.out.println("You added " + noun + " to your inventory");
-                pickUpItem(location, noun);
+                pickUpItem(noun);
             } else if (puzzle_reward_item.contains(noun)) {
                 inventory.add(noun);
             } else {
