@@ -130,11 +130,11 @@ public class Puzzle{
     }
 
     public void getEasyRiddle() {
-        System.out.println(MAP.get("easy_question"));
+        System.out.println(MAP.get(currentLocation).get("easy_question"));
         //Scanner easy = new Scanner(System.in);
         String easyInput = Prompts.getStringInput();
 
-        if (easyInput.equals(MAP.get("easy_answer"))) {
+        if (easyInput.equals(MAP.get(currentLocation).get("easy_answer"))) {
             System.out.println(getPuzzleReward());
             Sounds.playSounds(getPuzzleSounds(), 1000);
             System.out.println("You found " + this.getPuzzleRewardItem().get(0) + ".");
