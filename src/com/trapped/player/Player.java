@@ -4,9 +4,8 @@ import com.google.gson.Gson;
 import com.trapped.GameEngine;
 import com.trapped.utilities.*;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Serializable;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -36,7 +35,7 @@ public class Player implements Serializable {
     private static Map<String, Map<String, Object>> furniturePuzzleGenerator() {
         Gson gson = new Gson();
         try {
-            Reader reader = Files.newBufferedReader(Path.of("resources/furniture_puzzles.json"));
+            Reader reader = Files.newBufferedReader(Path.of(furniturePuzzlesJsonPath), StandardCharsets.UTF_8);
             Map<String, Map<String, Object>> map = gson.fromJson(reader, Map.class);
             reader.close();
             return map;
@@ -151,7 +150,7 @@ public class Player implements Serializable {
                     }
                     dropItem(selection);
                 }
-                addItemAndUpdateJson(furniture_items,furniture);
+                addItemAndUpdateJson(furniture_items, furniture);
             }
             //if furniture has no item available to be picked up
             if (furniture_items.isEmpty()) {
@@ -164,7 +163,7 @@ public class Player implements Serializable {
                 if (response.isEmpty()) {
                     System.out.println("Sorry, I didn't understand your entry. You did not pick anything up from " + location);
                 } else if (response.equalsIgnoreCase("Y")) {
-                    addItemAndUpdateJson(furniture_items,furniture);
+                    addItemAndUpdateJson(furniture_items, furniture);
                 } else if (response.equalsIgnoreCase("N")) {
                     System.out.println("You did not pick anything from " + location);
                 } else {
@@ -174,7 +173,7 @@ public class Player implements Serializable {
         }
     }
 
-    private static void addItemAndUpdateJson(ArrayList<String> furniture_items,Map<String, Object> furniture){
+    private static void addItemAndUpdateJson(ArrayList<String> furniture_items, Map<String, Object> furniture) {
         inventory.add(noun);
         furniture_items.remove(noun);
         furniture.put("furniture_items", furniture_items);
@@ -251,7 +250,7 @@ public class Player implements Serializable {
 
         System.out.println("What would you like to do next?");
         userInput = scan.nextLine(); // gets userInput as a string from Prompts
-        // now extract verb/nouns from parsedInput
+        //now extract verb/nouns from parsedInput
         verb = TextParser.getVerb(userInput);
         noun = TextParser.getNoun(userInput);
 
@@ -262,37 +261,41 @@ public class Player implements Serializable {
             System.out.println("Sorry, I don't understand your input, please enter again.");
             FileManager.getResource("commands.txt");
         } else {
-            switch (verb) {
-                case "commands":
-                    FileManager.getResource("commands.txt");
-                    break;
-                case "quit":
-                    quitGame();
-                    break;
-                case "go":
-                    // Currently, this is only pointing to the first index of the parsed array
-                    move();
-                    break;
-                case "get":
-                    get();
-                    break;
-                case "inspect":
-                    inspect();
-                    break;
-                case "help":
-                    helpMenu();
-                    break;
-                case "drop":
-                    drop();
-                    break;
-                default:
-                    System.out.println("Sorry, I don't understand your input, please enter again. ");
-                    FileManager.getResource("commands.txt");
-            }
+            playerInputLogic(verb, noun);
         }
     }
 
-    private static void drop() {
+    public static void playerInputLogic(String verb, String noun) {
+        switch (verb) {
+            case "commands":
+                FileManager.getResource("commands.txt");
+                break;
+            case "quit":
+                quitGame();
+                break;
+            case "go":
+                // Currently, this is only pointing to the first index of the parsed array
+                move(noun);
+                break;
+            case "get":
+                get(noun);
+                break;
+            case "inspect":
+                inspect(noun);
+                break;
+            case "help":
+                helpMenu();
+                break;
+            case "drop":
+                drop(noun);
+                break;
+            default:
+                System.out.println("Sorry, I don't understand your input, please enter again. ");
+                FileManager.getResource("commands.txt");
+        }
+    }
+
+    private static void drop(String noun) {
         if (noun != null) {
             if (inventory.isEmpty()) {
                 System.out.println("You have nothing to drop");
@@ -307,7 +310,7 @@ public class Player implements Serializable {
         playerInput();
     }
 
-    private static void inspect() {
+    private static void inspect(String noun) {
         if (noun != null) {
             inspectItem(noun);
         } else {
@@ -317,7 +320,7 @@ public class Player implements Serializable {
         }
     }
 
-    private static void get() {
+    private static void get(String noun) {
         Map<String, Object> furniture = map.get(location);
         ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
         ArrayList<String> puzzle_reward_item = (ArrayList<String>) furniture.get("puzzle_reward_item");
@@ -339,7 +342,7 @@ public class Player implements Serializable {
         playerInput();
     }
 
-    private static void move() {
+    private static void move(String noun) {
         if (noun != null) {
             if (map.containsKey(noun)) {
                 goFurniture(noun);
@@ -348,13 +351,12 @@ public class Player implements Serializable {
             } else {
                 System.out.println("Sorry, I don't understand your input, please enter again. ");
                 FileManager.getResource("commands.txt");
-                playerInput();
             }
         } else {
             System.out.println("Sorry, I don't understand your input, please enter again. ");
             FileManager.getResource("commands.txt");
-            playerInput();
         }
+        playerInput();
     }
 
 
@@ -368,7 +370,6 @@ public class Player implements Serializable {
         FileManager.getResource(furniture_picture);
         System.out.println("Now you are in front of " + location);
         System.out.println(furniture_desc);
-        playerInput();
     }
 
     private static void goFurniture(String destinationaLoc) {

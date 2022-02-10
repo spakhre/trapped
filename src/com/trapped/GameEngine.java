@@ -29,7 +29,6 @@ public class GameEngine implements Serializable {
                 switch (userInput) {
                     case 1:
                         Sounds.playSounds("startsound.wav", 0);
-                        System.out.println("Does this run 1");
                         playGame();
                     case 2: // menu option sound must be between 6.0206 and -80
                         menu();
