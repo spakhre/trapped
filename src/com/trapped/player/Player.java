@@ -10,40 +10,19 @@ import java.util.*;
 
 import static com.trapped.utilities.TextColor.*;
 
-public class Player implements Serializable{
+public class Player implements Serializable {
     // Needed to move, were out of scope in one section
-    public static String userInput;
-    public static String verb;
-    public static ArrayList<String> nouns = new ArrayList<>();
-    public static String location="bed";
-    static List<String> rewarded_item = List.of(new String[]{"crowbar", "key", "a piece of paper with number 104"});
-
+    private String userInput;
+    private String verb;
+    private ArrayList<String> nouns = new ArrayList<>();
+    private String location = "bed";
     private Puzzle puzzle = Puzzle.getInstance();
-//    private Map<String, Object> furniture = puzzle.generatePuzzle(location);
 
     public static Inventory inventory = new Inventory();
 
-    static boolean incorrectPass = true; // scope
-
-//    static Map<String, Map<String, Object>> map = furniturePuzzleGenerator();
-//
-//    //Utility class for the map generated above, trying to ensure json file is closed
-//    public static Map<String, Map<String, Object>> furniturePuzzleGenerator() {
-//        Gson gson = new Gson();
-//        try {
-//            Reader reader = Files.newBufferedReader(Paths.get("resources/furniture_puzzles.json"));
-//            Map<String, Map<String, Object>> map = gson.fromJson(reader, Map.class);
-//            reader.close();
-//            return map;
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-
     // After the intro story, player will see current location and the view of the whole room.
     public void viewRoom() {
-        System.out.println("\nYou are currently in front of " + TextColor.RED  + location + TextColor.RESET);
+        System.out.println("\nYou are currently in front of " + TextColor.RED + location + TextColor.RESET);
         System.out.println(TextColor.GREEN + "\nWhat you'd like to do next? (type [commands] to check available commands and [help] to see other help items)" + TextColor.RESET);
         playerInput();
     }
@@ -53,11 +32,10 @@ public class Player implements Serializable{
     public void inspectItem(String something) {
         //furniture
         Prompts.ClearConsole();
-        if(something.equals("inventory")){
+        if (something.equals("inventory")) {
             inventory.checkInv();
             new_command();
-        }
-        else if (Puzzle.MAP.containsKey(something)) {
+        } else if (Puzzle.MAP.containsKey(something)) {
             location = something;
             Map<String, Object> furniture = Puzzle.MAP.get(something);
 
@@ -98,18 +76,15 @@ public class Player implements Serializable{
             if (furniture_items.contains(something)) {
                 System.out.println("It's just a " + something);
                 new_command();
-            }
-            else if (inventory.getInvList().contains(something)){
+            } else if (inventory.getInvList().contains(something)) {
                 System.out.println("It's just a " + something);
                 new_command();
-            }
-            else {
+            } else {
                 System.out.println("Sorry, I don't understand your input, please enter again. ");
                 FileManager.getResource("commands.txt");
                 playerInput();
             }
-        }
-        else{
+        } else {
             System.out.println("Sorry, I don't understand your input, please enter again. ");
             FileManager.getResource("commands.txt");
             playerInput();
@@ -117,13 +92,13 @@ public class Player implements Serializable{
     }
 
     // check current location
-    public  void checkCurrentLocation() {
+    public void checkCurrentLocation() {
         System.out.println("Your current location: " + location);
         playerInput();
     }
 
     // quit game
-    public static void quitGame(){
+    public static void quitGame() {
         System.out.println("Quitting the Game. See you next time.");
         System.exit(0);
     }
@@ -142,12 +117,11 @@ public class Player implements Serializable{
         puzzle.generatePuzzle(loc);
 
         if ("Y".equals(puzzle.getPuzzleExist())) {
-            if("riddles".equals(puzzle.getPuzzleType())) {
+            if ("riddles".equals(puzzle.getPuzzleType())) {
                 puzzle.checkRiddle(inventory.invList, loc);
-            }
-            else if("use tool".equals(puzzle.getPuzzleType())) {
+            } else if ("use tool".equals(puzzle.getPuzzleType())) {
                 puzzle.useTool(inventory.invList, loc);
-            } else if("final".equals(puzzle.getPuzzleType())) {
+            } else if ("final".equals(puzzle.getPuzzleType())) {
                 puzzle.finalPuzzle();
             }
         }
@@ -161,115 +135,94 @@ public class Player implements Serializable{
         verb = TextParser.getVerb(userInput);
         nouns = TextParser.getNouns(userInput);
 
-        Map<String, Object> furniture = puzzle.generatePuzzle(location);
-        ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
-        ArrayList<String> puzzle_reward_item = (ArrayList<String>) furniture.get("puzzle_reward_item");
-        if(verb==null && nouns.isEmpty()){
-            System.out.println("Sorry, I don't understand your input, please enter again.");
-            FileManager.getResource("commands.txt");
-            playerInput();
-        }
-        else if(verb == null){
-            System.out.println("Sorry, I don't understand your input, please enter again.");
-            FileManager.getResource("commands.txt");
-            playerInput();
-        }
-        else if (verb != null) {
-            // Show Commands
-            if (verb.equals("commands")){
-                FileManager.getResource("commands.txt");
-                playerInput();
-            }
-            // Quit Game
-            else if (verb.equals("quit")) {
-                if (nouns.contains("game") || (nouns.isEmpty())) {
-                    quitGame();
-                }
-            }
-            // "Go" command
-            else if (verb.equals("go")) {
-                // Currently this is only pointing to the first index of the parsed array
-                if (nouns.isEmpty()){
-                    System.out.println("Sorry, I don't understand your input, please enter again. ");
-                    FileManager.getResource("commands.txt");
-                    playerInput();
-                }
-                else if (puzzle.MAP.containsKey(nouns.get(0))) {
+        puzzle.generatePuzzle(location); // change location/furniture
+        checkCommands();
+        playerInput();
+    }
 
-                    goFurniture(nouns.get(0));
-                } else if (nouns.get(0).equals("left") || (nouns.get(0).equals("right"))) {
-                    moveDirection(nouns.get(0));
-                }
-                else{
-                    System.out.println("Sorry, I don't understand your input, please enter again. ");
-                    FileManager.getResource("commands.txt");
-                    playerInput();
-                }
+    private void checkCommands() {
+        ArrayList<String> puzzle_reward_item = puzzle.getPuzzleRewardItem();
+
+        if (verb == null || nouns.isEmpty()) {
+            System.out.println("Sorry, I don't understand your input, please enter again.");
+            FileManager.getResource("commands.txt");
+            return;
+        }
+        //VERB IS NOT NULL PAST HERE
+        // Show Commands
+        if (verb.equals("commands")) {
+            FileManager.getResource("commands.txt");
+            return;
+        }
+        // Quit Game
+        else if (verb.equals("quit")) {
+            if (nouns.contains("game") || (nouns.isEmpty())) {
+                quitGame();
             }
-            // "Get" command
-            else if (verb.equals("get")) {   // || get_value.toString().contains(verb)) {
-                if (nouns.isEmpty()) {
-                    System.out.println("Sorry, I don't understand your input, please enter again. ");
-                    FileManager.getResource("commands.txt");
-                    playerInput();
-                }
-                else {
-                    if (inventory.invList.contains(nouns.get(0))) {
-                        assert Puzzle.MAP != null;
-                        inventory.pickUpItem(location, Puzzle.MAP);
-                        new_command();
-                    }
-                    else if (puzzle_reward_item.contains(nouns.get(0))) {
-                        inventory.getInvList().add(nouns.get(0));
-                    }
-                    else {
-                        System.out.println("Sorry, I don't understand your input, please enter again. ");
-                        FileManager.getResource("commands.txt");
-                        playerInput();
-                    }
-                }
-            }
-            else if (verb.equals("inspect")) {   // || inspect_value.toString().contains(verb)) {
-                if (nouns.isEmpty()){
-                    System.out.println("Sorry, I don't understand your input, please enter again.");
-                    FileManager.getResource("commands.txt");
-                    playerInput();
-                }
-                else{
-                    inspectItem(nouns.get(0));
-                }
-            }
-            // "Help"
-            else if (verb.equals("help")) {  // || help_value.toString().contains(verb)) {
-                gameMenu();
-                playerInput();
-            }
-            else if (verb.equals("drop")) {  // || drop_value.toString().contains(verb)) {
-                if (inventory.getInvList().isEmpty()) {
-                    System.out.println("Sorry, your inventory is empty now and you cannot drop item.");
-                    new_command();
-                }
-                else if (nouns.isEmpty()) {
-                    inventory.dropItem();
-                    new_command();
-                }
-                else {
-                    inventory.dropSpecificItem(nouns.get(0));
-                    new_command();
-                }
-            }
-            //area to playtest
-            else if(userInput.equals(nouns.get(0))){
-                System.out.println("Sorry, I don't understand your input, please enter again.");
-                FileManager.getResource("commands.txt");
-                playerInput();
-            }
-            else {
-                System.out.println("Sorry, I don't understand your input, please enter again.");
-                FileManager.getResource("commands.txt");
-                playerInput();
+        }  // "Help"
+        else if (verb.equals("help")) {  // || help_value.toString().contains(verb)) {
+            gameMenu();
+            return;
+        }
+        // "Go" command
+        else if (verb.equals("go")) {
+            goCommand();
+        }
+        // "Get" command
+        else if (verb.equals("get")) {   // || get_value.toString().contains(verb)) {
+            getCommand(puzzle_reward_item);
+
+        } else if (verb.equals("inspect")) {   // || inspect_value.toString().contains(verb)) {
+            inspectItem(nouns.get(0));
+        }
+
+        else if (verb.equals("drop")) {  // || drop_value.toString().contains(verb)) {
+            if (inventory.getInvList().isEmpty()) {
+                System.out.println("Sorry, your inventory is empty now and you cannot drop item.");
+                new_command();
+            } else if (nouns.isEmpty()) {
+                inventory.dropItem();
+                new_command();
+            } else {
+                inventory.dropSpecificItem(nouns.get(0));
+                new_command();
             }
         }
+        //area to playtest
+        else {
+            System.out.println("Sorry, I don't understand your input, please enter again.");
+            FileManager.getResource("commands.txt");
+        }
+    }
+
+    private void getCommand(ArrayList<String> puzzle_reward_item) {
+
+        if (inventory.invList.contains(nouns.get(0))) {
+            assert Puzzle.MAP != null;
+            inventory.pickUpItem(location, Puzzle.MAP);
+            new_command();
+        } else if (puzzle_reward_item.contains(nouns.get(0))) {
+            inventory.getInvList().add(nouns.get(0));
+        } else {
+            System.out.println("Sorry, I don't understand your input, please enter again. ");
+            FileManager.getResource("commands.txt");
+            playerInput();
+        }
+
+    }
+
+    private void goCommand() {
+        // Currently this is only pointing to the first index of the parsed array
+        if (puzzle.MAP.containsKey(nouns.get(0))) {
+            goFurniture(nouns.get(0));
+        } else if (nouns.get(0).equals("left") || (nouns.get(0).equals("right"))) {
+            moveDirection(nouns.get(0));
+        } else {
+            System.out.println("Sorry, I don't understand your input, please enter again. ");
+            FileManager.getResource("commands.txt");
+//            playerInput();
+        }
+
     }
 
     public void moveDirection(String direction) {
@@ -324,10 +277,11 @@ public class Player implements Serializable{
         } else if (selection == 4) {
             quitGame();
         }
-        new_command ();
+        new_command();
         Prompts.ClearConsole();
     }
-    public void new_command (){
+
+    public void new_command() {
 
         System.out.println(TextColor.GREEN + "\nWhat you'd like to do next? (type [commands] to check available commands and [help] to see other help items)" + TextColor.RESET);
         playerInput();
