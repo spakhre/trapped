@@ -1,6 +1,8 @@
 package com.trapped.utilities;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Map;
+import java.util.Scanner;
 
 public class TextParser {
 
@@ -14,11 +16,6 @@ public class TextParser {
         String[] strArr;
         ArrayList<String> parsedArr = new ArrayList<>();
         String stripRegex = "[^A-Za-z]";
-
-//        if (userInput.isEmpty() || userInput == null) {
-//            System.out.println("Empty, or null string passed to parser");
-//            return parsedArr;
-//        }
 
         strArr = userInput.trim().split(stripRegex);
 
@@ -69,11 +66,10 @@ public class TextParser {
      * will return an array with verb keywords removed
      */
 
-    public static ArrayList<String> getNouns (String userInput) {
+    public static String getNoun (String userInput) {
         ArrayList<String> parsedArr = parseText(userInput.toLowerCase());
         ArrayList<String> nouns = new ArrayList<>();
         String word;
-
         //keywords from JSON as LinkedTreeMap
         Map<String, ArrayList<String>> nounMap = FileManager.loadJson("nouns.json");
 
@@ -89,7 +85,35 @@ public class TextParser {
                 }
             }
         }
-        return nouns;
+        String noun = null;
+        if(!nouns.isEmpty()) {
+            noun = nouns.get(0);
+        }
+        return noun;
+    }
+
+    public static int integerParse(){
+        int value;
+        try {
+            Scanner scan = new Scanner(System.in);
+            value = scan.nextInt();
+        }
+        catch(InputMismatchException e){
+            value=0;
+        }
+        return value;
+    }
+
+    public static float floatParse(){
+        float value;
+        try {
+            Scanner scan = new Scanner(System.in);
+            value = scan.nextFloat();
+        }
+        catch(InputMismatchException e){
+            value=7;
+        }
+        return value;
     }
 
 

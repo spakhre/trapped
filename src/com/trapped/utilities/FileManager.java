@@ -18,7 +18,7 @@ public class FileManager {
      */
 
     public static void getResource(String fileName) {
-        String art = "./resources/art/" + fileName;
+        String art = "resources/art/" + fileName;
         try (BufferedReader br = new BufferedReader(new FileReader(art))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -27,17 +27,6 @@ public class FileManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-       /* var out = new BufferedOutputStream(System.out);
-        try {
-            if (Files.exists(Path.of(art))) {
-                Files.copy(Path.of(art), out);
-                out.flush();    // this sends the stream to default output stream
-                out.close();
-            }
-        }
-        catch (IOException e) {
-            System.out.println(fileName + "not found");
-        }*/
     }
 
     /*
@@ -66,7 +55,7 @@ public class FileManager {
      */
 
     public static String convertTxtToString(String fileName){
-        String file = "./resources/" + fileName;
+        String file = "resources/" + fileName;
         Path path = Paths.get(file);
         StringBuilder sb = new StringBuilder();
 
@@ -85,7 +74,7 @@ public class FileManager {
      */
 
     public static Map<String, ArrayList<String>> loadJson(String fileName) {
-        String file = "./resources/cfg/" + fileName;
+        String file = "resources/cfg/" + fileName;
         Gson gson = new Gson();
 
         try {
@@ -102,24 +91,40 @@ public class FileManager {
         return null;
     }
 
-    //Attempt at a more generic load json, assume at least the key would be a String with unknown value
-
-    public static Map<String, ?> fromJsonAsMap(String fileName) {
-        String file = "./resources/cfg/" + fileName;
-        Gson gson = new Gson();
-
-        try {
-            if (Files.exists(Path.of(file))) {
-                Reader reader = Files.newBufferedReader(Paths.get(file));
-                Map<String, ?> map = gson.fromJson(reader, Map.class);
-                reader.close();
-                return map;
-            }
+    public static void writeJSON(Map<String, Map<String, Object>> file, String path){
+        try(Writer w = new FileWriter(path)){
+            new Gson().toJson(file,w);
+            w.flush();
+        }catch(IOException e){
+            System.err.print(e);
         }
-        catch(IOException e) {
-            System.out.println(file + " not found");
+    }
+    public static void writeJSONDefaults(Map<String, Map<String, Object>> file, String path){
+        try(Writer w = new FileWriter(path)){
+            new Gson().toJson(file,w);
+            w.flush();
+        }catch(IOException e){
+            System.err.print(e);
+        }
+    }
+
+    public static Map<String, Map<String, Object>> loadFurniturePuzzlesTestJson(String path) {
+        Gson gson = new Gson();
+        try {
+            Reader reader = Files.newBufferedReader(Path.of(path));
+            Map<String, Map<String, Object>> map = gson.fromJson(reader, Map.class);
+            reader.close();
+            return map;
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return null;
     }
 
+    public static void writeDefaults(){
+        String dirtyFilePath = "resources/furniture_puzzles.json";
+        String cleanFilePath = "resources/defaults/furniture_puzzles_test_defaults.json";
+        Map<String, Map<String, Object>> cleanFile = loadFurniturePuzzlesTestJson(cleanFilePath);
+        writeJSONDefaults(cleanFile,dirtyFilePath);
+    }
 }

@@ -1,0 +1,238 @@
+{
+  "bed": {
+    "name": "bed",
+    "furniture_desc": "The bed is a normal size, it's made out of light oak. It's very sturdy, well built, and durable. ",
+    "furniture_picture": "bed.txt",
+    "furniture_available_directions": [
+      "left",
+      "right"
+    ],
+    "left": "door",
+    "right": "safe",
+    "furniture_items": [
+      "matches"
+    ],
+    "puzzle_exist": "N",
+    "puzzle_type": "",
+    "puzzle_reward_item": [],
+    "target_item": [],
+    "furniture_sounds": "",
+    "puzzle_desc": "",
+    "puzzle_hint": "",
+    "puzzle_reward": "",
+    "puzzle_filename": [],
+    "puzzle_itemsNeeded": [],
+    "puzzle_verb": "",
+    "puzzle_answer": "",
+    "puzzle_sounds": "",
+    "puzzle_picture_filename": "",
+    "multiple_puzzle_answer": [],
+    "easy_question": "",
+    "easy_answer": ""
+  },
+  "door": {
+    "name": "door",
+    "furniture_desc": "This door has a keypad and is locked. The only way you can get out of here is if you know the 3-digit password used to unlock it",
+    "furniture_available_directions": [
+      "left",
+      "right"
+    ],
+    "left": "window",
+    "right": "bed",
+    "furniture_sounds": "door_close.wav",
+    "puzzle_exist": "Y",
+    "puzzle_type": "final",
+    "puzzle_desc": "Please enter the 3-digit passcode. ",
+    "puzzle_hint": "the number is somewhere in this room",
+    "puzzle_reward": "You've got it right! The door is now unlocked!",
+    "puzzle_filename": [],
+    "puzzle_itemsNeeded": [],
+    "furniture_items": [],
+    "puzzle_verb": "",
+    "puzzle_answer": "104",
+    "puzzle_sounds": "open_door.wav",
+    "furniture_picture": "door.txt",
+    "puzzle_reward_item": [],
+    "target_item": [],
+    "multiple_puzzle_answer": [],
+    "easy_question": "",
+    "easy_answer": ""
+  },
+  "window": {
+    "name": "window",
+    "furniture_desc": "there is a glass window in this room too. You have no idea how to open it. You see a key that's hanging outside of the window, but you must open the window to reach it. ",
+    "furniture_available_directions": [
+      "left",
+      "right"
+    ],
+    "left": "chair",
+    "right": "door",
+    "furniture_items": [],
+    "furniture_sounds": "",
+    "puzzle_exist": "Y",
+    "puzzle_type": "use tool",
+    "puzzle_desc": "a key is hanging outside the window, you need to open the window to get it.",
+    "puzzle_filename": [],
+    "puzzle_hint": "maybe you need a tool",
+    "puzzle_reward": "You opened the window.",
+    "puzzle_itemsNeeded": [
+      "crowbar"
+    ],
+    "puzzle_reward_item": [
+      "key"
+    ],
+    "target_item": ["a piece of paper with number 104"],
+    "puzzle_verb": "use",
+    "puzzle_answer": "",
+    "puzzle_sounds": "glass_breaking.wav",
+    "furniture_picture": "window.txt",
+    "multiple_puzzle_answer": [],
+    "easy_question": "",
+    "easy_answer": ""
+  },
+  "drawer": {
+    "name": "drawer",
+    "furniture_desc": "It is a locked drawer",
+    "furniture_items": [
+      "wallet"
+    ],
+    "puzzle_desc": "You need to open the drawer",
+    "furniture_available_directions": [
+      "left",
+      "right"
+    ],
+    "left": "safe",
+    "right": "lamp",
+    "puzzle_exist": "Y",
+    "puzzle_type": "use tool",
+    "puzzle_filename": [],
+    "puzzle_hint": "you probably need a key",
+    "puzzle_reward": "You opened the drawer!",
+    "puzzle_itemsNeeded": [
+      "key"
+    ],
+    "puzzle_verb": "use",
+    "puzzle_reward_item": [
+      "a piece of paper with number 104"
+    ],
+    "target_item": [],
+    "puzzle_answer": "",
+    "puzzle_sounds": "drawer_opening.wav",
+    "furniture_picture": "drawer.txt",
+    "furniture_sounds": "",
+    "multiple_puzzle_answer": [],
+    "easy_question": "",
+    "easy_answer": ""
+  },
+  "safe": {
+    "name": "safe",
+    "furniture_available_directions": [
+      "left",
+      "right"
+    ],
+    "left": "bed",
+    "right": "drawer",
+    "furniture_items": ["candle"],
+    "furniture_desc": "The safe is a name brand with a lot of focus on quality and security. Since this is a very reliable and a high security brand, the only way you can open it is if you answer a question.",
+    "puzzle_exist": "Y",
+    "puzzle_type": "riddles",
+    "puzzle_desc": "You need to answer a question to open the safe:",
+    "puzzle_filename": [
+      "riddles1.txt",
+      "riddles2.txt",
+      "riddles3.txt"
+    ],
+    "puzzle_reward": "You opened the safe...",
+    "puzzle_verb": "",
+    "puzzle_itemsNeeded": [],
+    "puzzle_reward_item": [
+      "crowbar"
+    ],
+    "target_item": ["key"],
+    "multiple_puzzle_answer": [
+      [
+        "6",
+        "six"
+      ],
+      [
+        "2",
+        "two",
+        "two apples",
+        "two apple",
+        "2apple",
+        "2apples"
+      ],
+      [
+        "0",
+        "zero",
+        "zero eggs",
+        "zero egg",
+        "zeroegg",
+        "zeroeggs"
+      ]
+    ],
+    "puzzle_sounds": "safe_open.wav",
+    "easy_question": "What is the last day of ILT, please enter MMDDYYYY",
+    "easy_answer": "02222022",
+    "furniture_picture": "safe.txt",
+    "furniture_sounds": "",
+    "puzzle_hint": "",
+    "puzzle_answer": ""
+  },
+  "lamp": {
+    "name": "lamp",
+    "furniture_desc": "It is a lamp",
+    "furniture_available_directions": [
+      "left",
+      "right"
+    ],
+    "left": "drawer",
+    "right": "chair",
+    "furniture_sounds": "",
+    "puzzle_exist": "N",
+    "puzzle_type": "",
+    "puzzle_desc": "",
+    "puzzle_hint": "",
+    "puzzle_reward": "",
+    "puzzle_filename": [],
+    "puzzle_itemsNeeded": [],
+    "furniture_items": [],
+    "puzzle_verb": "",
+    "puzzle_answer": "",
+    "puzzle_sounds": "lamp.wav",
+    "furniture_picture": "lamp.txt",
+    "puzzle_reward_item": [],
+    "multiple_puzzle_answer": [],
+    "easy_question": "",
+    "easy_answer": ""
+  },
+  "chair": {
+    "name": "chair",
+    "furniture_desc": "the chair is made out of wood, it’s lightweight and painted red. ",
+    "furniture_available_directions": [
+      "left",
+      "right"
+    ],
+    "furniture_items": [
+      "laptop"
+    ],
+    "left": "lamp",
+    "right": "window",
+    "furniture_sounds": "",
+    "puzzle_exist": "N",
+    "puzzle_type": "",
+    "puzzle_desc": "",
+    "puzzle_hint": "",
+    "puzzle_reward": "",
+    "puzzle_filename": [],
+    "puzzle_itemsNeeded": [],
+    "puzzle_verb": "",
+    "puzzle_answer": "",
+    "puzzle_sounds": "chair.wav",
+    "furniture_picture": "chair.txt",
+    "puzzle_reward_item": [],
+    "multiple_puzzle_answer": [],
+    "easy_question": "",
+    "easy_answer": ""
+  }
+}
