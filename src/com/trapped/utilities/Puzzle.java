@@ -5,6 +5,7 @@ import com.trapped.player.Inventory;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -131,10 +132,10 @@ public class Puzzle{
     }
 
     public void getEasyRiddle() {
-        System.out.println(MAP.get("easy_question"));
+        System.out.println(MAP.get(currentLocation).get("easy_question"));
         String easyInput = Prompts.getStringInput();
 
-        if (easyInput.equals(MAP.get("easy_answer"))) {
+        if (easyInput.equals(MAP.get(currentLocation).get("easy_answer"))) {
             System.out.println(getPuzzleReward());
             Sounds.playSounds(getPuzzleSounds(), 1000);
             System.out.println("You found " + this.getPuzzleRewardItem().get(0) + ".");
