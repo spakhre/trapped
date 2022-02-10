@@ -14,9 +14,10 @@ import static com.trapped.utilities.TextColor.RESET;
 
 public class GameEngine implements Serializable {
     private boolean quitGame = false;
+    private Player player = new Player();
 
+    public void startGame()  {
 
-    public static void startGame()  {
         while (true) {
             FileManager.getResource("./splash_screen.txt");   // displaying splash screen
 
@@ -32,7 +33,7 @@ public class GameEngine implements Serializable {
                     System.out.println("\n--------------------------------");
                     System.out.println("What is your name: ");
                     String userName = Prompts.getStringInput();
-                    Prompts.ClearConsole();
+//                    Prompts.ClearConsole();
                     System.out.println("\n\nHello, " + BLUE_BOLD + userName.toUpperCase() + RESET);
 
                     FileManager.readMessageSlowly("introstory.txt", 10);
@@ -55,21 +56,15 @@ public class GameEngine implements Serializable {
                 case 2: // quit game option
                     System.out.println("Exiting the game. Thank you for playing");
                     System.exit(0);
-
                 default:
                     System.out.println("Invalid input! Please enter a number corresponding to one of the menu options.");
             }
         }
     }
 
-    public static void playGame() {
+    public void playGame() {
         while (true) {
-            Player.viewRoom();
+            player.viewRoom();
         }
     }
-
-
 }
-
-
-

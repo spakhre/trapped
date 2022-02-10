@@ -6,7 +6,7 @@ import java.lang.ProcessBuilder;
 
 
 public class Prompts {
-    //static Scanner scan = new Scanner(System.in);
+    static Scanner scan = new Scanner(System.in);
 
     /*
      * gets String from user input
@@ -14,12 +14,7 @@ public class Prompts {
      */
 
     public static String getStringInput() {
-        Scanner scan = new Scanner(System.in);
-        //scan.useDelimiter("\r\n");
         String userInput = scan.nextLine();
-
-        //scan.nextLine();
-        //scan.close();
         return userInput;
     }
 
@@ -29,39 +24,16 @@ public class Prompts {
      */
 
     public static int getIntInput() {
-        Scanner scan = new Scanner(System.in);
         try {
             int userInput = scan.nextInt();
-            //scan.nextLine();
-            //scan.close();
             return userInput;
         }
         catch (InputMismatchException e) {
             System.out.println("Invalid input. Input must be an integer.");
-            //scan.nextLine();    //clear buffer to ready for next input
         }
         finally {
             scan.nextLine();
-            //scan.close();
         }
-
-//        boolean invalid = true;
-//        while(invalid) {
-//            try {
-//                int userInput = scan.nextInt();
-//                scan.nextLine();
-//                //if(userInput instanceof Integer) {
-//                invalid = false;
-//                scan.close();
-//                return userInput;
-//                //}
-//            }
-//            catch (InputMismatchException e) {
-//                System.out.println("Invalid input. Input must be an integer.");
-//                scan.nextLine();    //clear buffer to ready for next input
-//            }
-//        }
-//        scan.close();
           return 0;
     }
 
@@ -76,9 +48,9 @@ public class Prompts {
                 ProcessBuilder pb = new ProcessBuilder("clear");
                 pb.inheritIO().start().waitFor();
             }
-        }catch(Exception e){
+        }
+        catch(Exception e){
             System.out.println(e);
         }
     }
-    
 }
