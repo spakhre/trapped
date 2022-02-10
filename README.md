@@ -12,17 +12,17 @@ The game takes place in a mysterious room. The player has to explore the room, l
 
 
 ## Release Version
-> Version 2.1
+Version 2.1
 > 
 > whats new?
 > 
-> *Item persistence!
+> Item persistence!
 > 
-> *Less bugs!
+> Less bugs!
 > 
-> *Volume control!
+> Volume control!
 > 
-> *Did we mention, less bugs?
+> Did we mention, less bugs?
 
 ## Contributors
 ### v1 Team
