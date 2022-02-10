@@ -50,9 +50,9 @@ public class Gui extends JFrame {
         return this;
     }
 
-    public void createGameScreen() {
-        guiPlayPanel = new GuiPlayPanel(this);
-        setMainPanel(guiPlayPanel);
-    }
+//    public void createGameScreen() {
+//        guiPlayPanel = new GuiPlayPanel(this);
+//        setMainPanel(guiPlayPanel);
+//    }
 
 }

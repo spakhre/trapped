@@ -88,7 +88,7 @@ public class GuiStartPanel extends GuiBackgroundImageLabelPanel {
         public void actionPerformed(ActionEvent e) {
             System.out.println("Start Screen Pressed.....");
             //Create Game Screen
-            getGui().createGameScreen();
+//            getGui().createGameScreen();
         }
     }
 

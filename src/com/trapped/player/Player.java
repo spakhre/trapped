@@ -15,22 +15,15 @@ public class Player implements Serializable{
     public static String userInput;
     public static String verb;
     public static ArrayList<String> nouns = new ArrayList<>();
-    //Map<String, Items> inventory = new HashMap<String, Items>(); // player's inventory
     public static String location="bed";
-
-    //private List<String> inventory = new ArrayList<>();
     static List<String> rewarded_item = List.of(new String[]{"crowbar", "key", "a piece of paper with number 104"});
-
 
     private Puzzle puzzle = Puzzle.getInstance();
 //    private Map<String, Object> furniture = puzzle.generatePuzzle(location);
 
     public static Inventory inventory = new Inventory();
-//    static List<String> inventory = new ArrayList<>();
-
 
     static boolean incorrectPass = true; // scope
-
 
 //    static Map<String, Map<String, Object>> map = furniturePuzzleGenerator();
 //
@@ -64,8 +57,6 @@ public class Player implements Serializable{
             inventory.checkInv();
             new_command();
         }
-
-
         else if (Puzzle.MAP.containsKey(something)) {
             location = something;
             Map<String, Object> furniture = Puzzle.MAP.get(something);
@@ -83,7 +74,7 @@ public class Player implements Serializable{
                         FileManager.getResource(furniture_picture);
 
                         System.out.println("Inspecting...\nYou found: " + RED + furniture_items.get(0) + RESET);
-                        pickUpItem(something);
+                        inventory.pickUpItem(something, Puzzle.MAP);
 
                         solvePuzzle(something);
                     }
@@ -101,8 +92,6 @@ public class Player implements Serializable{
         }
 
         //item
-
-
         else if (Puzzle.MAP.get(location).get("furniture_items") != null) {
             ArrayList<String> furniture_items = (ArrayList<String>) Puzzle.MAP.get(location).get("furniture_items");
 
@@ -125,70 +114,6 @@ public class Player implements Serializable{
             FileManager.getResource("commands.txt");
             playerInput();
         }
-
-    }
-
-
-    // item disappear from inventory
-    public void useItem(String item) {
-        inventory.remove(item);
-    }
-
-    // check current inventory
-    public void checkCurrentInventory() {
-        System.out.println("Your current inventory: " + inventory);
-        new_command();
-    }
-
-
-
-    // pickup item method.
-    public void pickUpItem(String location) {
-
-        if (Puzzle.MAP.get(location) != null) {
-            Map<String, Object> furniture = Puzzle.MAP.get(location);
-            ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
-            // if inventory is full. player need to drop an item, then item found in current location will be added to inventory.
-            if (inventory.size() >= 5) {
-                System.out.println("inventory cannot take more than 5 items. Please drop one item.");
-                System.out.println("Which item you'd like to drop?");
-                String selection = Prompts.getStringInput();
-                while (!inventory.contains(selection.toLowerCase())) {
-                    System.out.println("Sorry, the item you entered is not in inventory, please select again.");
-                    selection = Prompts.getStringInput();
-                }
-                inventory.remove(selection);
-                Sounds.playSounds("drop.wav",1000);
-                System.out.println(selection + " has been dropped from your inventory.");
-                inventory.add(furniture_items.get(0));
-                System.out.println(furniture_items.get(0) + " has been added to your inventory");
-                Sounds.playSounds("pick.wav",1000);
-            }
-            // if inventory is not full
-            else {
-                //if furniture has no item available to be picked up
-                if (furniture_items.isEmpty()) {
-                    System.out.println(location + " is empty. Nothing can be added.");
-                }
-                //if furniture has an item available to be picked up
-                else if (!inventory.contains(furniture_items.get(0))) {
-                    System.out.println("\nDo you want to add " + furniture_items.get(0) + " to inventory? [Y/N]");
-                    Scanner scan = new Scanner(System.in);
-                    String response = scan.nextLine();
-                    if (response.isEmpty()) {
-                        System.out.println("Sorry, I don't understand your entry. You did not pick anything from " + location);
-                    } else if (response.equalsIgnoreCase("Y")) {
-                        System.out.println(furniture_items.get(0) + " has been picked up and added to your inventory");
-                        Sounds.playSounds("pick.wav", 1000);
-                        inventory.add(furniture_items.get(0));
-                    } else if (response.equalsIgnoreCase("N")) {
-                        System.out.println("You did not pick anything from " + location);
-                    } else {
-                        System.out.println("Sorry, I don't understand your entry. You did not pick anything from " + location);
-                    }
-                }
-            }
-        }
     }
 
     // check current location
@@ -203,7 +128,6 @@ public class Player implements Serializable{
         System.exit(0);
     }
 
-
     // play again
 //    public static void playAgain(String input) {
 //        if (input.equals("again") || (input.equals("play again"))){
@@ -211,51 +135,6 @@ public class Player implements Serializable{
 //        }
 //    }
 
-    // Drop item -- will provide current inventory first then let player pick. This method will be used when inventory is full and player being asked to drop an item.
-    public void dropItem() {
-
-        System.out.println("Your inventory: " + inventory);
-
-        System.out.println("Which item you'd like to drop? Please enter item name. ");
-        String selected_drop = Prompts.getStringInput(); // scan.nextLine();
-        if (inventory.contains(selected_drop.toLowerCase())) {
-            if(rewarded_item.contains(selected_drop)){
-                if (rewarded_item.contains(selected_drop)) {
-                    System.out.println("Sorry, you cannot drop "+selected_drop +". It was automatically added by your solved puzzle");
-                    new_command();
-                }
-                else {
-                    inventory.remove(selected_drop);
-                    Sounds.playSounds("drop.wav",1000);
-                    System.out.println(selected_drop + " has been dropped from your inventory.");
-                    new_command();
-                }
-            }
-
-        } else {
-            System.out.println("Sorry, you cannot drop "+selected_drop +". It is not in your inventory");
-            new_command();
-        }
-    }
-
-    // Drop a specific item - this will be used when player input "drop xxx"
-    public void dropSpecificItem(String item) {
-        if (inventory.contains(item.toLowerCase())) {
-            if (rewarded_item.contains(item)) {
-                System.out.println("Sorry, you cannot drop "+item +". It was automatically added by your solved puzzle");
-                new_command();
-            }
-            else{
-            inventory.remove(item);
-            Sounds.playSounds("drop.wav",1000);
-            System.out.println(item + " has been dropped from your inventory.");
-            new_command();
-            }
-        } else {
-            System.out.println("Sorry, the item you entered is not in your inventory.");
-            new_command();
-        }
-    }
 
     // solve puzzle
     public void solvePuzzle(String loc) {
@@ -264,27 +143,23 @@ public class Player implements Serializable{
 
         if ("Y".equals(puzzle.getPuzzleExist())) {
             if("riddles".equals(puzzle.getPuzzleType())) {
-                puzzle.checkRiddle(this.inventory, loc);
+                puzzle.checkRiddle(inventory.invList, loc);
             }
             else if("use tool".equals(puzzle.getPuzzleType())) {
-                puzzle.useTool(this.inventory, loc);
+                puzzle.useTool(inventory.invList, loc);
             } else if("final".equals(puzzle.getPuzzleType())) {
                 puzzle.finalPuzzle();
             }
         }
-
         new_command();
     }
 
 
     public void playerInput() {
-
-
         userInput = Prompts.getStringInput(); // gets userInput as a string from Prompts
         // now extract verb/nouns from parsedInput
         verb = TextParser.getVerb(userInput);
         nouns = TextParser.getNouns(userInput);
-
 
         Map<String, Object> furniture = puzzle.generatePuzzle(location);
         ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
@@ -319,7 +194,6 @@ public class Player implements Serializable{
                     FileManager.getResource("commands.txt");
                     playerInput();
                 }
-
                 else if (puzzle.MAP.containsKey(nouns.get(0))) {
 
                     goFurniture(nouns.get(0));
@@ -340,8 +214,9 @@ public class Player implements Serializable{
                     playerInput();
                 }
                 else {
-                    if (inventoryItems.contains(nouns.get(0))) {
-                        inventory.pickUpItem(location, furniturePuzzleMap);
+                    if (inventory.invList.contains(nouns.get(0))) {
+                        assert Puzzle.MAP != null;
+                        inventory.pickUpItem(location, Puzzle.MAP);
                         new_command();
                     }
                     else if (puzzle_reward_item.contains(nouns.get(0))) {
@@ -363,11 +238,8 @@ public class Player implements Serializable{
                 else{
                     inspectItem(nouns.get(0));
                 }
-
             }
-            // help
-            //Object help = map1.keySet().toArray()[6];
-            //Object help_value = map1.get(help);
+            // "Help"
             else if (verb.equals("help")) {  // || help_value.toString().contains(verb)) {
                 gameMenu();
                 playerInput();
@@ -397,7 +269,6 @@ public class Player implements Serializable{
                 FileManager.getResource("commands.txt");
                 playerInput();
             }
-            //reader.close();
         }
     }
 
