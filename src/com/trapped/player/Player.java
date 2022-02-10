@@ -28,7 +28,8 @@ public class Player implements Serializable {
     static boolean incorrectPass = true; // scope
     static int max_attempts = 3;
     static String ANSWER;
-
+    
+    private static final Player instance = new Player();
 
     static Scanner scan = new Scanner(System.in);
 
@@ -463,6 +464,9 @@ public class Player implements Serializable {
         }
         playerInput();
     }
+
+    public static Player getInstance(){
+        return instance;
 
     public static void riddles(String loc) {
         //Reading the JSON and pulling variables
