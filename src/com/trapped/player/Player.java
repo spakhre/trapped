@@ -9,7 +9,6 @@ import java.io.Reader;
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 
@@ -29,7 +28,6 @@ public class Player implements Serializable {
     static boolean incorrectPass = true; // scope
     static int max_attempts = 3;
     static String ANSWER;
-
 
 
     static Scanner scan = new Scanner(System.in);
@@ -81,7 +79,7 @@ public class Player implements Serializable {
                     roomWithItems(something);
                 }
                 if (furniture_items.isEmpty()) {
-                   noItemsInRoom(something);
+                    noItemsInRoom(something);
                 }
             } else if (furniture.get("furniture_items") == null) {
                 noItemsInRoom(something);
@@ -112,7 +110,7 @@ public class Player implements Serializable {
         playerInput();
     }
 
-    public static void roomWithItems(String something){
+    public static void roomWithItems(String something) {
         Map<String, Object> furniture = map.get(something);
         String furniture_picture = (String) furniture.get("furniture_picture");
         ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
@@ -127,7 +125,7 @@ public class Player implements Serializable {
         solvePuzzle(something);
     }
 
-    public static void noItemsInRoom(String something){
+    public static void noItemsInRoom(String something) {
         Map<String, Object> furniture = map.get(something);
         String furniture_picture = (String) furniture.get("furniture_picture");
 
@@ -266,140 +264,25 @@ public class Player implements Serializable {
         }
     }
 
-
-    //half re-factored
     public static void solvePuzzle(String loc) {
         Map<String, Object> furniture = map.get(loc);
-        ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
         location = loc;
-        String puzzle_desc = (String) furniture.get("puzzle_desc");
         String puzzle_exist = (String) furniture.get("puzzle_exist");
-        String puzzle_verb = (String) furniture.get("puzzle_verb");
-        ArrayList<String> puzzle_itemsNeeded = (ArrayList<String>) furniture.get("puzzle_itemsNeeded");
-        String puzzle_reward = (String) furniture.get("puzzle_reward");
-        ArrayList<Object> puzzle_filename = (ArrayList<Object>) furniture.get("puzzle_filename");
-        ArrayList<String> converted_puzzle_filename = (ArrayList<String>) (ArrayList<?>) (puzzle_filename);
-        String puzzle_answer = (String) furniture.get("puzzle_answer");
-        ArrayList<Object> multiple_puzzle_answer = (ArrayList<Object>) furniture.get("multiple_puzzle_answer");
-        ArrayList<String> converted_multiple_puzzle_answer = (ArrayList<String>) (ArrayList<?>) (multiple_puzzle_answer);
-        ArrayList<String> puzzle_reward_item = (ArrayList<String>) furniture.get("puzzle_reward_item");
         String puzzle_type = (String) furniture.get("puzzle_type");
-        String puzzle_sounds = (String) furniture.get("puzzle_sounds");
-
-
         // check if a location has puzzle
         if (puzzle_exist.equals("Y")) {
-
-            if (puzzle_type.equals("riddles")) {
-                //  if solved
-                if ((inventory.contains(puzzle_reward_item.get(0))) || (inventory.contains("key") && loc.equals("safe")) ||
-                        (inventory.contains("a piece of paper with number 104") && loc.equals("window")) ||
-                        (inventory.contains("a piece of paper with number 104") && loc.equals("safe"))) {
-                    System.out.println("The puzzle has been solved. Please feel free to explore other furniture :)");
-                    playerInput();
-                }
-                // if not solved
-                else {
-                    System.out.println("A puzzle has been found in " + loc + ".");
-                    System.out.println(puzzle_desc);
-                    System.out.println("Would you like to solve this puzzle now? Y/N");
-                    ANSWER = scan.nextLine().strip().toLowerCase();
-                    if (ANSWER.equals("y")) {
-                        // riddles puzzle
-                        boolean solved = false;
-                        Random r = new Random();
-                        int randomItem = r.nextInt(converted_puzzle_filename.size());
-                        String randomPuzzle = converted_puzzle_filename.get(randomItem);
-                        ArrayList<String> randomAnswer = (ArrayList<String>) multiple_puzzle_answer.get(randomItem);
-                        FileManager.getResource(randomPuzzle);
-                        System.out.println("\nYour answer:      (If it's too hard to answer, please enter [easy] to get a easier question.)");
-                        while (!solved) {
-                            ANSWER = scan.nextLine().strip().toLowerCase();
-                            // if user input correct answer
-                            if (ANSWER.equals(furniture.get("easy_answer")) || randomAnswer.contains(ANSWER)) {
-                                System.out.println(furniture.get("puzzle_reward"));
-                                Sounds.changeVolume(puzzle_sounds, 1000, volume);
-                                System.out.println("You found " + puzzle_reward_item.get(0) + ".");
-                                pickUpItem(puzzle_reward_item.get(0));
-                                solved = true;
-                            } else if (ANSWER.equalsIgnoreCase("easy")) {
-                                System.out.println(furniture.get("easy_question"));
-                            } else {
-                                System.out.println("you didn't solve the puzzle. Try again.");
-                            }
-                        }
-                    } else if (ANSWER.equals("n")) {
-                        System.out.println("You decided not to solve the puzzle");
-                    } else {
-                        System.out.println("Sorry I don't understand your command. The puzzle has not been solved. Please come back later.");
-                    }
-                    playerInput();
-                }
-            } else if (puzzle_type.equals("use tool")) {
-                //  if solved
-                if (inventory.contains(puzzle_reward_item.get(0))) {
-                    System.out.println("The puzzle has been solved. Please feel free to explore other furniture :)");
-                } else if ((inventory.contains("key") && loc.equals("safe")) ||
-                        (inventory.contains("a piece of paper with number 104") && loc.equals("window")) ||
-                        (inventory.contains("a piece of paper with number 104") && loc.equals("safe"))) {
-                    System.out.println("The puzzle has been solved. Please feel free to explore other furniture :)");
-                } else {
-                    System.out.println("A puzzle has been found in " + loc + ".");
-                    System.out.println(puzzle_desc);
-                    System.out.println("Would you like to solve this puzzle now? Y/N");
-                    String solve_ans = scan.nextLine();
-                    if (solve_ans.equalsIgnoreCase("Y")) {
-                        System.out.println("You need to use an item from your inventory. Let's see if you got needed item in your inventory...");
-                        System.out.println("Your current inventory: " + inventory);
-                        if (!inventory.contains(puzzle_itemsNeeded.get(0))) {
-                            System.out.println("Sorry, you don't have the tools. Explore the room and see if you can find anything");
-                        } else if (inventory.contains(puzzle_itemsNeeded.get(0))) {
-                            //Scanner scan = new Scanner(System.in);
-                            System.out.println("Which of the item you'd like to use?");
-                            String ans = scan.nextLine();
-                            if ((ans.equalsIgnoreCase(puzzle_verb + " " + puzzle_itemsNeeded.get(0))) || ans.equalsIgnoreCase(puzzle_itemsNeeded.get(0))) {
-                                Sounds.changeVolume(puzzle_sounds, 1000, volume);
-                                System.out.println(puzzle_reward + " and you've found " + puzzle_reward_item.get(0));
-                                inventory.remove(puzzle_itemsNeeded.get(0));
-                                inventory.add(puzzle_reward_item.get(0));
-                                Sounds.changeVolume("pick.wav", 1000, volume);
-                                System.out.println("Added " + puzzle_reward_item.get(0) + " to your inventory");
-                                playerInput();
-                            } else if ((inventory.contains(ans) && (!ans.equals(puzzle_itemsNeeded)))) {
-                                System.out.println("Wrong item. The puzzle has not been solved. Please come back later.");
-                            } else {
-                                System.out.println("Sorry I don't understand your command. The puzzle has not been solved. Please come back later.");
-                            }
-                        }
-                    } else if (solve_ans.equalsIgnoreCase("N")) {
-                        System.out.println("You chose not to solve the puzzle.");
-                    } else {
-                        System.out.println("Sorry I don't understand your command. The puzzle has not been solved. Please come back later.");
-                    }
-                }
-
-            } else if (puzzle_type.equals("final")) {
-                System.out.println(puzzle_desc);
-                System.out.println("What's the password? You have " + MAGENTA_UNDERLINE + max_attempts + RESET + " attempts remaining. If you's like to try later, enter[later]");
-                ANSWER = scan.nextLine();
-
-                if (ANSWER.trim().equals("later") || ANSWER.trim().equals("")) {
-                    System.out.println("No worries! Try next time!");
-                } else {
-                    while (max_attempts-- > 0) {
-                        if (ANSWER.trim().equals(puzzle_answer)) {
-                            System.out.println(puzzle_reward);
-                            Sounds.changeVolume(puzzle_sounds, 2000, volume);
-                            System.out.println("You won the game! Thanks for playing!");
-                            System.exit(0);
-                        } else if (max_attempts == 0) {
-                            System.out.println("You lost the game! You are Trapped. Please try again later.");
-                            System.exit(0);
-                        } else {
-                            System.out.println("Wrong password. Try again next time! " + MAGENTA_UNDERLINE + max_attempts + RESET + " attempts remaining");
-                        }
-                    }
-                }
+            switch (puzzle_type) {
+                case "riddles":
+                    //  if solved
+                    riddles(location);
+                    break;
+                case "use tool":
+                    //  if solved
+                    toolPuzzle(location);
+                    break;
+                case "final":
+                    doorPuzzle(location);
+                    break;
             }
         }
         playerInput();
@@ -474,7 +357,7 @@ public class Player implements Serializable {
         }
     }
 
-    public static void inspect(){
+    public static void inspect() {
         if (noun != null) {
             inspectItem(noun);
         } else {
@@ -484,15 +367,15 @@ public class Player implements Serializable {
         }
     }
 
-    public static void get(){
-    Map<String, Object> furniture = map.get(location);
-    ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
-    ArrayList<String> puzzle_reward_item = (ArrayList<String>) furniture.get("puzzle_reward_item");
+    public static void get() {
+        Map<String, Object> furniture = map.get(location);
+        ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
+        ArrayList<String> puzzle_reward_item = (ArrayList<String>) furniture.get("puzzle_reward_item");
 
         if (noun != null) {
             if (furniture_items.contains(noun)) {
                 System.out.println("You added " + noun + " to your inventory");
-                pickUpItem(location, noun);
+                pickUpItem(noun);
             } else if (puzzle_reward_item.contains(noun)) {
                 inventory.add(noun);
             } else {
@@ -506,7 +389,7 @@ public class Player implements Serializable {
         playerInput();
     }
 
-    public static void move(){
+    public static void move() {
         if (noun != null) {
             if (map.containsKey(noun)) {
                 goFurniture(noun);
@@ -523,7 +406,6 @@ public class Player implements Serializable {
             playerInput();
         }
     }
-
 
 
     public static void moveDirection(String direction) {
@@ -580,6 +462,146 @@ public class Player implements Serializable {
                 System.out.println("Sorry you did not select a number from 1-4.");
         }
         playerInput();
+    }
+
+    public static void riddles(String loc) {
+        //Reading the JSON and pulling variables
+        //Don't mind us...
+        Map<String, Object> furniture = map.get(loc);
+        ArrayList<String> puzzle_reward_item = (ArrayList<String>) furniture.get("puzzle_reward_item");
+        String puzzle_desc = (String) furniture.get("puzzle_desc");
+        ArrayList<Object> puzzle_filename = (ArrayList<Object>) furniture.get("puzzle_filename");
+        ArrayList<String> converted_puzzle_filename = (ArrayList<String>) (ArrayList<?>) (puzzle_filename);
+        String puzzle_sounds = (String) furniture.get("puzzle_sounds");
+        ArrayList<Object> multiple_puzzle_answer = (ArrayList<Object>) furniture.get("multiple_puzzle_answer");
+        //
+        //
+        if(!puzzleSolved()) {
+            System.out.println("A puzzle has been found in " + loc + ".");
+            System.out.println(puzzle_desc);
+            System.out.println("Would you like to solve this puzzle now? Y/N");
+            ANSWER = scan.nextLine().strip().toLowerCase();
+            if (ANSWER.equals("y")) {
+                // riddles puzzle
+                boolean solved = false;
+                Random r = new Random();
+                int randomItem = r.nextInt(converted_puzzle_filename.size());
+                String randomPuzzle = converted_puzzle_filename.get(randomItem);
+                ArrayList<String> randomAnswer = (ArrayList<String>) multiple_puzzle_answer.get(randomItem);
+                FileManager.getResource(randomPuzzle);
+                System.out.println("\nYour answer:      (If it's too hard to answer, please enter [easy] to get a easier question.)");
+                while (!solved) {
+                    ANSWER = scan.nextLine().strip().toLowerCase();
+                    // if user input correct answer
+                    if (ANSWER.equals(furniture.get("easy_answer")) || randomAnswer.contains(ANSWER)) {
+                        System.out.println(furniture.get("puzzle_reward"));
+                        Sounds.changeVolume(puzzle_sounds, 1000, volume);
+                        System.out.println("You found " + puzzle_reward_item.get(0) + ".");
+                        pickUpItem(puzzle_reward_item.get(0));
+                        solved = true;
+                    } else if (ANSWER.equalsIgnoreCase("easy")) {
+                        System.out.println(furniture.get("easy_question"));
+                    } else {
+                        System.out.println("you didn't solve the puzzle. Try again.");
+                    }
+                }
+            } else if (ANSWER.equals("n")) {
+                System.out.println("You decided not to solve the puzzle");
+            } else {
+                System.out.println("Sorry I don't understand your command. The puzzle has not been solved. Please come back later.");
+            }
+        }
+    }
+
+    static boolean puzzleSolved(){
+        //checks to see if the player has solved any of the puzzles, if they have, returns true to the caller!
+        Map<String, Object> furniture = map.get(location);
+        ArrayList<String> puzzle_reward_item = (ArrayList<String>) furniture.get("puzzle_reward_item");
+        Boolean solved = false;
+        if ((inventory.contains(puzzle_reward_item.get(0))) || (inventory.contains("key") && location.equals("safe")) ||
+                (inventory.contains("a piece of paper with number 104") && location.equals("window")) ||
+                (inventory.contains("a piece of paper with number 104") && location.equals("safe"))) {
+            System.out.println("The puzzle has been solved. Please feel free to explore other furniture :)");
+            solved = true;
+        }
+        return solved;
+    }
+
+    static void toolPuzzle(String loc){
+        //reading the JSON file, walking fast, faces past and I'm homebound
+        Map<String, Object> furniture = map.get(loc);
+        ArrayList<String> puzzle_reward_item = (ArrayList<String>) furniture.get("puzzle_reward_item");
+        String puzzle_desc = (String) furniture.get("puzzle_desc");
+        ArrayList<Object> puzzle_filename = (ArrayList<Object>) furniture.get("puzzle_filename");
+        String puzzle_sounds = (String) furniture.get("puzzle_sounds");
+        ArrayList<String> puzzle_itemsNeeded = (ArrayList<String>) furniture.get("puzzle_itemsNeeded");
+        String puzzle_verb = (String) furniture.get("puzzle_verb");
+        String puzzle_reward = (String) furniture.get("puzzle_reward");
+        //
+        //
+        if(!puzzleSolved()){
+            System.out.println("A puzzle has been found in " + loc + ".");
+            System.out.println(puzzle_desc);
+            System.out.println("Would you like to solve this puzzle now? Y/N");
+            String solve_ans = scan.nextLine();
+            if (solve_ans.equalsIgnoreCase("Y")) {
+                System.out.println("You need to use an item from your inventory. Let's see if you got needed item in your inventory...");
+                System.out.println("Your current inventory: " + inventory);
+                if (!inventory.contains(puzzle_itemsNeeded.get(0))) {
+                    System.out.println("Sorry, you don't have the tools. Explore the room and see if you can find anything");
+                } else if (inventory.contains(puzzle_itemsNeeded.get(0))) {
+                    //Scanner scan = new Scanner(System.in);
+                    System.out.println("Which of the item you'd like to use?");
+                    String ans = scan.nextLine();
+                    if ((ans.equalsIgnoreCase(puzzle_verb + " " + puzzle_itemsNeeded.get(0))) || ans.equalsIgnoreCase(puzzle_itemsNeeded.get(0))) {
+                        Sounds.changeVolume(puzzle_sounds, 1000, volume);
+                        System.out.println(puzzle_reward + " and you've found " + puzzle_reward_item.get(0));
+                        inventory.remove(puzzle_itemsNeeded.get(0));
+                        inventory.add(puzzle_reward_item.get(0));
+                        Sounds.changeVolume("pick.wav", 1000, volume);
+                        System.out.println("Added " + puzzle_reward_item.get(0) + " to your inventory");
+                        playerInput();
+                    } else if ((inventory.contains(ans) && (!ans.equals(puzzle_itemsNeeded)))) {
+                        System.out.println("Wrong item. The puzzle has not been solved. Please come back later.");
+                    } else {
+                        System.out.println("Sorry I don't understand your command. The puzzle has not been solved. Please come back later.");
+                    }
+                }
+            } else if (solve_ans.equalsIgnoreCase("N")) {
+                System.out.println("You chose not to solve the puzzle.");
+            } else {
+                System.out.println("Sorry I don't understand your command. The puzzle has not been solved. Please come back later.");
+            }
+        }
+    }
+
+    static void doorPuzzle(String loc){
+        Map<String, Object> furniture = map.get(loc);
+        String puzzle_desc = (String) furniture.get("puzzle_desc");
+        String puzzle_sounds = (String) furniture.get("puzzle_sounds");
+        String puzzle_answer = (String) furniture.get("puzzle_answer");
+        String puzzle_reward = (String) furniture.get("puzzle_reward");
+        System.out.println(puzzle_desc);
+        System.out.println("What's the password? You have " + MAGENTA_UNDERLINE + max_attempts + RESET + " attempts remaining. If you's like to try later, enter[later]");
+        ANSWER = scan.nextLine();
+
+        if (ANSWER.trim().equals("later") || ANSWER.trim().equals("")) {
+            System.out.println("No worries! Try next time!");
+        } else {
+            while (max_attempts-- > 0) {
+                if (ANSWER.trim().equals(puzzle_answer)) {
+                    System.out.println(puzzle_reward);
+                    Sounds.changeVolume(puzzle_sounds, 2000, volume);
+                    System.out.println("You won the game! Thanks for playing!");
+                    System.exit(0);
+                } else if (max_attempts == 0) {
+                    System.out.println("You lost the game! You are Trapped. Please try again later.");
+                    System.exit(0);
+                } else {
+                    System.out.println("Wrong password. Try again next time! " + MAGENTA_UNDERLINE + max_attempts + RESET + " attempts remaining");
+                }
+            }
+        }
     }
 }
 
