@@ -22,10 +22,7 @@ public class Player implements Serializable {
     public static String noun;
     public static String location = "bed";
     static List<String> inventory = new ArrayList<>();
-    static List<String> rewarded_item = List.of(new String[]{"crowbar", "key", "a piece of paper with number 104"});
     static String furniturePuzzlesJsonPath = "./resources/furniture_puzzles.json";
-    static GameEngine game = new GameEngine();
-    static boolean incorrectPass = true; // scope
     static int max_attempts = 3;
     static String ANSWER;
 
@@ -72,8 +69,6 @@ public class Player implements Serializable {
             checkCurrentInventory();
         } else if (map.containsKey(something)) {
             location = something;
-            String furniture_desc = (String) furniture.get("furniture_desc");
-            String furniture_picture = (String) furniture.get("furniture_picture");
             if (furniture.get("furniture_items") != null) {
                 ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
                 if (!furniture_items.isEmpty()) {
@@ -135,12 +130,6 @@ public class Player implements Serializable {
         solvePuzzle(something);
     }
 
-
-    // item disappear from inventory
-    public static void useItem(String item) {
-        inventory.remove(item);
-    }
-
     // check current inventory
     public static void checkCurrentInventory() {
         System.out.println("Your current inventory: " + inventory);
@@ -166,13 +155,7 @@ public class Player implements Serializable {
                     }
                     dropItem(selection);
                 }
-                inventory.add(noun);
-                furniture_items.remove(noun);
-                furniture.put("furniture_items", furniture_items);
-                map.put("location", furniture);
-                FileManager.writeJSON(map, furniturePuzzlesJsonPath);
-                System.out.println(noun + " has been added to your inventory");
-                Sounds.playSounds("pick.wav", 1000);
+                addItemAndUpdateJson(furniture_items,furniture);
             }
             // if inventory is not full
             //if furniture has no item available to be picked up
@@ -186,13 +169,7 @@ public class Player implements Serializable {
                 if (response.isEmpty()) {
                     System.out.println("Sorry, I didn't understand your entry. You did not pick anything up from " + location);
                 } else if (response.equalsIgnoreCase("Y")) {
-                    System.out.println(noun + " has been picked up and added to your inventory");
-                    Sounds.playSounds("pick.wav", 1000);
-                    inventory.add(noun);
-                    furniture_items.remove(noun);
-                    furniture.put("furniture_items", furniture_items);
-                    map.put("location", furniture);
-                    FileManager.writeJSON(map, furniturePuzzlesJsonPath);
+                    addItemAndUpdateJson(furniture_items,furniture);
                 } else if (response.equalsIgnoreCase("N")) {
                     System.out.println("You did not pick anything from " + location);
                 } else {
@@ -201,12 +178,14 @@ public class Player implements Serializable {
             }
         }
     }
-
-
-    // check current location
-    public static void checkCurrentLocation() {
-        System.out.println("Your current location: " + location);
-        playerInput();
+    public static void addItemAndUpdateJson(ArrayList<String> furniture_items,Map<String, Object> furniture){
+        inventory.add(noun);
+        furniture_items.remove(noun);
+        furniture.put("furniture_items", furniture_items);
+        map.put("location", furniture);
+        FileManager.writeJSON(map, furniturePuzzlesJsonPath);
+        System.out.println(noun + " has been added to your inventory");
+        Sounds.playSounds("pick.wav", 1000);
     }
 
     // quit game
@@ -215,34 +194,13 @@ public class Player implements Serializable {
         System.exit(0);
     }
 
-    // play again
-    public static void playAgain(String input) {
-        if (input.equals("again") || (input.equals("play again"))) {
-            GameEngine.startGame();
-        }
-    }
-
     // Drop item -- will provide current inventory first then let player pick.
     // This method will be used when inventory is full and player being asked to drop an item.
     public static void dropItem() {
-        Map<String, Object> furniture = map.get(location);
-        ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
         System.out.println("Your inventory: " + inventory);
-
         System.out.println("Which item you'd like to drop? Please enter item name. ");
         String selected_drop = scan.nextLine();
-        if (inventory.contains(selected_drop.toLowerCase())) {
-            inventory.remove(selected_drop);
-            Sounds.playSounds("drop.wav", 1000);
-            furniture_items.add(selected_drop);
-            furniture.put("furniture_items", furniture_items);
-            map.put("location", furniture);
-            FileManager.writeJSON(map, furniturePuzzlesJsonPath);
-            System.out.println(selected_drop + " has been dropped from your inventory.");
-        } else {
-            System.out.println("Sorry, you cannot drop " + selected_drop + ". It is not in your inventory");
-        }
-        playerInput();
+        dropItem(selected_drop);
     }
 
     // Drop a specific item - this will be used when player input "drop xxx"
@@ -435,15 +393,10 @@ public class Player implements Serializable {
         playerInput();
     }
 
-    // Removed String as input, seemed redundant
-    public static void helpMenu() {
-        // no other if loop needed because help command already issued
-        // if(input.equalsIgnoreCase("Help")){
-        System.out.println("-----------------------");
-        System.out.println("\nHere are your options?");
-        FileManager.getResource("helperMenu.txt");
 
-        System.out.println("\nPlease select options above. enter number 1-4?");
+    public static void helpMenu() {
+        FileManager.getResource("helperMenu.txt");
+        System.out.println("\nTo select from the options above enter a number 1-4.");
         //Scanner scan = new Scanner(System.in);
         int selection = scan.nextInt();
         switch (selection) {
@@ -463,10 +416,6 @@ public class Player implements Serializable {
                 System.out.println("Sorry you did not select a number from 1-4.");
         }
         playerInput();
-    }
-
-    public static Player getInstance() {
-        return instance;
     }
 
     public static void riddles(String loc) {
@@ -537,7 +486,6 @@ public class Player implements Serializable {
         Map<String, Object> furniture = map.get(loc);
         ArrayList<String> puzzle_reward_item = (ArrayList<String>) furniture.get("puzzle_reward_item");
         String puzzle_desc = (String) furniture.get("puzzle_desc");
-        ArrayList<Object> puzzle_filename = (ArrayList<Object>) furniture.get("puzzle_filename");
         String puzzle_sounds = (String) furniture.get("puzzle_sounds");
         ArrayList<String> puzzle_itemsNeeded = (ArrayList<String>) furniture.get("puzzle_itemsNeeded");
         String puzzle_verb = (String) furniture.get("puzzle_verb");
@@ -581,6 +529,7 @@ public class Player implements Serializable {
     }
 
     static void doorPuzzle(String loc) {
+        //Final puzzle in the game, can be solved at any time if you know the secret number (104)
         Map<String, Object> furniture = map.get(loc);
         String puzzle_desc = (String) furniture.get("puzzle_desc");
         String puzzle_sounds = (String) furniture.get("puzzle_sounds");
@@ -609,8 +558,3 @@ public class Player implements Serializable {
         }
     }
 }
-
-
-
-
-
