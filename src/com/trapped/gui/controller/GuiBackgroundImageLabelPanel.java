@@ -19,7 +19,6 @@ public class GuiBackgroundImageLabelPanel extends JPanel {
         this.gui = gui;
         JPanel backgroundPanel = createBackgroundPanel(gui.getMainWindow());
         this.add(backgroundPanel);
-
     }
 
     private JPanel createBackgroundPanel(JFrame gameWindow) {
