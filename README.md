@@ -1,4 +1,4 @@
-### Trapped
+# Trapped
 The project is a version of a text-based escape room game.
 
 The game takes place in a mysterious room. The player has to explore the room, look for items and solve different puzzles in order to unlock the door and escape from the room.
@@ -19,10 +19,10 @@ The game takes place in a mysterious room. The player has to explore the room, l
 > *Volume control!
 > *Did we mention, less bugs?
 
-### Contributors
-# v1 Team
+## Contributors
+### v1 Team
 [Justin Hammel](https://github.com/thirdeye18), [Sushma Pakhreen](https://github.com/spakhre), [Zoe Ji](https://github.com/zoeji569)
-# v2 Team
+### v2 Team
 [Fan Wu](https://github.com/fanwu513), [Michael Stack](https://github.com/AgentKD6-37), [Zicheng Li](https://github.com/thrashghost)
 
 ## Quickstart
