@@ -1,8 +1,6 @@
 package com.trapped.player;
 
 
-import com.trapped.GameEngine;
-
 import com.trapped.utilities.*;
 
 import java.io.Serializable;
@@ -19,27 +17,11 @@ public class Player implements Serializable{
     static List<String> rewarded_item = List.of(new String[]{"crowbar", "key", "a piece of paper with number 104"});
 
     private Puzzle puzzle = Puzzle.getInstance();
+    private Inventory inventory = Inventory.getInstance();
 //    private Map<String, Object> furniture = puzzle.generatePuzzle(location);
 
-    public static Inventory inventory = new Inventory();
 
     static boolean incorrectPass = true; // scope
-
-//    static Map<String, Map<String, Object>> map = furniturePuzzleGenerator();
-//
-//    //Utility class for the map generated above, trying to ensure json file is closed
-//    public static Map<String, Map<String, Object>> furniturePuzzleGenerator() {
-//        Gson gson = new Gson();
-//        try {
-//            Reader reader = Files.newBufferedReader(Paths.get("resources/furniture_puzzles.json"));
-//            Map<String, Map<String, Object>> map = gson.fromJson(reader, Map.class);
-//            reader.close();
-//            return map;
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
 
     // After the intro story, player will see current location and the view of the whole room.
     public void viewRoom() {
@@ -250,7 +232,7 @@ public class Player implements Serializable{
                     new_command();
                 }
                 else if (nouns.isEmpty()) {
-                    inventory.dropItem();
+                    inventory.dropSelect();
                     new_command();
                 }
                 else {
