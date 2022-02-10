@@ -14,9 +14,9 @@ import static com.trapped.utilities.TextColor.RESET;
 
 public class GameEngine implements Serializable {
     private boolean quitGame = false;
+    private Player player = new Player();
 
-
-    public static void startGame()  {
+    public void startGame()  {
         while (true) {
             FileManager.getResource("./splash_screen.txt");   // displaying splash screen
 
@@ -61,9 +61,9 @@ public class GameEngine implements Serializable {
         }
     }
 
-    public static void playGame() {
+    public void playGame() {
         while (true) {
-            Player.viewRoom();
+            player.viewRoom();
         }
     }
 
