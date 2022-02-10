@@ -29,7 +29,8 @@ public class Player implements Serializable {
     static boolean incorrectPass = true; // scope
     static int max_attempts = 3;
     static String ANSWER;
-
+    
+    private static final Player instance = new Player();
 
 
     static Scanner scan = new Scanner(System.in);
@@ -492,7 +493,7 @@ public class Player implements Serializable {
         if (noun != null) {
             if (furniture_items.contains(noun)) {
                 System.out.println("You added " + noun + " to your inventory");
-                pickUpItem(location, noun);
+                pickUpItem(noun);
             } else if (puzzle_reward_item.contains(noun)) {
                 inventory.add(noun);
             } else {
@@ -580,6 +581,10 @@ public class Player implements Serializable {
                 System.out.println("Sorry you did not select a number from 1-4.");
         }
         playerInput();
+    }
+
+    public static Player getInstance(){
+        return instance;
     }
 }
 
