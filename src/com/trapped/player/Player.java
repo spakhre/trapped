@@ -21,22 +21,19 @@ public class Player implements Serializable {
     public static String verb;
     public static String noun;
     public static String location = "bed";
-    static List<String> inventory = new ArrayList<>();
-    static String furniturePuzzlesJsonPath = "./resources/furniture_puzzles.json";
-    static int max_attempts = 3;
-    static String ANSWER;
-
-    private static final Player instance = new Player();
-
-    static Scanner scan = new Scanner(System.in);
-
     public static float volume;
+    private static List<String> inventory = new ArrayList<>();
+    private static String furniturePuzzlesJsonPath = "./resources/furniture_puzzles.json";
+    private static int max_attempts = 3;
+    private static String ANSWER;
+    private static Scanner scan = new Scanner(System.in);
+    private static final Player instance = new Player();
 
 
     static Map<String, Map<String, Object>> map = furniturePuzzleGenerator();
 
     //Utility class for the map generated above, trying to ensure json file is closed
-    public static Map<String, Map<String, Object>> furniturePuzzleGenerator() {
+    private static Map<String, Map<String, Object>> furniturePuzzleGenerator() {
         Gson gson = new Gson();
         try {
             Reader reader = Files.newBufferedReader(Path.of("resources/furniture_puzzles.json"));
@@ -60,7 +57,7 @@ public class Player implements Serializable {
     // inspect room, player can inspect either a furniture or an item.
     // If inspect a furniture, the output will have: Description of this furniture, items in here.
     // And if the furniture has a puzzle, it will show the puzzle's description.
-    public static void inspectItem(String something) {
+    private static void inspectItem(String something) {
         //furniture
 
         Map<String, Object> furniture = map.get(something);
@@ -106,7 +103,7 @@ public class Player implements Serializable {
         playerInput();
     }
 
-    public static void roomWithItems(String something) {
+    private static void roomWithItems(String something) {
         Map<String, Object> furniture = map.get(something);
         String furniture_picture = (String) furniture.get("furniture_picture");
         ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
@@ -121,7 +118,7 @@ public class Player implements Serializable {
         solvePuzzle(something);
     }
 
-    public static void noItemsInRoom(String something) {
+    private static void noItemsInRoom(String something) {
         Map<String, Object> furniture = map.get(something);
         String furniture_picture = (String) furniture.get("furniture_picture");
 
@@ -131,14 +128,13 @@ public class Player implements Serializable {
     }
 
     // check current inventory
-    public static void checkCurrentInventory() {
+    private static void checkCurrentInventory() {
         System.out.println("Your current inventory: " + inventory);
         playerInput();
     }
 
-
     // pickup item method.
-    public static void pickUpItem(String noun) {
+    private static void pickUpItem(String noun) {
 
         if (map.get(location) != null) {
             Map<String, Object> furniture = map.get(location);
@@ -157,7 +153,6 @@ public class Player implements Serializable {
                 }
                 addItemAndUpdateJson(furniture_items,furniture);
             }
-            // if inventory is not full
             //if furniture has no item available to be picked up
             if (furniture_items.isEmpty()) {
                 System.out.println("There's nothing here...");
@@ -178,7 +173,8 @@ public class Player implements Serializable {
             }
         }
     }
-    public static void addItemAndUpdateJson(ArrayList<String> furniture_items,Map<String, Object> furniture){
+
+    private static void addItemAndUpdateJson(ArrayList<String> furniture_items,Map<String, Object> furniture){
         inventory.add(noun);
         furniture_items.remove(noun);
         furniture.put("furniture_items", furniture_items);
@@ -189,14 +185,14 @@ public class Player implements Serializable {
     }
 
     // quit game
-    public static void quitGame() {
+    private static void quitGame() {
         System.out.println("Quitting the Game. See you next time.");
         System.exit(0);
     }
 
     // Drop item -- will provide current inventory first then let player pick.
     // This method will be used when inventory is full and player being asked to drop an item.
-    public static void dropItem() {
+    private static void dropItem() {
         System.out.println("Your inventory: " + inventory);
         System.out.println("Which item you'd like to drop? Please enter item name. ");
         String selected_drop = scan.nextLine();
@@ -204,7 +200,7 @@ public class Player implements Serializable {
     }
 
     // Drop a specific item - this will be used when player input "drop xxx"
-    public static void dropItem(String item) {
+    private static void dropItem(String item) {
         Map<String, Object> furniture = map.get(location);
         ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
         if (inventory.contains(item.toLowerCase())) {
@@ -223,7 +219,7 @@ public class Player implements Serializable {
         }
     }
 
-    public static void solvePuzzle(String loc) {
+    private static void solvePuzzle(String loc) {
         Map<String, Object> furniture = map.get(loc);
         location = loc;
         String puzzle_exist = (String) furniture.get("puzzle_exist");
@@ -258,9 +254,6 @@ public class Player implements Serializable {
         // now extract verb/nouns from parsedInput
         verb = TextParser.getVerb(userInput);
         noun = TextParser.getNoun(userInput);
-        Map<String, Object> furniture = map.get(location);
-        ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
-        ArrayList<String> puzzle_reward_item = (ArrayList<String>) furniture.get("puzzle_reward_item");
 
         if (verb == null && (noun == null)) {
             System.out.println("Sorry, I don't understand your input, please try again.");
@@ -295,16 +288,14 @@ public class Player implements Serializable {
                 default:
                     System.out.println("Sorry, I don't understand your input, please enter again. ");
                     FileManager.getResource("commands.txt");
-                    playerInput();
             }
         }
     }
 
-    public static void drop() {
+    private static void drop() {
         if (noun != null) {
             if (inventory.isEmpty()) {
                 System.out.println("You have nothing to drop");
-                playerInput();
             } else if (noun.isEmpty()) {
                 dropItem();
             } else
@@ -312,11 +303,11 @@ public class Player implements Serializable {
         } else {
             System.out.println("Sorry, I don't understand your input, please enter again. ");
             FileManager.getResource("commands.txt");
-            playerInput();
         }
+        playerInput();
     }
 
-    public static void inspect() {
+    private static void inspect() {
         if (noun != null) {
             inspectItem(noun);
         } else {
@@ -326,7 +317,7 @@ public class Player implements Serializable {
         }
     }
 
-    public static void get() {
+    private static void get() {
         Map<String, Object> furniture = map.get(location);
         ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
         ArrayList<String> puzzle_reward_item = (ArrayList<String>) furniture.get("puzzle_reward_item");
@@ -348,7 +339,7 @@ public class Player implements Serializable {
         playerInput();
     }
 
-    public static void move() {
+    private static void move() {
         if (noun != null) {
             if (map.containsKey(noun)) {
                 goFurniture(noun);
@@ -367,8 +358,7 @@ public class Player implements Serializable {
     }
 
 
-    public static void moveDirection(String direction) {
-//        Prompts.ClearConsole();
+    private static void moveDirection(String direction) {
         Map<String, Object> furniture = map.get(location);
         String newlocation = (String) furniture.get(direction);
         location = newlocation;
@@ -381,8 +371,7 @@ public class Player implements Serializable {
         playerInput();
     }
 
-    public static void goFurniture(String destinationaLoc) {
-//        Prompts.ClearConsole();
+    private static void goFurniture(String destinationaLoc) {
         Map<String, Object> furniture = map.get(destinationaLoc);
         String furniture_desc = (String) furniture.get("furniture_desc");
         String furniture_picture = (String) furniture.get("furniture_picture");
@@ -394,7 +383,7 @@ public class Player implements Serializable {
     }
 
 
-    public static void helpMenu() {
+    private static void helpMenu() {
         FileManager.getResource("helperMenu.txt");
         System.out.println("\nTo select from the options above enter a number 1-4.");
         //Scanner scan = new Scanner(System.in);
@@ -418,7 +407,7 @@ public class Player implements Serializable {
         playerInput();
     }
 
-    public static void riddles(String loc) {
+    private static void riddles(String loc) {
         //Reading the JSON and pulling variables
         //Don't mind us...
         Map<String, Object> furniture = map.get(loc);
@@ -428,8 +417,7 @@ public class Player implements Serializable {
         ArrayList<String> converted_puzzle_filename = (ArrayList<String>) (ArrayList<?>) (puzzle_filename);
         String puzzle_sounds = (String) furniture.get("puzzle_sounds");
         ArrayList<Object> multiple_puzzle_answer = (ArrayList<Object>) furniture.get("multiple_puzzle_answer");
-        //
-        //
+
         if (!puzzleSolved()) {
             System.out.println("A puzzle has been found in " + loc + ".");
             System.out.println(puzzle_desc);
@@ -467,7 +455,7 @@ public class Player implements Serializable {
         }
     }
 
-    static boolean puzzleSolved() {
+    private static boolean puzzleSolved() {
         //checks to see if the player has solved any of the puzzles, if they have, returns true to the caller!
         Map<String, Object> furniture = map.get(location);
         ArrayList<String> puzzle_reward_item = (ArrayList<String>) furniture.get("puzzle_reward_item");
@@ -481,7 +469,7 @@ public class Player implements Serializable {
         return solved;
     }
 
-    static void toolPuzzle(String loc) {
+    private static void toolPuzzle(String loc) {
         //reading the JSON file, walking fast, faces past and I'm homebound
         Map<String, Object> furniture = map.get(loc);
         ArrayList<String> puzzle_reward_item = (ArrayList<String>) furniture.get("puzzle_reward_item");
@@ -503,7 +491,6 @@ public class Player implements Serializable {
                 if (!inventory.contains(puzzle_itemsNeeded.get(0))) {
                     System.out.println("Sorry, you don't have the tools. Explore the room and see if you can find anything");
                 } else if (inventory.contains(puzzle_itemsNeeded.get(0))) {
-                    //Scanner scan = new Scanner(System.in);
                     System.out.println("Which of the item you'd like to use?");
                     String ans = scan.nextLine();
                     if ((ans.equalsIgnoreCase(puzzle_verb + " " + puzzle_itemsNeeded.get(0))) || ans.equalsIgnoreCase(puzzle_itemsNeeded.get(0))) {
@@ -528,7 +515,7 @@ public class Player implements Serializable {
         }
     }
 
-    static void doorPuzzle(String loc) {
+    private static void doorPuzzle(String loc) {
         //Final puzzle in the game, can be solved at any time if you know the secret number (104)
         Map<String, Object> furniture = map.get(loc);
         String puzzle_desc = (String) furniture.get("puzzle_desc");
