@@ -28,7 +28,7 @@ public class Player implements Serializable {
     static boolean incorrectPass = true; // scope
     static int max_attempts = 3;
     static String ANSWER;
-    
+
     private static final Player instance = new Player();
 
     static Scanner scan = new Scanner(System.in);
@@ -465,8 +465,9 @@ public class Player implements Serializable {
         playerInput();
     }
 
-    public static Player getInstance(){
+    public static Player getInstance() {
         return instance;
+    }
 
     public static void riddles(String loc) {
         //Reading the JSON and pulling variables
@@ -480,7 +481,7 @@ public class Player implements Serializable {
         ArrayList<Object> multiple_puzzle_answer = (ArrayList<Object>) furniture.get("multiple_puzzle_answer");
         //
         //
-        if(!puzzleSolved()) {
+        if (!puzzleSolved()) {
             System.out.println("A puzzle has been found in " + loc + ".");
             System.out.println(puzzle_desc);
             System.out.println("Would you like to solve this puzzle now? Y/N");
@@ -517,7 +518,7 @@ public class Player implements Serializable {
         }
     }
 
-    static boolean puzzleSolved(){
+    static boolean puzzleSolved() {
         //checks to see if the player has solved any of the puzzles, if they have, returns true to the caller!
         Map<String, Object> furniture = map.get(location);
         ArrayList<String> puzzle_reward_item = (ArrayList<String>) furniture.get("puzzle_reward_item");
@@ -531,7 +532,7 @@ public class Player implements Serializable {
         return solved;
     }
 
-    static void toolPuzzle(String loc){
+    static void toolPuzzle(String loc) {
         //reading the JSON file, walking fast, faces past and I'm homebound
         Map<String, Object> furniture = map.get(loc);
         ArrayList<String> puzzle_reward_item = (ArrayList<String>) furniture.get("puzzle_reward_item");
@@ -543,7 +544,7 @@ public class Player implements Serializable {
         String puzzle_reward = (String) furniture.get("puzzle_reward");
         //
         //
-        if(!puzzleSolved()){
+        if (!puzzleSolved()) {
             System.out.println("A puzzle has been found in " + loc + ".");
             System.out.println(puzzle_desc);
             System.out.println("Would you like to solve this puzzle now? Y/N");
@@ -579,7 +580,7 @@ public class Player implements Serializable {
         }
     }
 
-    static void doorPuzzle(String loc){
+    static void doorPuzzle(String loc) {
         Map<String, Object> furniture = map.get(loc);
         String puzzle_desc = (String) furniture.get("puzzle_desc");
         String puzzle_sounds = (String) furniture.get("puzzle_sounds");
@@ -608,6 +609,7 @@ public class Player implements Serializable {
         }
     }
 }
+
 
 
 
