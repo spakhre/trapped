@@ -3,7 +3,7 @@
 > go xxx(left, right, door,...)   - player can go left / right or furniture name<
 > inspect xxx( bed, drawer...)    - player can inspect a furniture or an item   <
 > pick xxx (key, wallet...)       - player can pick item                        <
-> drop xxx 			  - to drop the item from inventory             <
+> drop xxx 		               	  - to drop the item from inventory             <
 > help                            - to check the help menu                      <
 > commands                        - to see the list of commands you can type    <
 *********************************************************************************

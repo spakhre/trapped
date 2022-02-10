@@ -1,6 +1,8 @@
 package com.trapped.player;
 
+
 import com.trapped.GameEngine;
+
 import com.trapped.utilities.*;
 
 import java.io.Serializable;
@@ -15,15 +17,19 @@ public class Player implements Serializable{
     public static ArrayList<String> nouns = new ArrayList<>();
     //Map<String, Items> inventory = new HashMap<String, Items>(); // player's inventory
     public static String location="bed";
-    private List<String> inventory = new ArrayList<>();
+
+    //private List<String> inventory = new ArrayList<>();
     static List<String> rewarded_item = List.of(new String[]{"crowbar", "key", "a piece of paper with number 104"});
 
 
     private Puzzle puzzle = Puzzle.getInstance();
 //    private Map<String, Object> furniture = puzzle.generatePuzzle(location);
+
+    public static Inventory inventory = new Inventory();
+//    static List<String> inventory = new ArrayList<>();
+
+
     static boolean incorrectPass = true; // scope
-
-
 
 
 //    static Map<String, Map<String, Object>> map = furniturePuzzleGenerator();
@@ -42,8 +48,6 @@ public class Player implements Serializable{
 //        return null;
 //    }
 
-
-
     // After the intro story, player will see current location and the view of the whole room.
     public void viewRoom() {
         System.out.println("\nYou are currently in front of " + TextColor.RED  + location + TextColor.RESET);
@@ -55,31 +59,34 @@ public class Player implements Serializable{
     // And if the furniture has a puzzle, it will show the puzzle's description.
     public void inspectItem(String something) {
         //furniture
-        //furniture
         Prompts.ClearConsole();
         if(something.equals("inventory")){
-            checkCurrentInventory();
+            inventory.checkInv();
+            new_command();
         }
+
 
         else if (Puzzle.MAP.containsKey(something)) {
             location = something;
             Map<String, Object> furniture = Puzzle.MAP.get(something);
+
             String furniture_desc = (String) furniture.get("furniture_desc");
             String furniture_picture = (String) furniture.get("furniture_picture");
             if (furniture.get("furniture_items") != null) {
                 ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
                 if (!furniture_items.isEmpty()) {
-                    if (inventory.contains(furniture_items.get(0))) {
+                    if (inventory.getInvList().contains(furniture_items.get(0))) {
                         FileManager.getResource(furniture_picture);
                         System.out.println("Inspecting...\nNo items found here in " + something);
                         solvePuzzle(something);
-                    } else if (!inventory.contains(furniture_items.get(0))) {
+                    } else if (!inventory.getInvList().contains(furniture_items.get(0))) {
                         FileManager.getResource(furniture_picture);
+
                         System.out.println("Inspecting...\nYou found: " + RED + furniture_items.get(0) + RESET);
                         pickUpItem(something);
+
                         solvePuzzle(something);
                     }
-
                 }
                 if (furniture_items.isEmpty()) {
                     FileManager.getResource(furniture_picture);
@@ -95,13 +102,15 @@ public class Player implements Serializable{
 
         //item
 
+
         else if (Puzzle.MAP.get(location).get("furniture_items") != null) {
             ArrayList<String> furniture_items = (ArrayList<String>) Puzzle.MAP.get(location).get("furniture_items");
+
             if (furniture_items.contains(something)) {
                 System.out.println("It's just a " + something);
                 new_command();
             }
-            else if (inventory.contains(something)){
+            else if (inventory.getInvList().contains(something)){
                 System.out.println("It's just a " + something);
                 new_command();
             }
@@ -110,14 +119,12 @@ public class Player implements Serializable{
                 FileManager.getResource("commands.txt");
                 playerInput();
             }
-
         }
         else{
             System.out.println("Sorry, I don't understand your input, please enter again. ");
             FileManager.getResource("commands.txt");
             playerInput();
         }
-
 
     }
 
@@ -196,6 +203,7 @@ public class Player implements Serializable{
         System.exit(0);
     }
 
+
     // play again
 //    public static void playAgain(String input) {
 //        if (input.equals("again") || (input.equals("play again"))){
@@ -271,6 +279,7 @@ public class Player implements Serializable{
 
     public void playerInput() {
 
+
         userInput = Prompts.getStringInput(); // gets userInput as a string from Prompts
         // now extract verb/nouns from parsedInput
         verb = TextParser.getVerb(userInput);
@@ -290,36 +299,29 @@ public class Player implements Serializable{
             FileManager.getResource("commands.txt");
             playerInput();
         }
-
         else if (verb != null) {
-//            if (verb.equalsIgnoreCase("start")) {    // || start_value.toString().contains(verb)) {
-//                if (nouns.contains("game") || (nouns.isEmpty())) {
-//                    GameEngine.startGame();
-//                }
-//            }
-
+            // Show Commands
             if (verb.equals("commands")){
                 FileManager.getResource("commands.txt");
                 playerInput();
             }
-
-            else if (verb.equals("quit")) {          // || quit_value.toString().contains(verb)) {
+            // Quit Game
+            else if (verb.equals("quit")) {
                 if (nouns.contains("game") || (nouns.isEmpty())) {
                     quitGame();
                 }
             }
-
-            // go
-            //Object go = map1.keySet().toArray()[2];
-            //Object go_value = map1.get(go);
-            else if (verb.equals("go")) {    // || go_value.toString().contains(verb)) {
+            // "Go" command
+            else if (verb.equals("go")) {
                 // Currently this is only pointing to the first index of the parsed array
                 if (nouns.isEmpty()){
                     System.out.println("Sorry, I don't understand your input, please enter again. ");
                     FileManager.getResource("commands.txt");
                     playerInput();
                 }
+
                 else if (puzzle.MAP.containsKey(nouns.get(0))) {
+
                     goFurniture(nouns.get(0));
                 } else if (nouns.get(0).equals("left") || (nouns.get(0).equals("right"))) {
                     moveDirection(nouns.get(0));
@@ -330,32 +332,28 @@ public class Player implements Serializable{
                     playerInput();
                 }
             }
-
-            // get
-            //Object get = map1.keySet().toArray()[3];
-            //Object get_value = map1.get(get);
+            // "Get" command
             else if (verb.equals("get")) {   // || get_value.toString().contains(verb)) {
                 if (nouns.isEmpty()) {
                     System.out.println("Sorry, I don't understand your input, please enter again. ");
                     FileManager.getResource("commands.txt");
                     playerInput();
-                } else {
-                    if (furniture_items.contains(nouns.get(0))) {
-                        pickUpItem(location);
+                }
+                else {
+                    if (inventoryItems.contains(nouns.get(0))) {
+                        inventory.pickUpItem(location, furniturePuzzleMap);
                         new_command();
                     }
                     else if (puzzle_reward_item.contains(nouns.get(0))) {
-                        inventory.add(nouns.get(0));
+                        inventory.getInvList().add(nouns.get(0));
                     }
-                    else{
+                    else {
                         System.out.println("Sorry, I don't understand your input, please enter again. ");
                         FileManager.getResource("commands.txt");
                         playerInput();
                     }
                 }
             }
-
-
             else if (verb.equals("inspect")) {   // || inspect_value.toString().contains(verb)) {
                 if (nouns.isEmpty()){
                     System.out.println("Sorry, I don't understand your input, please enter again.");
@@ -367,68 +365,63 @@ public class Player implements Serializable{
                 }
 
             }
-
             // help
             //Object help = map1.keySet().toArray()[6];
             //Object help_value = map1.get(help);
-
             else if (verb.equals("help")) {  // || help_value.toString().contains(verb)) {
                 gameMenu();
                 playerInput();
             }
-
-
             else if (verb.equals("drop")) {  // || drop_value.toString().contains(verb)) {
-                if (inventory.isEmpty()) {
+                if (inventory.getInvList().isEmpty()) {
                     System.out.println("Sorry, your inventory is empty now and you cannot drop item.");
                     new_command();
                 }
                 else if (nouns.isEmpty()) {
-                    dropItem();
+                    inventory.dropItem();
+                    new_command();
                 }
                 else {
-                    dropSpecificItem(nouns.get(0));
+                    inventory.dropSpecificItem(nouns.get(0));
+                    new_command();
                 }
             }
-
-         else if(userInput.equals(nouns.get(0))){
+            //area to playtest
+            else if(userInput.equals(nouns.get(0))){
                 System.out.println("Sorry, I don't understand your input, please enter again.");
                 FileManager.getResource("commands.txt");
                 playerInput();
             }
-
-
-
             else {
                 System.out.println("Sorry, I don't understand your input, please enter again.");
                 FileManager.getResource("commands.txt");
                 playerInput();
             }
             //reader.close();
-
-
         }
-
-
     }
 
     public void moveDirection(String direction) {
         Prompts.ClearConsole();
+
         Map<String, Object> furniture = puzzle.MAP.get(location);
         String newlocation = (String) furniture.get(direction);
         location = newlocation;
         Map<String, Object> new_furniture = puzzle.MAP.get(newlocation);
+
         String furniture_desc = (String) new_furniture.get("furniture_desc");
         String furniture_picture = (String) new_furniture.get("furniture_picture");
         FileManager.getResource(furniture_picture);
-        System.out.println("Now you are in front of " + newlocation);
+        System.out.println("Now you are in front of " + location);
         System.out.println(furniture_desc);
         new_command();
     }
 
     public void goFurniture(String destinationaLoc) {
         Prompts.ClearConsole();
+
         Map<String, Object> furniture = puzzle.MAP.get(destinationaLoc);
+
         String furniture_desc = (String) furniture.get("furniture_desc");
         String furniture_picture = (String) furniture.get("furniture_picture");
         FileManager.getResource(furniture_picture);
@@ -452,8 +445,8 @@ public class Player implements Serializable{
         if (selection == 1) {
             System.out.println("you are at " + location);
         } else if (selection == 2) {
-            checkCurrentInventory();
-
+            inventory.checkInv();
+            new_command();
         } else if (selection == 3) {
             System.out.println("Returning to game");
             new_command();
@@ -464,12 +457,8 @@ public class Player implements Serializable{
         Prompts.ClearConsole();
     }
     public void new_command (){
+
         System.out.println(TextColor.GREEN + "\nWhat you'd like to do next? (type [commands] to check available commands and [help] to see other help items)" + TextColor.RESET);
         playerInput();
     }
-
 }
-
-
-
-

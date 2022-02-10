@@ -17,6 +17,7 @@ public class GameEngine implements Serializable {
     private Player player = new Player();
 
     public void startGame()  {
+
         while (true) {
             FileManager.getResource("./splash_screen.txt");   // displaying splash screen
 
@@ -66,9 +67,4 @@ public class GameEngine implements Serializable {
             player.viewRoom();
         }
     }
-
-
 }
-
-
-
