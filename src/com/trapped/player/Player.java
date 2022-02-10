@@ -17,8 +17,8 @@ public class Player implements Serializable {
     private ArrayList<String> nouns = new ArrayList<>();
     private String location = "bed";
     private Puzzle puzzle = Puzzle.getInstance();
+    private Inventory inventory = Inventory.getInstance();
 
-    public static Inventory inventory = new Inventory();
 
     // After the intro story, player will see current location and the view of the whole room.
     public void viewRoom() {
@@ -181,7 +181,7 @@ public class Player implements Serializable {
                 System.out.println("Sorry, your inventory is empty now and you cannot drop item.");
                 new_command();
             } else if (nouns.isEmpty()) {
-                inventory.dropItem();
+                inventory.dropSelect();
                 new_command();
             } else {
                 inventory.dropSpecificItem(nouns.get(0));
@@ -222,7 +222,6 @@ public class Player implements Serializable {
             FileManager.getResource("commands.txt");
 //            playerInput();
         }
-
     }
 
     public void moveDirection(String direction) {
@@ -282,7 +281,6 @@ public class Player implements Serializable {
     }
 
     public void new_command() {
-
         System.out.println(TextColor.GREEN + "\nWhat you'd like to do next? (type [commands] to check available commands and [help] to see other help items)" + TextColor.RESET);
         playerInput();
     }
