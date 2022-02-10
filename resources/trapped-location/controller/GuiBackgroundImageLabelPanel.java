@@ -30,8 +30,8 @@ public class GuiBackgroundImageLabelPanel extends GuiPanel {
         backgroundImageLabel.setSize(backgroundPanel.getWidth(), backgroundPanel.getHeight());
 
         // setting background image
-        URL imageURL = GuiBackgroundImageLabelPanel.class.getResource("/image/image.jpg");
-        ImageIcon backgroundImage = new ImageIcon(new ImageIcon(imageURL).getImage()
+        URL resource = GuiBackgroundImageLabelPanel.class.getResource("/image/image.jpg");
+        ImageIcon backgroundImage = new ImageIcon(new ImageIcon(resource).getImage()
                 .getScaledInstance(backgroundImageLabel.getWidth(), backgroundImageLabel.getHeight(), Image.SCALE_SMOOTH));
         backgroundImageLabel.setIcon(backgroundImage);
         backgroundPanel.add(backgroundImageLabel);

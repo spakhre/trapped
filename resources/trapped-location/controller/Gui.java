@@ -27,7 +27,7 @@ public class Gui extends JFrame {
         this.add(backgroundPanel);
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //Exit out of application(default is hide application)
-        this.setResizable(false); //prevent frame from being resized
+//        this.setResizable(false); //prevent frame from being resized
         this.getContentPane().setBackground(new Color(100, 200, 200)); //set background collor
 
         GuiStartPanel guiStartPanel = new GuiStartPanel(this);

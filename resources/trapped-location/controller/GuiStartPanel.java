@@ -96,7 +96,7 @@ public class GuiStartPanel extends GuiBackgroundImageLabelPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            //JOptionPane.showMessageDialog(GuiStartPanel.this.getGui(), "Good Bye!");
+            JOptionPane.showMessageDialog(GuiStartPanel.this.getGui(), "Good Bye!");
             System.exit(0);
         }
     }
