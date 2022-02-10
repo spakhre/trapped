@@ -2,6 +2,7 @@ package com.trapped.utilities;
 
 import com.google.gson.Gson;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -111,9 +112,10 @@ public class FileManager {
     public static Map<String, Map<String, Object>> loadFurniturePuzzlesTestJson(String path) {
         Gson gson = new Gson();
         try {
-            Reader reader = Files.newBufferedReader(Path.of(path));
-            Map<String, Map<String, Object>> map = gson.fromJson(reader, Map.class);
-            reader.close();
+            FileInputStream fiPath = new FileInputStream(path);
+            BufferedReader br = new BufferedReader(new InputStreamReader(fiPath, StandardCharsets.UTF_8));
+            Map<String, Map<String, Object>> map = gson.fromJson(br, Map.class);
+            br.close();
             return map;
         } catch (IOException e) {
             e.printStackTrace();
