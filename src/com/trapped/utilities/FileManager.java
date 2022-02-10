@@ -2,7 +2,6 @@ package com.trapped.utilities;
 
 import com.google.gson.Gson;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,7 +18,7 @@ public class FileManager {
      */
 
     public static void getResource(String fileName) {
-        String art = "resources/art/" + fileName;
+        String art = "./resources/art/" + fileName;
         try (BufferedReader br = new BufferedReader(new FileReader(art))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -56,7 +55,7 @@ public class FileManager {
      */
 
     public static String convertTxtToString(String fileName){
-        String file = "resources/" + fileName;
+        String file = "./resources/" + fileName;
         Path path = Paths.get(file);
         StringBuilder sb = new StringBuilder();
 
@@ -75,7 +74,7 @@ public class FileManager {
      */
 
     public static Map<String, ArrayList<String>> loadJson(String fileName) {
-        String file = "resources/cfg/" + fileName;
+        String file = "./resources/cfg/" + fileName;
         Gson gson = new Gson();
 
         try {
@@ -112,10 +111,9 @@ public class FileManager {
     public static Map<String, Map<String, Object>> loadFurniturePuzzlesTestJson(String path) {
         Gson gson = new Gson();
         try {
-            FileInputStream fiPath = new FileInputStream(path);
-            BufferedReader br = new BufferedReader(new InputStreamReader(fiPath, StandardCharsets.UTF_8));
-            Map<String, Map<String, Object>> map = gson.fromJson(br, Map.class);
-            br.close();
+            Reader reader = Files.newBufferedReader(Paths.get(path));
+            Map<String, Map<String, Object>> map = gson.fromJson(reader, Map.class);
+            reader.close();
             return map;
         } catch (IOException e) {
             e.printStackTrace();
@@ -124,8 +122,8 @@ public class FileManager {
     }
 
     public static void writeDefaults(){
-        String dirtyFilePath = "resources/furniture_puzzles.json";
-        String cleanFilePath = "resources/defaults/furniture_puzzles_test_defaults.json";
+        String dirtyFilePath = "./resources/furniture_puzzles.json";
+        String cleanFilePath = "./resources/defaults/furniture_puzzles_test_defaults.json";
         Map<String, Map<String, Object>> cleanFile = loadFurniturePuzzlesTestJson(cleanFilePath);
         writeJSONDefaults(cleanFile,dirtyFilePath);
     }
