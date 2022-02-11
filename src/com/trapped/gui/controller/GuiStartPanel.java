@@ -8,7 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class GuiStartPanel extends GuiBackgroundImageLabelPanel {
-    public GuiStartPanel(Gui gui) {
+    public GuiStartPanel(GuiMainWindow gui) {
         super(gui);
 
         //start panel design
@@ -54,7 +54,7 @@ public class GuiStartPanel extends GuiBackgroundImageLabelPanel {
         JButton startButton = new JButton(" START ");
 
         startButton.setSize(dimension);
-        startButton.setFont(Gui.btnFont);
+        startButton.setFont(GuiMainWindow.btnFont);
         startButton.setOpaque(false);
         startButton.setForeground(Color.BLACK);
         startButton.setBackground(Color.GRAY);
@@ -68,7 +68,7 @@ public class GuiStartPanel extends GuiBackgroundImageLabelPanel {
     private JButton createExitButton(Dimension dimension) {
         JButton exitButton = new JButton(" EXIT ");
         exitButton.setSize(dimension);
-        exitButton.setFont(Gui.btnFont);
+        exitButton.setFont(GuiMainWindow.btnFont);
         exitButton.setOpaque(false);
         exitButton.setForeground(Color.BLACK);
         exitButton.setBackground(Color.GRAY);
@@ -85,7 +85,7 @@ public class GuiStartPanel extends GuiBackgroundImageLabelPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             //Create Game Screen
-            getGui().createGameScreen();
+            getGuiMainWindow().createGameScreen();
         }
     }
 

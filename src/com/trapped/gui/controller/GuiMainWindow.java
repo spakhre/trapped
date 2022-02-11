@@ -7,7 +7,7 @@ import java.awt.Container;
 import java.awt.Font;
 
 
-public class Gui extends JFrame {
+public class GuiMainWindow extends JFrame {
 
     // Font and styling
     public static final Font btnFont = new Font("Times New Roman", Font.BOLD, 10); // ORIGINAL
@@ -20,7 +20,7 @@ public class Gui extends JFrame {
      * CONSTRUCTOR.
      */
 
-    public Gui() {
+    public GuiMainWindow() {
         super("Trapped: Try to escape!"); //game window design
         this.setSize(GUI_WIDTH, GUI_HEIGHT);//sets the x-dimension and y-dimension of the frame
 

@@ -6,7 +6,7 @@ import java.awt.BorderLayout;
 public class GuiPlayPanel extends GuiBackgroundImageLabelPanel {
     private JPanel mainPanel;
 
-    public GuiPlayPanel(Gui gui) {
+    public GuiPlayPanel(GuiMainWindow gui) {
         super(gui);
         setToBackgroundLabel(createMainPanel());
     }

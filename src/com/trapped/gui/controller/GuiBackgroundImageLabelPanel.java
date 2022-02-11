@@ -12,7 +12,7 @@ import java.net.URL;
 public class GuiBackgroundImageLabelPanel extends GuiPanel {
     private JLabel backgroundImageLabel;
 
-    public GuiBackgroundImageLabelPanel(Gui gui) {
+    public GuiBackgroundImageLabelPanel(GuiMainWindow gui) {
         super(gui);
         JPanel backgroundPanel = createBackgroundPanel(gui);
         this.add(backgroundPanel);

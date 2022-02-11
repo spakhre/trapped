@@ -4,12 +4,12 @@ import javax.swing.JPanel;
 
 public class GuiPanel extends JPanel {
 
-    private Gui gui;
+    private GuiMainWindow guiMainWindow;
 
-    public GuiPanel(Gui gui) {
-        this.gui=gui;
+    public GuiPanel(GuiMainWindow guiMainWindow) {
+        this.guiMainWindow=guiMainWindow;
     }
-    protected Gui getGui() {
-        return gui;
+    protected GuiMainWindow getGuiMainWindow() {
+        return guiMainWindow;
     }
 }

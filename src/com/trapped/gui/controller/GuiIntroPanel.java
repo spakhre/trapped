@@ -14,17 +14,13 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.trapped.gui.controller.Gui.displayAreaFont;
+import static com.trapped.gui.controller.GuiMainWindow.displayAreaFont;
 
 public class GuiIntroPanel extends GuiPanel {
-
     private JTextArea introText;
 
     //Rows and cols of text area to match the size of the map
@@ -37,16 +33,13 @@ public class GuiIntroPanel extends GuiPanel {
      *
      * @param gui
      */
-    public GuiIntroPanel(Gui gui) {
+    public GuiIntroPanel(GuiMainWindow gui) {
         super(gui);
-
         setLayout(new BorderLayout());
-
         this.add(createCenterPanel(), BorderLayout.CENTER);
         this.add(createSouthPanel(), BorderLayout.SOUTH);
-
         String[] filesArr = {"resources/textfile/greeting.txt", "resources/textfile/warning.txt"};
-        displayText(Arrays.asList(filesArr), displayTextArea, true);
+        GuiUtil.displayText(Arrays.asList(filesArr), displayTextArea, true, getGuiMainWindow());
 
     }
 
@@ -95,7 +88,7 @@ public class GuiIntroPanel extends GuiPanel {
      * @return
      */
     public JScrollPane getIntroScrollPane() {
-        JScrollPane introTAScroll = null;
+        JScrollPane introTextScroll = null;
         if (introText == null) {
             introText = new JTextArea(12, MAIN_PANEL_TEXT_AREA_COLS);
             introText.setEditable(false);
@@ -106,9 +99,9 @@ public class GuiIntroPanel extends GuiPanel {
             introText.setWrapStyleWord(true);
 
             //Add scrollbar
-            introTAScroll = GuiUtil.createScrollPane(introText);
+            introTextScroll = GuiUtil.createScrollPane(introText);
         }
-        return introTAScroll;
+        return introTextScroll;
     }
 
 
@@ -117,37 +110,7 @@ public class GuiIntroPanel extends GuiPanel {
 
         lines.add("Hello " + name + "!");
 
-        displayText(lines, Arrays.asList("resources/textfile/introstory.txt"), introText, true);
-    }
-
-    private void displayText(List<String> filesList, JTextArea jTextArea, boolean append) {
-        displayText(null, filesList, jTextArea, append);
-    }
-
-    private void displayText(List<String> lines, List<String> filesList, JTextArea jTextArea, boolean append) {
-        if(!append) {
-            //clear previous text
-            jTextArea.setText("");
-        }
-        try {
-            if(lines == null){
-                lines = new ArrayList<>();
-            }
-            else{
-                lines.add("\n\n");
-            }
-            for (String filePath: filesList) {
-                List<String> listLines = Files.readAllLines(Path.of(filePath));
-                lines.addAll(listLines);
-                lines.add("\n\n");
-            }
-            String text = String.join("\n", lines);
-            GuiUtil.setMessageSlowly(jTextArea, text);
-        } catch (IOException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(getGui(), "Error reading intro text.");
-            return;
-        }
+        GuiUtil.displayText(lines, Arrays.asList("resources/textfile/introstory.txt"), introText, true, getGuiMainWindow());
     }
 
     private JPanel createNamePanel() {
@@ -162,7 +125,7 @@ public class GuiIntroPanel extends GuiPanel {
             public void actionPerformed(ActionEvent e) {
                 String name = nameTextField.getText().trim();
                 if(name.isEmpty() || name.isBlank()){
-                    JOptionPane.showMessageDialog(getGui(), "Invalid name.");
+                    JOptionPane.showMessageDialog(getGuiMainWindow(), "Invalid name.");
                     return;
                 }
                 displayIntroText(name);
@@ -195,7 +158,7 @@ public class GuiIntroPanel extends GuiPanel {
         continueButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                getGui().setMainPanel(new GuiLocationPanel(getGui()));
+                getGuiMainWindow().setMainPanel(new GuiLocationPanel(getGuiMainWindow()));
             }
         });
 
