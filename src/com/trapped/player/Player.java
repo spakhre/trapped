@@ -259,11 +259,11 @@ public class Player implements Serializable {
          * Comment out this block for JUnit Testing
          */
         ///////////////////////////////////////////////////////////////////////////////////////////////////////
-        System.out.println("What would you like to do next?");
-        userInput = scan.nextLine(); // gets userInput as a string from Prompts
-        //now extract verb/nouns from parsedInput
-        verb = TextParser.getVerb(userInput);
-        noun = TextParser.getNoun(userInput);
+//        System.out.println("What would you like to do next?");
+//        userInput = scan.nextLine(); // gets userInput as a string from Prompts
+//        //now extract verb/nouns from parsedInput
+//        verb = TextParser.getVerb(userInput);
+//        noun = TextParser.getNoun(userInput);
         ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if (verb == null && (noun == null)) {
@@ -354,10 +354,12 @@ public class Player implements Serializable {
         playerInput();
     }
 
-    private static void move(String noun) {
+    public static boolean move(String noun) {
+        boolean success = false;
         if (noun != null) {
             if (map.containsKey(noun)) {
                 goFurniture(noun);
+                return true;
             } else if (noun.equals("left") || (noun.equals("right"))) {
                 moveDirection(noun);
             } else {
@@ -368,7 +370,7 @@ public class Player implements Serializable {
             System.out.println("Sorry, I don't understand your input, please enter again. ");
             FileManager.getResource("commands.txt");
         }
-        playerInput();
+        return false;
     }
 
 
@@ -468,14 +470,14 @@ public class Player implements Serializable {
         }
     }
 
-    private static boolean puzzleSolved() {
+    public static boolean puzzleSolved() {
         //checks to see if the player has solved any of the puzzles, if they have, returns true to the caller!
         Map<String, Object> furniture = map.get(location);
         ArrayList<String> puzzle_reward_item = (ArrayList<String>) furniture.get("puzzle_reward_item");
         Boolean solved = false;
-        if ((inventory.contains(puzzle_reward_item.get(0))) || (inventory.contains("key") && location.equals("safe")) ||
+        if (((inventory.contains("key") && location.equals("safe")) ||
                 (inventory.contains("a piece of paper with number 104") && location.equals("window")) ||
-                (inventory.contains("a piece of paper with number 104") && location.equals("safe"))) {
+                (inventory.contains("a piece of paper with number 104") && location.equals("safe")))) {
             System.out.println("The puzzle has been solved. Please feel free to explore other furniture :)");
             solved = true;
         }

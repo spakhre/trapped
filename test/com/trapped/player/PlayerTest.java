@@ -63,14 +63,22 @@ public class PlayerTest {
     }
 
     @Test
+    public void playerShouldNotDropItemsWhenItemNotInInventory(){
+        Map<String, Object> furniture = player.map.get(player.location);
+        ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
+        player.drop("crowbar");
+        assertFalse(furniture_items.contains("crowbar"));
+    }
+
+    @Test
     public void playerShouldPickUpItemWhenUserPicksUpItem() {
-        player.location= "bed";
+        player.location = "bed";
         assertEquals(true,player.pickUpItem("matches"));
     }
 
     @Test
     public void playerShouldNotPickUpItemWhenItemNotThere() {
-        player.location= "bed";
+        player.location = "bed";
         assertEquals(false,player.pickUpItem("key"));
     }
 
@@ -81,6 +89,26 @@ public class PlayerTest {
 
     @Test
     public void playerShouldGoToFurnitureWhenInputValid() {
+        player.location = "bed";
+        assertEquals(true, player.move("window"));
+    }
 
+    @Test
+    public void playerShouldNotGoToFurnitureWhenInputNotValid() {
+        player.location = "bed";
+        assertEquals(false, player.move(null));
+    }
+
+    @Test
+    public void playerShouldSolvePuzzleIfItemsInInventory(){
+        List<String> inventory = new ArrayList<>();
+        player.inventory.add("key");
+        player.location = "safe";
+        assertEquals(true, player.puzzleSolved());
+    }
+
+    @Test
+    public void playerShouldNotSolvePuzzleIfItemsNotInInventory(){
+        assertFalse(player.puzzleSolved());
     }
 }
