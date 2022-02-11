@@ -17,7 +17,6 @@ public class Player implements Serializable {
     private ArrayList<String> nouns = new ArrayList<>();
     private String location = "bed";
     private Puzzle puzzle = Puzzle.getInstance();
-
     public static Inventory inventory = new Inventory();
 
     // After the intro story, player will see current location and the view of the whole room.

@@ -86,7 +86,7 @@ public class GuiStartPanel extends GuiBackgroundImageLabelPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             //Create Game Screen
-//            getGui().createGameScreen();
+            getGui().createGameScreen();
         }
     }
 
