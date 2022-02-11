@@ -322,14 +322,17 @@ public class Player implements Serializable {
         playerInput();
     }
 
-    private static void inspect(String noun) {
+    public static boolean inspect(String noun) {
+        boolean success = false;
         if (noun != null) {
             inspectItem(noun);
+            success = true;
         } else {
             System.out.println("Sorry, I don't understand your input, please enter again. ");
             FileManager.getResource("commands.txt");
             playerInput();
         }
+        return success;
     }
 
     private static void get(String noun) {
