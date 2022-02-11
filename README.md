@@ -11,23 +11,29 @@ The game takes place in a mysterious room. The player has to explore the room, l
 * When the game is over, it asks if the player wants to play again or quit.
 
 
-## Used Programming skills
-* Foundations of Java
-- Classes
-- Functions
-- ...
-- ...
-- ..
-
 ## Release Version
-* V1.3
+Version 2.1
+> 
+> whats new?
+> 
+> Item persistence!
+> 
+> Less bugs!
+> 
+> Volume control!
+> 
+> Did we mention, less bugs?
 
 ## Contributors
-* Justin Hammel, Sushma Pakhreen, Zoe Ji
+### v1 Team
+[Justin Hammel](https://github.com/thirdeye18), [Sushma Pakhreen](https://github.com/spakhre), [Zoe Ji](https://github.com/zoeji569)
+### v2 Team
+[Fan Wu](https://github.com/fanwu513), [Michael Stack](https://github.com/AgentKD6-37), [Zicheng Li](https://github.com/thrashghost)
 
 ## Quickstart
-* Clone the project and `cd` into it in your terminal
-* Run project:
-- On **MacOS** run`Main.java` and follow the instruction on the screen
-- On **Windows** run `Main.java` in order for the program to run correctly
-* _Note:_ The project runs on Java 11. Need to add GSON 2.8.9 as a library.
+*Download the zip file in the latest release
+*Unzip the file
+*double click the Run command
+
+## Libraries
+*GSON 2.8.9
