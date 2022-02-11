@@ -259,11 +259,11 @@ public class Player implements Serializable {
          * Comment out this block for JUnit Testing
          */
         ///////////////////////////////////////////////////////////////////////////////////////////////////////
-        //System.out.println("What would you like to do next?");
-        //userInput = scan.nextLine(); // gets userInput as a string from Prompts
-        ////now extract verb/nouns from parsedInput
-        //verb = TextParser.getVerb(userInput);
-        //noun = TextParser.getNoun(userInput);
+        System.out.println("What would you like to do next?");
+        userInput = scan.nextLine(); // gets userInput as a string from Prompts
+        //now extract verb/nouns from parsedInput
+        verb = TextParser.getVerb(userInput);
+        noun = TextParser.getNoun(userInput);
         ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if (verb == null && (noun == null)) {
