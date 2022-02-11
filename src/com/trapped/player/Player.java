@@ -15,7 +15,7 @@ public class Player implements Serializable {
     private String userInput;
     private String verb;
     private ArrayList<String> nouns = new ArrayList<>();
-    private String location = "bed";
+    public static String location = "bed";
     private Puzzle puzzle = Puzzle.getInstance();
     private Inventory inventory = Inventory.getInstance();
 
