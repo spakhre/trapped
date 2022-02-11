@@ -43,8 +43,11 @@ public class Gui extends JFrame {
 
     public void setMainPanel(JPanel panel) {
         Container contentPane = this.getContentPane();
+        //remove all existing components
         contentPane.removeAll();
+        //add the new panel
         contentPane.add(panel);
+        //refresh frame
         this.revalidate();
     }
 
@@ -52,3 +55,4 @@ public class Gui extends JFrame {
         GuiIntroPanel panel = new GuiIntroPanel(this);
         setMainPanel(panel);
     }
+}

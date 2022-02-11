@@ -195,7 +195,7 @@ public class GuiIntroPanel extends GuiPanel {
         continueButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(getGui(), "Continue Screen Here.....");
+                getGui().setMainPanel(new GuiLocationPanel(getGui()));
             }
         });
 

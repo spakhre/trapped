@@ -1,7 +1,6 @@
 package com.trapped.gui.controller;
 
 import javax.swing.JButton;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -86,7 +85,7 @@ public class GuiStartPanel extends GuiBackgroundImageLabelPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             //Create Game Screen
-//            getGui().createGameScreen();
+            getGui().createGameScreen();
         }
     }
 
