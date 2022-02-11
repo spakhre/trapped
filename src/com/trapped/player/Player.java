@@ -259,11 +259,11 @@ public class Player implements Serializable {
          * Comment out this block for JUnit Testing
          */
         ///////////////////////////////////////////////////////////////////////////////////////////////////////
-        System.out.println("What would you like to do next?");
-        userInput = scan.nextLine(); // gets userInput as a string from Prompts
-        //now extract verb/nouns from parsedInput
-        verb = TextParser.getVerb(userInput);
-        noun = TextParser.getNoun(userInput);
+        //System.out.println("What would you like to do next?");
+        //userInput = scan.nextLine(); // gets userInput as a string from Prompts
+        ////now extract verb/nouns from parsedInput
+        //verb = TextParser.getVerb(userInput);
+        //noun = TextParser.getNoun(userInput);
         ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if (verb == null && (noun == null)) {
@@ -322,14 +322,17 @@ public class Player implements Serializable {
         playerInput();
     }
 
-    private static void inspect(String noun) {
+    public static boolean inspect(String noun) {
+        boolean success = false;
         if (noun != null) {
             inspectItem(noun);
+            success = true;
         } else {
             System.out.println("Sorry, I don't understand your input, please enter again. ");
             FileManager.getResource("commands.txt");
             playerInput();
         }
+        return success;
     }
 
     private static void get(String noun) {

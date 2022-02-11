@@ -75,8 +75,13 @@ public class PlayerTest {
     }
 
     @Test
-    public void playerShouldInspectItemWhenUserInspectItem() {
+    public void playerShouldInspectItemWhenInputValid() {
+        assertTrue(player.inspect("bed"));
+    }
 
+    @Test
+    public void playerShouldNotInspectItemWhenInputNull(){
+        assertFalse(player.inspect(null));
     }
 
     @Test
