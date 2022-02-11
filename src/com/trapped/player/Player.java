@@ -21,7 +21,7 @@ public class Player implements Serializable {
     public static String noun;
     public static String location = "bed";
     public static float volume;
-    private static List<String> inventory = new ArrayList<>();
+    public static List<String> inventory = new ArrayList<>();
     private static String furniturePuzzlesJsonPath = "./resources/furniture_puzzles.json";
     private static int max_attempts = 3;
     private static String ANSWER;
@@ -133,13 +133,14 @@ public class Player implements Serializable {
     }
 
     // pickup item method.
-    private static void pickUpItem(String noun) {
+    public static boolean pickUpItem(String noun) {
+        boolean success = false;
 
         if (map.get(location) != null) {
             Map<String, Object> furniture = map.get(location);
             ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
             // if inventory is full. player need to drop an item, then item found in current location will be added to inventory.
-            if (!furniture_items.isEmpty()) {
+            if (!furniture_items.isEmpty() && !furniture_items.contains(null) && furniture_items.contains(noun) ) {
                 while (inventory.size() >= 5) {
                     System.out.println("You can't hold more than 5 items. Please drop one item.");
                     System.out.println("Which item would you like to drop?");
@@ -150,30 +151,35 @@ public class Player implements Serializable {
                     }
                     dropItem(selection);
                 }
-                addItemAndUpdateJson(furniture_items, furniture);
-            }
-            //if furniture has no item available to be picked up
-            if (furniture_items.isEmpty()) {
-                System.out.println("There's nothing here...");
+                addItemAndUpdateJson(furniture_items, furniture, noun);
+                success = true;
             }
             //if furniture has an item available to be picked up
-            else if (!inventory.contains(noun)) {
+           else if (!inventory.contains(noun) && !furniture_items.contains(null) && furniture_items.contains(noun)) {
                 System.out.println("\nDo you want to add " + noun + " to inventory? [Y/N]");
                 String response = scan.nextLine();
                 if (response.isEmpty()) {
                     System.out.println("Sorry, I didn't understand your entry. You did not pick anything up from " + location);
                 } else if (response.equalsIgnoreCase("Y")) {
-                    addItemAndUpdateJson(furniture_items, furniture);
+                    addItemAndUpdateJson(furniture_items, furniture, noun);
+                    success = true;
                 } else if (response.equalsIgnoreCase("N")) {
                     System.out.println("You did not pick anything from " + location);
                 } else {
                     System.out.println("Sorry, I didn't understand your entry. You did not pick anything up from " + location);
                 }
             }
+            //if furniture has no item available to be picked up
+            if (furniture_items.isEmpty()) {
+                System.out.println("There's nothing here...");
+            }
+        } else {
+            System.out.println("There's nothing here");
         }
+        return success;
     }
 
-    private static void addItemAndUpdateJson(ArrayList<String> furniture_items, Map<String, Object> furniture) {
+    private static void addItemAndUpdateJson(ArrayList<String> furniture_items, Map<String, Object> furniture, String noun) {
         inventory.add(noun);
         furniture_items.remove(noun);
         furniture.put("furniture_items", furniture_items);
@@ -191,7 +197,7 @@ public class Player implements Serializable {
 
     // Drop item -- will provide current inventory first then let player pick.
     // This method will be used when inventory is full and player being asked to drop an item.
-    private static void dropItem() {
+    public static void dropItem() {
         System.out.println("Your inventory: " + inventory);
         System.out.println("Which item you'd like to drop? Please enter item name. ");
         String selected_drop = scan.nextLine();
@@ -199,7 +205,7 @@ public class Player implements Serializable {
     }
 
     // Drop a specific item - this will be used when player input "drop xxx"
-    private static void dropItem(String item) {
+    public static void dropItem(String item) {
         Map<String, Object> furniture = map.get(location);
         ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
         if (inventory.contains(item.toLowerCase())) {
@@ -242,17 +248,23 @@ public class Player implements Serializable {
         playerInput();
     }
 
+
     public static void playerInput() {
         /*
          * This seems to be the main logic loop for the game. It takes in the player's input and then calls functions
          * based on the input results. We've swapped the massive if else block for a switch statement. -MS
          */
 
+        /*
+         * Comment out this block for JUnit Testing
+         */
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////
         System.out.println("What would you like to do next?");
         userInput = scan.nextLine(); // gets userInput as a string from Prompts
         //now extract verb/nouns from parsedInput
         verb = TextParser.getVerb(userInput);
         noun = TextParser.getNoun(userInput);
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if (verb == null && (noun == null)) {
             System.out.println("Sorry, I don't understand your input, please try again.");
@@ -295,7 +307,7 @@ public class Player implements Serializable {
         }
     }
 
-    private static void drop(String noun) {
+    public static void drop(String noun) {
         if (noun != null) {
             if (inventory.isEmpty()) {
                 System.out.println("You have nothing to drop");
