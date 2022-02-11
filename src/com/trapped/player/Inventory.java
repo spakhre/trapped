@@ -6,14 +6,19 @@ import com.trapped.utilities.Sounds;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 
-class Inventory {
+public class Inventory {
+    public static final Inventory INVENTORY = new Inventory();
+
     List<String> invList = new ArrayList<>();
-    static List<String> rewardsList = List.of(new String[]{"crowbar", "key", "a piece of paper with number 104"});
+    public static List<String> rewardsList = List.of(new String[]{"crowbar", "key", "a piece of paper with number 104"});
 
-    // CTOR
-    public Inventory() {};
+    // Singleton ctor
+    private Inventory() {};
+
+    public static Inventory getInstance(){
+        return INVENTORY;
+    }
 
     // check current inventory
     public List<String> checkInv() {
@@ -33,97 +38,90 @@ class Inventory {
             furniture = furniturePuzzleMap.get(location);
             locationItem = ((ArrayList<String>) furniture.get("furniture_items")).get(0);
             // if inventory is full. player needs to drop an item
-            if (invList.size() >= 5) {
-                System.out.println("Inventory cannot take more than 5 items. Please drop one item.");
-//                String droppedItem;
-//                do {   droppedItem = dropItem();  }
-//                while (droppedItem == null);
-                String selection = Prompts.getStringInput();
-                while (!invList.contains(selection.toLowerCase())) {
-                    System.out.println("Sorry, the item you entered is not in inventory, please select again.");
-                    selection = Prompts.getStringInput();
-                }
-                invList.remove(selection);
-                Sounds.playSounds("drop.wav",1000);
-                System.out.println(selection + " has been dropped from your inventory.");
-
-                invList.add(locationItem);
-                System.out.println(locationItem + " has been added to your inventory");
-                Sounds.playSounds("pick.wav",1000);
+            if (locationItem.isEmpty()) {
+                System.out.println(location + " is empty. Nothing can be added.");
             }
-            // if inventory is not full
-            else {
-                //if furniture has no item available to be picked up
-                if (locationItem.isEmpty()) {
-                    System.out.println(location + " is empty. Nothing can be added.");
-                }
-                //if furniture has an item available to be picked up
-                else if (!invList.contains(locationItem)) {
-                    System.out.println("\nDo you want to add " + locationItem + " to your inventory? [Y/N]");
-                    String response = Prompts.getStringInput();
-                    switch (response){
-                        case "Y":
-                        case "y":
-                            System.out.println(locationItem + " has been picked up and added to your inventory");
-                            Sounds.playSounds("pick.wav", 1000);
-                            invList.add(locationItem);
-                            break;
-                        case "N":
-                        case "n":
-                            System.out.println("You did not pick up anything from " + location);
-                            break;
-                        default:
-                            System.out.println("Sorry, I don't understand your entry. You did not pick anything from " + location);
-                    }
+            //if furniture has an item available to be picked up
+            else if (!invList.contains(locationItem)) {
+                System.out.println("\nDo you want to add " + locationItem + " to your inventory? [Y/N]");
+                String response = Prompts.getStringInput();
+                switch (response){
+                    case "Y":
+                    case "y":
+                        checkInvLimit();
+                        addItem(locationItem);
+                        break;
+                    case "N":
+                    case "n":
+                        System.out.println("You did not pick up anything from " + location);
+                        break;
+                    default:
+                        System.out.println("Sorry, I don't understand your entry. You did not pick anything from " + location);
                 }
             }
         }
     }
 
-    // Drop item -- will provide current inventory first then let player pick.
-    // This method is also used when inventory is full and player being asked to drop an item.
-    public String dropItem() {
-        System.out.println("Your inventory: " + getInvList());
-        System.out.println("Which item you'd like to drop? Please enter item name. ");
-
-        String selection = Prompts.getStringInput(); // scan.nextLine();
-
-        if (invList.contains(selection.toLowerCase())){
-            if (rewardsList.contains(selection)) {
-                System.out.println("Sorry, you cannot drop " + selection + ". It was automatically added by your solved puzzle and can not be dropped.");
-                return selection + " NOT REMOVED";
+    // Check Inventory size to ensure only 5 items
+    // loop until 5 items maximum
+    public void checkInvLimit(){
+        if (invList.size() >= 5) {
+            System.out.println("Inventory cannot take more than 5 items. Please drop one item.");
+            String droppedItem;
+            do {
+                droppedItem = dropSelect();
             }
-            else {
-                invList.remove(selection);
-                Sounds.playSounds("drop.wav",1000);
-                System.out.println(selection + " has been dropped from your inventory.");
-                return selection;
-            }
-        }
-        else {
-            System.out.println("Sorry, you cannot drop "+selection +". It is not in your inventory");
-            return selection + " NOT IN INVENTORY";
+            while (droppedItem == null || droppedItem.isEmpty());
         }
     }
 
-    // Drop a specific item - this will be used when player input "drop xxx"
+    // Drop item -- provide current inventory first then let player pick.
+    // Also used when inventory is full
+    public String dropSelect() {
+        System.out.println("Your inventory: " + invList);
+        System.out.println("Which item would you like to drop? Please enter item name: ");
+        String selection = "";
+        selection = drop(selection);
+        return selection;
+    }
+
+    // Drop a specific item
+    // Used for input "drop xxx"
     public String dropSpecificItem(String item) {
-        if (invList.contains(item.toLowerCase())) {
-            if (rewardsList.contains(item)) {
-                System.out.println("Sorry, you cannot drop "+item +". It was automatically added by your solved puzzle and can not be dropped.");
-                return item + " NOT REMOVED";
+        drop(item);
+        return item;
+    }
+
+    // Loop for dropping an item
+    // Ensures the item is in the inventory and then not required
+    public String drop(String selection) {
+        // while inventory DOES NOT contain item OR item is a reward
+        while (!invList.contains(selection) || rewardsList.contains(selection)) {
+            selection = Prompts.getStringInput().toLowerCase();
+            if (!invList.contains(selection)){
+                System.out.println("Sorry, you cannot drop " + selection + ". It is not in your inventory.\n" +
+                        "Please try again -->");
             }
-            else {
-                invList.remove(item);
-                Sounds.playSounds("drop.wav",1000);
-                System.out.println(item + " has been dropped from your inventory.");
-                return item;
+            else if(rewardsList.contains(selection)){
+                System.out.println("Sorry, you cannot drop " + selection + ". It is a required item to complete the game.\n" +
+                        "Please try again -->");
             }
         }
-        else {
-            System.out.println("Sorry, the item you entered is not in your inventory.");
-            return item + " NOT IN INVENTORY";
-        }
+        // dropSpecific ignores above while-loop
+        // DROP actions
+        invList.remove(selection);
+        Sounds.playSounds("drop.wav",1000);
+        System.out.println(selection + " has been dropped from your inventory.");
+        return selection;
+    }
+
+    // Adding an item actions and sound
+    // DOES NOT verify item passed here is a proper inventory item
+    public String addItem(String item){
+        invList.add(item);
+        System.out.println(item + " has been added to your inventory");
+        Sounds.playSounds("pick.wav",1000);
+        return item;
     }
 
     // getters and setters

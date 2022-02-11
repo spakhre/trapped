@@ -1,6 +1,7 @@
 package com.trapped.utilities;
 
 import com.google.gson.Gson;
+import com.trapped.player.Inventory;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -32,6 +33,7 @@ public class Puzzle{
     private String puzzleSounds;
 
     private static final Puzzle PUZZLE = new Puzzle();
+    private static Inventory inventory = Inventory.getInstance();
 
     private String currentLocation;
     private List<String> currentInventory;
@@ -125,39 +127,22 @@ public class Puzzle{
         System.out.println(getPuzzleReward());
         Sounds.playSounds(getPuzzleSounds(), 1000);
         System.out.println("You found " + getPuzzleRewardItem().get(0) + ".");
-//        pickUpItem(getPuzzleRewardItem().get(0));
-        checkInventory();
+        inventory.checkInvLimit();
+        inventory.addItem(getPuzzleRewardItem().get(0));
     }
 
     public void getEasyRiddle() {
         System.out.println(MAP.get(currentLocation).get("easy_question"));
-        //Scanner easy = new Scanner(System.in);
         String easyInput = Prompts.getStringInput();
 
         if (easyInput.equals(MAP.get(currentLocation).get("easy_answer"))) {
             System.out.println(getPuzzleReward());
             Sounds.playSounds(getPuzzleSounds(), 1000);
             System.out.println("You found " + this.getPuzzleRewardItem().get(0) + ".");
-            checkInventory();
+            inventory.checkInvLimit();
+            inventory.addItem(getPuzzleRewardItem().get(0));
         }
     }
-
-    public void checkInventory() {
-        if (this.currentInventory.size() >= 5) {
-            System.out.println("Please drop one item. Inventory cannot take more than 5 items.");
-            System.out.println("Your current inventory: " + this.currentInventory);
-//            playerInput();
-            this.currentInventory.add(this.getPuzzleRewardItem().get(0));
-            Sounds.playSounds("pick.wav", 1000);
-            System.out.println(this.getPuzzleRewardItem().get(0) + "has been added to your inventory");
-
-        } else if (this.currentInventory.size() < 5) {
-            this.currentInventory.add(this.getPuzzleRewardItem().get(0));
-            Sounds.playSounds("pick.wav", 1000);
-            System.out.println("Added " + this.getPuzzleRewardItem().get(0) + " to your inventory");
-        }
-    }
-
 
     public void useTool(List<String> inventory, String loc) {
         this.currentInventory = inventory;
@@ -182,21 +167,23 @@ public class Puzzle{
     private void checkItemsPuzzle(String solve_ans) {
 
         if (solve_ans.equalsIgnoreCase("Y")) {
-            System.out.println("You need to use an item from your inventory. Let's see if you got needed item in your inventory...");
+            System.out.println("You need to use an item from your inventory. " +
+                    "Let's see if you've got the needed item in your inventory...");
             System.out.println("Your current inventory: " + this.currentInventory);
             if (!this.currentInventory.contains(getPuzzleItemsNeeded().get(0))) {
                 System.out.println("Sorry, you don't have the tools. Explore the room and see if you can find anything");
             } else if (this.currentInventory.contains(getPuzzleItemsNeeded().get(0))) {
-                //Scanner scan = new Scanner(System.in);
-                System.out.println("Which of the item you'd like to use?");
+                System.out.println("Which item would you like to use?");
                 String ans = Prompts.getStringInput();
+                // Perhaps insert option to remake choice if not correct item but correct item is in inventory?
                 if ((ans.equalsIgnoreCase(getPuzzleVerb() + " " + getPuzzleItemsNeeded().get(0))) || ans.equalsIgnoreCase(getPuzzleItemsNeeded().get(0))) {
                     Sounds.playSounds(getPuzzleSounds(), 1000);
                     System.out.println(getPuzzleReward() + " and you've found " + this.getPuzzleRewardItem().get(0));
-                    this.currentInventory.remove(getPuzzleItemsNeeded().get(0));
-                    this.currentInventory.add(this.getPuzzleRewardItem().get(0));
-                    Sounds.playSounds("pick.wav", 1000);
-                    System.out.println("Added " + this.getPuzzleRewardItem().get(0) + " to your inventory");
+                    if (!"crowbar".equals(ans)){
+                        this.currentInventory.remove(getPuzzleItemsNeeded().get(0));
+                    }
+                    inventory.checkInvLimit();
+                    inventory.addItem(getPuzzleRewardItem().get(0));
                 } else if ((this.currentInventory.contains(ans) && (!ans.equals(getPuzzleItemsNeeded())))) {
                     System.out.println("Wrong item. The puzzle has not been solved. Please come back later.");
 
