@@ -4,6 +4,7 @@ import com.trapped.player.Player;
 import com.trapped.utilities.FileManager;
 import com.trapped.utilities.Sounds;
 import com.trapped.utilities.TextParser;
+import com.trapped.view.MainFrame;
 
 import java.io.Serializable;
 import java.util.Scanner;
@@ -86,6 +87,36 @@ public class GameEngine implements Serializable {
             Player.viewRoom();
         }
     }
+
+    //--- Gui function ---
+
+    private static MainFrame mainFrame=new MainFrame();
+
+    public GameEngine() {
+        setAllActionListeners();
+    }
+
+
+    // ---- BUSINESS METHODS for the GUI---
+
+    public static void execute() {
+        mainFrame.createGameScreen();
+        task();
+        // playGame()
+    }
+
+    private static void setAllActionListeners() {
+        mainFrame.startButton.addActionListener(e -> execute());
+        mainFrame.exitButton.addActionListener(e -> System.exit(0));
+//        mainFrame.settingButton.addActionListener(e -> );
+    }
+
+    // ---- START GAME FLOW ----
+    private static void task() {
+        mainFrame.writeToTextArea("Welcome! the task of the game is Escaping the Room .......... ");
+
+    }
+
 }
 
 
