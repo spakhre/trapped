@@ -107,20 +107,6 @@ public class GuiLocationPanel extends GuiPanel {
         return label;
     }
 
-
-//    private JLabel getAvailableItemsLabel() {
-//        String parentKey = Player.location;
-//        String childKey = "furniture_items";
-//        Object value = getChildKeyForParentKey(parentKey, childKey);
-//
-//        //Expected type of value is java.util.ArrayList
-//        List<String> itemsList = (List<String>) value;
-//        String text = "Available items: " + String.join(", ", itemsList);
-//        JLabel label = new JLabel(text);
-//        label.setFont(DESCRIPTION_FONT);
-//        return label;
-//    }
-
     /**
      * Example of Mapping in JSON:
      * parentKey is bed or currentLocation

@@ -1,5 +1,6 @@
 package com.trapped.gui.controller;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Color;
@@ -36,6 +37,9 @@ public class GuiMainWindow extends JFrame {
 
         GuiStartPanel guiStartPanel = new GuiStartPanel(this);
         setMainPanel(guiStartPanel);
+
+        ImageIcon image = new ImageIcon("resources/images/trapped-image.jpg");
+        this.setIconImage(image.getImage());
 
         //make frame visible
         this.setVisible(true);
