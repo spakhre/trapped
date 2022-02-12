@@ -1,6 +1,5 @@
 package com.trapped.gui.controller;
 
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Color;
