@@ -19,7 +19,6 @@ public class Player implements Serializable {
     private Puzzle puzzle = Puzzle.getInstance();
     private Inventory inventory = Inventory.getInstance();
 
-
     // After the intro story, player will see current location and the view of the whole room.
     public void viewRoom() {
         System.out.println("\nYou are currently in front of " + TextColor.RED + location + TextColor.RESET);

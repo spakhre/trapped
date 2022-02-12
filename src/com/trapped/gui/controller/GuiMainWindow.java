@@ -25,7 +25,6 @@ public class GuiMainWindow extends JFrame {
         super("Trapped: Try to escape!"); //game window design
         this.setSize(GUI_WIDTH, GUI_HEIGHT);//sets the x-dimension and y-dimension of the frame
 
-
         GuiBackgroundImageLabelPanel backgroundPanel =
                 new GuiBackgroundImageLabelPanel(this);
 
