@@ -1,5 +1,6 @@
 package com.trapped.gui.controller;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Color;
@@ -7,7 +8,7 @@ import java.awt.Container;
 import java.awt.Font;
 
 
-public class Gui extends JFrame {
+public class GuiMainWindow extends JFrame {
 
     // Font and styling
     public static final Font btnFont = new Font("Times New Roman", Font.BOLD, 10); // ORIGINAL
@@ -20,7 +21,7 @@ public class Gui extends JFrame {
      * CONSTRUCTOR.
      */
 
-    public Gui() {
+    public GuiMainWindow() {
         super("Trapped: Try to escape!"); //game window design
         this.setSize(GUI_WIDTH, GUI_HEIGHT);//sets the x-dimension and y-dimension of the frame
 
@@ -35,6 +36,9 @@ public class Gui extends JFrame {
 
         GuiStartPanel guiStartPanel = new GuiStartPanel(this);
         setMainPanel(guiStartPanel);
+
+        ImageIcon image = new ImageIcon("resources/images/trapped-image.jpg");
+        this.setIconImage(image.getImage());
 
         //make frame visible
         this.setVisible(true);
