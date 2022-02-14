@@ -1,9 +1,11 @@
 package com.trapped.gui.plain;
 
 import com.trapped.player.Player;
+import com.trapped.utilities.Puzzle;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Map;
 
 public class MainFrame extends JFrame {
     public static final Font btnFont = new Font("Times New Roman", Font.BOLD, 10); // ORIGINAL
@@ -45,13 +47,14 @@ public class MainFrame extends JFrame {
         textArea.setEditable(false);
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
-        textArea.setText("TEST TEST ETST SETSETSETASDFGSADFSF S SGSDG SAFD");
 
+        // get intro location description
+       Map<String, Object> currentLoc = Puzzle.MAP.get(player.getLocation());
+       String desc = (String) currentLoc.get("furniture_desc");
+       changeTextShow(desc);
 
         textPanel.add(textArea);
         this.add(textPanel);
-//        textArea.setVisible(true);
-//        this.add(textArea);
     }
 
     private void createImagePanel() {
@@ -80,8 +83,9 @@ public class MainFrame extends JFrame {
 
 
 
-    public void changeTextShow() {
-
+    public void changeTextShow(String text) {
+        String showText = "Location: "+ player.getLocation() +"\n\n" +text;
+        textArea.setText(showText);
     }
 
 

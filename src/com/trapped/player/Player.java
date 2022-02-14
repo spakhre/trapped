@@ -119,6 +119,7 @@ public class Player implements Serializable {
 
     public Map<String, String> moveDirection(String direction) {
         Map<String, String> result = new HashMap<>();
+
         Map<String, Object> furniture = puzzle.MAP.get(location);
         String newlocation = (String) furniture.get(direction);
         location = newlocation;
@@ -334,4 +335,43 @@ public class Player implements Serializable {
 //        new_command();
 //        Prompts.ClearConsole();
 //    }
+
+    // Called when "help" is input
+    public String gameMenu() {
+        String returnText = "You are at " + location;
+        return returnText;
+    }
+
+    public void new_command() {
+        System.out.println(TextColor.GREEN + "\nWhat you'd like to do next? (type [commands] to check available commands and [help] to see other help items)" + TextColor.RESET);
+        playerInput();
+    }
+
+    public String getVerb() {
+        return verb;
+    }
+
+    public void setVerb(String verb) {
+        this.verb = verb;
+    }
+
+    public List<String> getNouns() {
+        return nouns;
+    }
+
+    public void setNouns(List<String> nouns) {
+        this.nouns = nouns;
+    }
+
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    public Puzzle getPuzzle() {
+        return puzzle;
+    }
+
+    public static String getLocation() {
+        return location;
+    }
 }
