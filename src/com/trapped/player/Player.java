@@ -11,6 +11,7 @@ import java.util.*;
 import static com.trapped.utilities.TextColor.*;
 
 public class Player implements Serializable {
+    private static final Player PLAYER = new Player();
     // Needed to move, were out of scope in one section
     private String userInput;
     private String verb;
@@ -18,6 +19,12 @@ public class Player implements Serializable {
     public static String location = "bed";
     private Puzzle puzzle = Puzzle.getInstance();
     private Inventory inventory = Inventory.getInstance();
+
+    private void Player() {}
+
+    public static Player getInstance(){
+        return PLAYER;
+    }
 
     // After the intro story, player will see current location and the view of the whole room.
     public void viewRoom() {
@@ -139,19 +146,29 @@ public class Player implements Serializable {
         playerInput();
     }
 
-    private void checkCommands() {
+    public String playerInput(String input) {
+//        userInput = Prompts.getStringInput(); // gets userInput as a string from Prompts
+        // now extract verb/nouns from parsedInput
+        verb = TextParser.getVerb(input);
+        nouns = TextParser.getNouns(input);
+
+//        puzzle.generatePuzzle(location); // change location/furniture
+        return checkCommands();
+    }
+
+    private String checkCommands() {
         ArrayList<String> puzzle_reward_item = puzzle.getPuzzleRewardItem();
 
-        if (verb == null || nouns.isEmpty()) {
+        if (verb == null) {
             System.out.println("Sorry, I don't understand your input, please enter again.");
             FileManager.getResource("commands.txt");
-            return;
+            return "REPLACE 1";
         }
         //VERB IS NOT NULL PAST HERE
         // Show Commands
         if (verb.equals("commands")) {
             FileManager.getResource("commands.txt");
-            return;
+            return "REPLACE 2";
         }
         // Quit Game
         else if (verb.equals("quit")) {
@@ -160,8 +177,7 @@ public class Player implements Serializable {
             }
         }  // "Help"
         else if (verb.equals("help")) {  // || help_value.toString().contains(verb)) {
-            gameMenu();
-            return;
+            return gameMenu();
         }
         // "Go" command
         else if (verb.equals("go")) {
@@ -192,6 +208,7 @@ public class Player implements Serializable {
             System.out.println("Sorry, I don't understand your input, please enter again.");
             FileManager.getResource("commands.txt");
         }
+        return "REPLACE 3";
     }
 
     private void getCommand(ArrayList<String> puzzle_reward_item) {
@@ -253,30 +270,39 @@ public class Player implements Serializable {
         new_command();
     }
 
+    /*
+     * OLD "HELP" CALL
+     */
     // Removed String as input, seemed redundant
-    public void gameMenu() {
-        // no other if loop needed because help command already issued
-        // if(input.equalsIgnoreCase("Help")){
-        System.out.println("-----------------------");
-        System.out.println("\nHere are your options?");
-        FileManager.getResource("helperMenu.txt");
+//    public void gameMenu() {
+//        // no other if loop needed because help command already issued
+//        // if(input.equalsIgnoreCase("Help")){
+//        System.out.println("-----------------------");
+//        System.out.println("\nHere are your options?");
+//        FileManager.getResource("helperMenu.txt");
+//
+//        System.out.println("\nPlease select options above. enter number 1-4?");
+//        //Scanner scan = new Scanner(System.in);
+//        int selection = Prompts.getIntInput();
+//        if (selection == 1) {
+//            System.out.println("you are at " + location);
+//        } else if (selection == 2) {
+//            inventory.checkInv();
+//            new_command();
+//        } else if (selection == 3) {
+//            System.out.println("Returning to game");
+//            new_command();
+//        } else if (selection == 4) {
+//            quitGame();
+//        }
+//        new_command();
+//        Prompts.ClearConsole();
+//    }
 
-        System.out.println("\nPlease select options above. enter number 1-4?");
-        //Scanner scan = new Scanner(System.in);
-        int selection = Prompts.getIntInput();
-        if (selection == 1) {
-            System.out.println("you are at " + location);
-        } else if (selection == 2) {
-            inventory.checkInv();
-            new_command();
-        } else if (selection == 3) {
-            System.out.println("Returning to game");
-            new_command();
-        } else if (selection == 4) {
-            quitGame();
-        }
-        new_command();
-        Prompts.ClearConsole();
+    // Called when "help" is input
+    public String gameMenu() {
+        String returnText = "You are at " + location;
+        return returnText;
     }
 
     public void new_command() {
