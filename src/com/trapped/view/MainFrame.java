@@ -1,5 +1,8 @@
 package com.trapped.view;
 
+import com.trapped.GameHandler;
+import com.trapped.client.Main;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -8,17 +11,20 @@ import java.awt.event.MouseListener;
 
 public class MainFrame extends JFrame{
 
+    GameHandler gHandler;
 
     public JButton  startButton, settingButton, exitButton;
-    public JPanel MenuBG_panel, menuPanel,aboutTextPanel, howTextPanel,mainTextPanel;
+    public JPanel MenuBG_panel, menuPanel,itemsPanel,MainBG_Panel;
+    public JLabel themeLabel,roomLabel,keyLabel;
     public JTextArea textArea = new JTextArea();
-    public JPanel[] GameBG_panel =new JPanel[10];
-    public JLabel[] GameBG_label=new JLabel[10];
 
-    public MainFrame() {
-        // the tile of the window
+
+
+    public MainFrame(GameHandler gHandler){
         super("Trapped");
         setUpMainMenu();
+        showMainMenu();
+        this.gHandler=gHandler;
     }
 
     public void setUpMainMenu() {
@@ -27,24 +33,24 @@ public class MainFrame extends JFrame{
         setFrameConfigs();
         setAllButtons();
         setAllPanels();
-        createGameBG();
+        createStatusField();
 
         // ---- LABELS ADDED TO PANELS ----
-        JLabel themeLabel = new JLabel();
-        ImageIcon ThemeIcon = new ImageIcon("resources/SwingArt/MainTheme1.png");
-        themeLabel.setIcon(ThemeIcon);
+        themeLabel=createJLabel("resources/SwingArt/MainTheme1.png");
         MenuBG_panel.add(themeLabel);
 
+        roomLabel=createJLabel("resources/SwingArt/room1.png");
+        MainBG_Panel.add(roomLabel);
 
         menuPanel.add(startButton);
         menuPanel.add(settingButton);
         menuPanel.add(exitButton);
 
         con.add(MenuBG_panel);
+        con.add(MainBG_Panel);
         con.add(menuPanel);
         con.add(textArea);
-        con.add(GameBG_panel[1]);
-
+        con.add(itemsPanel);
         setVisible(true);
     }
 
@@ -63,7 +69,13 @@ public class MainFrame extends JFrame{
         MenuBG_panel = createJPanel(-10, 0, 500, 750, true);
         menuPanel = createJPanel(150, 350, 100, 180, true);
         menuPanel.setBackground(Color.decode("#302a1e"));
-        mainTextPanel = createJPanel(10, 550, 300, 150, false);
+
+        MainBG_Panel=createJPanel(10,40,460,500,false);
+        itemsPanel=createJPanel(350,550,120,150,false);
+        itemsPanel.setBackground(Color.lightGray);
+        itemsPanel.setLayout(new GridLayout(2,3));
+
+
     }
 
     private void setAllButtons() {
@@ -76,19 +88,88 @@ public class MainFrame extends JFrame{
     // display the MainMenu
     public void showMainMenu() {
         menuPanel.setVisible(true);
-        aboutTextPanel.setVisible(false);
-        howTextPanel.setVisible(false);
-        mainTextPanel.setVisible(false);
+        startButton.addActionListener(e -> restScreen());
+        exitButton.addActionListener(e -> System.exit(0));
     }
 
     // Create the game sense
-    public void createGameScreen() {
+    public void restScreen() {
+        MainBG_Panel.updateUI();  // reset the panels
+        MainBG_Panel.removeAll(); // remove all the layers
+
+        MainBG_Panel.setVisible(true);
         MenuBG_panel.setVisible(false);
         menuPanel.setVisible(false);
         textArea.setVisible(true);
-        GameBG_panel[1].setVisible(true);
-        createGameObj(140,250,200,200,"inspect","get","drop","resources/SwingArt/bed1.png");
+        itemsPanel.setVisible(true);
+
+        JLabel bed=createGameObj(60,250,200,200,"inspect","get","drop","insBed","getKey","DROP","resources/SwingArt/bed1.png");
+        JLabel vault=createGameObj(250,250,150,150,"inspect","get","drop","INS","GET","DROP","resources/SwingArt/vault1.png");
+        JButton lftBtn=createNavButton(0,400,80,80,"resources/SwingArt/left.png","hallSection");
+        JButton rgtBtn=createNavButton(380,400,80,80,"resources/SwingArt/right.png","studySection");
+
+        MainBG_Panel.setLayout(null);
+        MainBG_Panel.add(bed);
+        MainBG_Panel.add(vault);
+        MainBG_Panel.add(lftBtn);
+        MainBG_Panel.add(rgtBtn);
+        MainBG_Panel.setLayout(null);
+        MainBG_Panel.add(roomLabel);
+
+
     }
+
+    public void studyScreen() {
+
+        MainBG_Panel.updateUI();
+        MainBG_Panel.removeAll();
+
+        MainBG_Panel.setVisible(true);
+        MenuBG_panel.setVisible(false);
+        menuPanel.setVisible(false);
+        textArea.setVisible(true);
+
+        JLabel lamp=createGameObj(90,190,200,200,"inspect","get","drop","INS","GET","DROP","resources/SwingArt/lamp1.png");
+        JLabel chair=createGameObj(60,250,200,200,"inspect","get","drop","INS","GET","DROP","resources/SwingArt/chair1.png");
+        JLabel desk=createGameObj(220,230,200,200,"inspect","get","drop","INS","GET","DROP","resources/SwingArt/desk1.png");
+        JButton lftBtn=createNavButton(0,400,80,80,"resources/SwingArt/left.png","restSection");
+        JButton rgtBtn=createNavButton(380,400,80,80,"resources/SwingArt/right.png","hallSection");
+
+        MainBG_Panel.setLayout(null);
+        MainBG_Panel.add(lamp);
+        MainBG_Panel.add(chair);
+        MainBG_Panel.add(desk);
+        MainBG_Panel.add(lftBtn);
+        MainBG_Panel.add(rgtBtn);
+        MainBG_Panel.setLayout(null);
+        MainBG_Panel.add(roomLabel);
+    }
+
+    public void hallScreen() {
+
+        MainBG_Panel.updateUI();
+        MainBG_Panel.removeAll();
+
+        MainBG_Panel.setVisible(true);
+        MenuBG_panel.setVisible(false);
+        menuPanel.setVisible(false);
+        textArea.setVisible(true);
+
+        JLabel door=createGameObj(200,180,200,200,"inspect","open","","INS","openDoor","","resources/SwingArt/door1.png");
+        JLabel window=createGameObj(100,210,100,100,"inspect","get","drop","INS","GET","DROP","resources/SwingArt/window1.png");
+        JButton lftBtn=createNavButton(0,400,80,80,"resources/SwingArt/left.png","studySection");
+        JButton rgtBtn=createNavButton(380,400,80,80,"resources/SwingArt/right.png","restSection");
+
+
+        MainBG_Panel.setLayout(null);
+        MainBG_Panel.add(door);
+        MainBG_Panel.add(window);
+        MainBG_Panel.add(lftBtn);
+        MainBG_Panel.add(rgtBtn);
+        MainBG_Panel.setLayout(null);
+        MainBG_Panel.add(roomLabel);
+    }
+
 
     // method to set the JButton
     private JButton createJButton(String title, int width, int height, boolean focusable, Color foreground, Color background) {
@@ -109,6 +190,16 @@ public class MainFrame extends JFrame{
         return panel;
     }
 
+    // method to set the JLabel for the img
+    private JLabel createJLabel(String imageFile){
+        JLabel label=new JLabel();
+        ImageIcon icon = new ImageIcon(imageFile);
+        label.setIcon(icon);
+        return label;
+    }
+
+
+    // method creating the text field
     public void writeToTextArea(String s) {
             textArea.setText(s);
             textArea.setFont(new Font("Arial", Font.BOLD, 15));
@@ -120,38 +211,31 @@ public class MainFrame extends JFrame{
             textArea.setEditable(false);
     }
 
-    public void createGameBG(){
-        GameBG_panel[1]=new JPanel();
-        GameBG_panel[1]=createJPanel(10,40,480,500,false);
-        GameBG_panel[1].setLayout(null);
-
-        GameBG_label[1]=new JLabel();
-        GameBG_label[1].setBounds(0,0,490,500);
-
-        ImageIcon RoomBackground=new ImageIcon("resources/SwingArt/room1.png");
-        GameBG_label[1].setIcon(RoomBackground);
-    }
-
-    public void createGameObj(int x,int y,int width,int height,
-                              String inspect,String get, String drop,String fileName) {
+    // creating the gameObj on the main area
+    public JLabel createGameObj(int x,int y,int width,int height, String action1,String action2, String action3,
+                                String Command1, String Command2,String Command3,String fileName) {
 
         JPopupMenu popMenu=new JPopupMenu();
-        JMenuItem menuItem[]=new JMenuItem[5];
-        menuItem[1] = new JMenuItem(inspect);
+        JMenuItem[] menuItem =new JMenuItem[5];
+        menuItem[1] = new JMenuItem(action1);
         popMenu.add(menuItem[1]);
+        menuItem[1].addActionListener(gHandler.aHandler);
+        menuItem[1].setActionCommand(Command1);
 
-        menuItem[2] = new JMenuItem(get);
+        menuItem[2] = new JMenuItem(action2);
         popMenu.add(menuItem[2]);
+        menuItem[2].addActionListener(gHandler.aHandler);
+        menuItem[2].setActionCommand(Command2);
 
-        menuItem[3] = new JMenuItem(drop);
+        menuItem[3] = new JMenuItem(action3);
         popMenu.add(menuItem[3]);
+        menuItem[3].addActionListener(gHandler.aHandler);
+        menuItem[3].setActionCommand(Command3);
 
 
-
-        JLabel ObjLabel=new JLabel();
+        JLabel ObjLabel;
+        ObjLabel=createJLabel(fileName);
         ObjLabel.setBounds(x,y,width,height);
-        ImageIcon objectIcon=new ImageIcon(fileName);
-        ObjLabel.setIcon(objectIcon);
         ObjLabel.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -182,9 +266,31 @@ public class MainFrame extends JFrame{
             }
         });
 
-        GameBG_panel[1].add(ObjLabel);
-        GameBG_panel[1].add(GameBG_label[1]);
+        return ObjLabel;
     }
 
+
+    public JButton createNavButton(int x, int y, int width, int height, String arrowFileName,
+                                String command) {
+
+        ImageIcon NavIcon = new ImageIcon(arrowFileName);
+        JButton NavButton = new JButton();
+        NavButton.setBounds(x, y, width, height);
+        NavButton.setBackground(null);
+        NavButton.setContentAreaFilled(false);
+        NavButton.setFocusPainted(false);
+        NavButton.setIcon(NavIcon);
+        NavButton.addActionListener(gHandler.aHandler);
+        NavButton.setActionCommand(command);
+        NavButton.setBorderPainted(false);
+        return NavButton;
+    }
+
+    public void createStatusField(){
+        keyLabel=createJLabel("resources/SwingArt/key.png");
+        keyLabel.setBounds(350,550,50,50);
+        keyLabel.setVisible(false);
+        itemsPanel.add(keyLabel);
+    }
 
 }
