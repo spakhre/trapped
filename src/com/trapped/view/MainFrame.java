@@ -2,6 +2,8 @@ package com.trapped.view;
 
 import com.trapped.GameHandler;
 import com.trapped.client.Main;
+import com.trapped.utilities.Sounds;
+import com.trapped.utilities.Volume;
 
 import javax.swing.*;
 import java.awt.*;
@@ -90,6 +92,55 @@ public class MainFrame extends JFrame{
         menuPanel.setVisible(true);
         startButton.addActionListener(e -> restScreen());
         exitButton.addActionListener(e -> System.exit(0));
+        settingButton.addActionListener(e -> settingScreen());
+        Sounds.changeSoundVolume("startsound.wav", 0, -40);
+    }
+
+    public void settingScreen(){
+        menuPanel.setVisible(true);
+        startButton.addActionListener(e -> restScreen());
+        exitButton.addActionListener(e -> System.exit(0));
+        MainBG_Panel.updateUI();  // reset the panels
+        MainBG_Panel.removeAll(); // remove all the layers
+
+        MainBG_Panel.setVisible(true);
+        MenuBG_panel.setVisible(true);
+        menuPanel.setVisible(true);
+        textArea.setVisible(true);
+        itemsPanel.setVisible(true);
+
+        textArea = new JTextArea(5, 20);
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        textArea.setEditable(false);
+
+        changeVolume();
+    }
+
+    public void changeVolume(){
+        JFrame frame = new JFrame("JoptionPane Test");
+        frame.setSize(200, 200);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+        JOptionPane.showMessageDialog(frame, "Hello, this is the volume selector");
+        int result = JOptionPane.showConfirmDialog(null, "Do wish to change the volume? "
+        );
+        switch (result) {
+            case JOptionPane.YES_OPTION:
+                String name = JOptionPane.showInputDialog(null,
+                        "Please enter a number from -80 to 6 to change volume");
+                float num = Float.parseFloat(name);
+                if (-80.0f <= num && num <= 6.0206f) {
+                    Sounds.changeSoundVolume("startsound.wav", 0, num);
+                }
+                else{
+                    JOptionPane.showMessageDialog(frame, "Please enter a number from -80 to 6 to change volume");
+                }
+                break;
+            case JOptionPane.NO_OPTION:
+            case JOptionPane.CANCEL_OPTION:
+                showMainMenu();
+                break;
+        }
     }
 
     // Create the game sense
