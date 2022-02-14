@@ -1,5 +1,6 @@
 package com.trapped;
 
+import com.trapped.utilities.FileManager;
 import com.trapped.view.MainFrame;
 
 import java.awt.event.ActionListener;
@@ -16,6 +17,7 @@ public class GameHandler {
     }
 
     public GameHandler(){
+        FileManager.writeDefaults();
         player.playerDefault();
     }
 

@@ -1,6 +1,6 @@
 package com.trapped;
 
-import com.trapped.player.Player;
+
 import com.trapped.utilities.FileManager;
 import com.trapped.utilities.Sounds;
 import com.trapped.utilities.TextParser;
@@ -53,7 +53,7 @@ public class GameEngine implements Serializable {
         volume = TextParser.floatParse();
             if (-80.0f <= volume && volume <= 6.0206f) {
                 Sounds.changeVolume("startsound.wav", 0, volume);
-                Player.volume = volume;
+                ActionController.volume = volume;
                 playGame();
             } else {
                 System.out.println("volume must be between -80.0 and 6.0206");
@@ -85,7 +85,6 @@ public class GameEngine implements Serializable {
         timer.schedule(task, 480000);
         while (true) {
 
-            Player.viewRoom();
         }
     }
 }
