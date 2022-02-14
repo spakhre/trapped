@@ -4,7 +4,6 @@ import com.trapped.player.Player;
 import com.trapped.utilities.FileManager;
 import com.trapped.utilities.Sounds;
 import com.trapped.utilities.TextParser;
-import com.trapped.view.MainFrame;
 
 import java.io.Serializable;
 import java.util.Scanner;
@@ -52,7 +51,7 @@ public class GameEngine implements Serializable {
                 "\nEnter volume in the form of '+/- XX.X', for example -30.0 or 30.0");
         volume = TextParser.floatParse();
             if (-80.0f <= volume && volume <= 6.0206f) {
-                Sounds.changeVolume("startsound.wav", 0, volume);
+                Sounds.changeSoundVolume("startsound.wav", 0, volume);
                 Player.volume = volume;
                 playGame();
             } else {
