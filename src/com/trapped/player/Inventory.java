@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Inventory {
-    public static final Inventory INVENTORY = new Inventory();
+    private static final Inventory INVENTORY = new Inventory();
 
     List<String> invList = new ArrayList<>();
     public static List<String> rewardsList = List.of(new String[]{"crowbar", "key", "a piece of paper with number 104"});
