@@ -239,6 +239,7 @@ public class Player implements Serializable {
 
     public Map<String, String> moveDirection(String direction) {
         Map<String, String> result = new HashMap<>();
+
         Map<String, Object> furniture = puzzle.MAP.get(location);
         String newlocation = (String) furniture.get(direction);
         location = newlocation;
@@ -324,5 +325,17 @@ public class Player implements Serializable {
 
     public void setNouns(List<String> nouns) {
         this.nouns = nouns;
+    }
+
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    public Puzzle getPuzzle() {
+        return puzzle;
+    }
+
+    public static String getLocation() {
+        return location;
     }
 }
