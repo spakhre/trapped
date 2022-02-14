@@ -15,6 +15,7 @@ import static com.trapped.utilities.TextColor.BLUE_BOLD;
 import static com.trapped.utilities.TextColor.RESET;
 
 public class GameEngine implements Serializable {
+
     private boolean quitGame = false;
     static Scanner scanner = new Scanner(System.in);
     static float volume;
@@ -87,36 +88,6 @@ public class GameEngine implements Serializable {
             Player.viewRoom();
         }
     }
-
-    //--- Gui function ---
-
-    private static MainFrame mainFrame=new MainFrame();
-
-    public GameEngine() {
-        setAllActionListeners();
-    }
-
-
-    // ---- BUSINESS METHODS for the GUI---
-
-    public static void execute() {
-        mainFrame.createGameScreen();
-        task();
-        // playGame()
-    }
-
-    private static void setAllActionListeners() {
-        mainFrame.startButton.addActionListener(e -> execute());
-        mainFrame.exitButton.addActionListener(e -> System.exit(0));
-//        mainFrame.settingButton.addActionListener(e -> );
-    }
-
-    // ---- START GAME FLOW ----
-    private static void task() {
-        mainFrame.writeToTextArea("Welcome! the task of the game is Escaping the Room .......... ");
-
-    }
-
 }
 
 
