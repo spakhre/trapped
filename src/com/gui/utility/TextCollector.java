@@ -27,7 +27,7 @@ public class TextCollector {
 
     public void executeCommand(String command) {
         System.out.println("Attempt playerInput: " + command);
-        String returnValue = player.playerInput(command);
-        System.out.println("Did we get it?: " + returnValue);
+//        String returnValue = player.playerInput(command);
+//        System.out.println("Did we get it?: " + returnValue);
     }
 }

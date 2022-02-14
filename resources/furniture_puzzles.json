@@ -2,7 +2,7 @@
   "bed": {
     "name": "bed",
     "furniture_desc": "The bed has a normal size, it's made out of light oak, and it's very sturdy, well built and durable. ",
-    "furniture_picture": "bed.txt",
+    "furniture_picture": "bed.jpg",
     "furniture_available_directions": [
       "left",
       "right"
@@ -51,7 +51,7 @@
     "puzzle_verb": "",
     "puzzle_answer": "104",
     "puzzle_sounds": "open_door.wav",
-    "furniture_picture": "door.txt",
+    "furniture_picture": "door.jpg",
     "puzzle_reward_item": [],
     "target_item": [],
     "multiple_puzzle_answer": [],
