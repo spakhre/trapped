@@ -1,9 +1,6 @@
 package com.trapped.view;
 
 import com.trapped.GameHandler;
-import com.trapped.client.Main;
-import com.trapped.utilities.Sounds;
-import com.trapped.utilities.Volume;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,7 +14,8 @@ public class MainFrame extends JFrame{
 
     public JButton  startButton, settingButton, exitButton;
     public JPanel MenuBG_panel, menuPanel,itemsPanel,MainBG_Panel;
-    public JLabel themeLabel,roomLabel,keyLabel;
+    public JLabel themeLabel,roomLabel,keyLabel,matchLabel,laptopLabel,walletLabel,candleLabel,paperLabel,crowbarLabel;
+    public JLabel matches,key,wallet,laptop,candle,paper,crowbar;
     public JTextArea textArea = new JTextArea();
 
 
@@ -90,61 +88,12 @@ public class MainFrame extends JFrame{
     // display the MainMenu
     public void showMainMenu() {
         menuPanel.setVisible(true);
-        startButton.addActionListener(e -> restScreen());
+        startButton.addActionListener(e -> bedScreen());
         exitButton.addActionListener(e -> System.exit(0));
-        settingButton.addActionListener(e -> settingScreen());
-        Sounds.changeSoundVolume("startsound.wav", 0, -40);
-    }
-
-    public void settingScreen(){
-        menuPanel.setVisible(true);
-        startButton.addActionListener(e -> restScreen());
-        exitButton.addActionListener(e -> System.exit(0));
-        MainBG_Panel.updateUI();  // reset the panels
-        MainBG_Panel.removeAll(); // remove all the layers
-
-        MainBG_Panel.setVisible(true);
-        MenuBG_panel.setVisible(true);
-        menuPanel.setVisible(true);
-        textArea.setVisible(true);
-        itemsPanel.setVisible(true);
-
-        textArea = new JTextArea(5, 20);
-        JScrollPane scrollPane = new JScrollPane(textArea);
-        textArea.setEditable(false);
-
-        changeVolume();
-    }
-
-    public void changeVolume(){
-        JFrame frame = new JFrame("JoptionPane Test");
-        frame.setSize(200, 200);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-        JOptionPane.showMessageDialog(frame, "Hello, this is the volume selector");
-        int result = JOptionPane.showConfirmDialog(null, "Do wish to change the volume? "
-        );
-        switch (result) {
-            case JOptionPane.YES_OPTION:
-                String name = JOptionPane.showInputDialog(null,
-                        "Please enter a number from -80 to 6 to change volume");
-                float num = Float.parseFloat(name);
-                if (-80.0f <= num && num <= 6.0206f) {
-                    Sounds.changeSoundVolume("startsound.wav", 0, num);
-                }
-                else{
-                    JOptionPane.showMessageDialog(frame, "Please enter a number from -80 to 6 to change volume");
-                }
-                break;
-            case JOptionPane.NO_OPTION:
-            case JOptionPane.CANCEL_OPTION:
-                showMainMenu();
-                break;
-        }
     }
 
     // Create the game sense
-    public void restScreen() {
+    public void bedScreen() {
         MainBG_Panel.updateUI();  // reset the panels
         MainBG_Panel.removeAll(); // remove all the layers
 
@@ -154,23 +103,65 @@ public class MainFrame extends JFrame{
         textArea.setVisible(true);
         itemsPanel.setVisible(true);
 
-        JLabel bed=createGameObj(60,250,200,200,"inspect","get","drop","insBed","getKey","DROP","resources/SwingArt/bed1.png");
-        JLabel vault=createGameObj(250,250,150,150,"inspect","get","drop","INS","GET","DROP","resources/SwingArt/vault1.png");
-        JButton lftBtn=createNavButton(0,400,80,80,"resources/SwingArt/left.png","hallSection");
-        JButton rgtBtn=createNavButton(380,400,80,80,"resources/SwingArt/right.png","studySection");
+        JLabel bed=createGameObj(130,250,200,200,"Inspect","","","inspect bed","","","resources/SwingArt/bed1.png");
+        matches= createGameObj(100,380,18,17, "Inspect", "Get","","inspect matches","get matches","","resources/SwingArt/matches.png");
+        JButton lftBtn=createNavButton(0,400,80,80,"resources/SwingArt/left.png","go left");
+        JButton rgtBtn=createNavButton(380,400,80,80,"resources/SwingArt/right.png","go right");
 
         MainBG_Panel.setLayout(null);
         MainBG_Panel.add(bed);
-        MainBG_Panel.add(vault);
+        MainBG_Panel.add(matches);
+        matches.setVisible(false);
         MainBG_Panel.add(lftBtn);
         MainBG_Panel.add(rgtBtn);
         MainBG_Panel.setLayout(null);
         MainBG_Panel.add(roomLabel);
 
-
     }
 
-    public void studyScreen() {
+    public void safeScreen(){
+        MainBG_Panel.updateUI();  // reset the panels
+        MainBG_Panel.removeAll(); // remove all the layers
+        MainBG_Panel.setVisible(true);
+        MenuBG_panel.setVisible(false);
+        menuPanel.setVisible(false);
+        textArea.setVisible(true);
+        itemsPanel.setVisible(true);
+
+        JLabel vault=createGameObj(250,250,150,150,"Inspect","get","drop","inspect safe","GET","DROP","resources/SwingArt/vault1.png");
+        JButton lftBtn=createNavButton(0,400,80,80,"resources/SwingArt/left.png","go left");
+        JButton rgtBtn=createNavButton(380,400,80,80,"resources/SwingArt/right.png","go right");
+
+        MainBG_Panel.setLayout(null);
+        MainBG_Panel.add(vault);
+        MainBG_Panel.add(lftBtn);
+        MainBG_Panel.add(rgtBtn);
+        MainBG_Panel.setLayout(null);
+        MainBG_Panel.add(roomLabel);
+    }
+
+    public void doorScreen(){
+        MainBG_Panel.updateUI();  // reset the panels
+        MainBG_Panel.removeAll(); // remove all the layers
+        MainBG_Panel.setVisible(true);
+        MenuBG_panel.setVisible(false);
+        menuPanel.setVisible(false);
+        textArea.setVisible(true);
+        itemsPanel.setVisible(true);
+
+        JLabel door=createGameObj(200,180,200,200,"Inspect","open","","inspect door","openDoor","","resources/SwingArt/door1.png");
+        JButton lftBtn=createNavButton(0,400,80,80,"resources/SwingArt/left.png","go left");
+        JButton rgtBtn=createNavButton(380,400,80,80,"resources/SwingArt/right.png","go right");
+
+        MainBG_Panel.setLayout(null);
+        MainBG_Panel.add(door);
+        MainBG_Panel.add(lftBtn);
+        MainBG_Panel.add(rgtBtn);
+        MainBG_Panel.setLayout(null);
+        MainBG_Panel.add(roomLabel);
+    }
+
+    public void deskScreen() {
 
         MainBG_Panel.updateUI();
         MainBG_Panel.removeAll();
@@ -180,15 +171,11 @@ public class MainFrame extends JFrame{
         menuPanel.setVisible(false);
         textArea.setVisible(true);
 
-        JLabel lamp=createGameObj(90,190,200,200,"inspect","get","drop","INS","GET","DROP","resources/SwingArt/lamp1.png");
-        JLabel chair=createGameObj(60,250,200,200,"inspect","get","drop","INS","GET","DROP","resources/SwingArt/chair1.png");
-        JLabel desk=createGameObj(220,230,200,200,"inspect","get","drop","INS","GET","DROP","resources/SwingArt/desk1.png");
-        JButton lftBtn=createNavButton(0,400,80,80,"resources/SwingArt/left.png","restSection");
-        JButton rgtBtn=createNavButton(380,400,80,80,"resources/SwingArt/right.png","hallSection");
+        JLabel desk=createGameObj(220,230,200,200,"Inspect","get","drop","inspect drawer","GET","DROP","resources/SwingArt/desk1.png");
+        JButton lftBtn=createNavButton(0,400,80,80,"resources/SwingArt/left.png","go left");
+        JButton rgtBtn=createNavButton(380,400,80,80,"resources/SwingArt/right.png","go right");
 
         MainBG_Panel.setLayout(null);
-        MainBG_Panel.add(lamp);
-        MainBG_Panel.add(chair);
         MainBG_Panel.add(desk);
         MainBG_Panel.add(lftBtn);
         MainBG_Panel.add(rgtBtn);
@@ -196,7 +183,7 @@ public class MainFrame extends JFrame{
         MainBG_Panel.add(roomLabel);
     }
 
-    public void hallScreen() {
+    public void lampScreen() {
 
         MainBG_Panel.updateUI();
         MainBG_Panel.removeAll();
@@ -206,14 +193,55 @@ public class MainFrame extends JFrame{
         menuPanel.setVisible(false);
         textArea.setVisible(true);
 
-        JLabel door=createGameObj(200,180,200,200,"inspect","open","","INS","openDoor","","resources/SwingArt/door1.png");
-        JLabel window=createGameObj(100,210,100,100,"inspect","get","drop","INS","GET","DROP","resources/SwingArt/window1.png");
-        JButton lftBtn=createNavButton(0,400,80,80,"resources/SwingArt/left.png","studySection");
-        JButton rgtBtn=createNavButton(380,400,80,80,"resources/SwingArt/right.png","restSection");
+        JLabel lamp=createGameObj(90,190,200,200,"Inspect","get","drop","inspect lamp","GET","DROP","resources/SwingArt/lamp1.png");
+        JButton lftBtn=createNavButton(0,400,80,80,"resources/SwingArt/left.png","go left");
+        JButton rgtBtn=createNavButton(380,400,80,80,"resources/SwingArt/right.png","go right");
+
+        MainBG_Panel.setLayout(null);
+        MainBG_Panel.add(lamp);
+        MainBG_Panel.add(lftBtn);
+        MainBG_Panel.add(rgtBtn);
+        MainBG_Panel.setLayout(null);
+        MainBG_Panel.add(roomLabel);
+    }
+
+    public void chairScreen() {
+
+        MainBG_Panel.updateUI();
+        MainBG_Panel.removeAll();
+        MainBG_Panel.setVisible(true);
+        MenuBG_panel.setVisible(false);
+        menuPanel.setVisible(false);
+        textArea.setVisible(true);
+
+        JLabel chair=createGameObj(60,250,200,200,"Inspect","get","drop","inspect chair","GET","DROP","resources/SwingArt/chair1.png");
+        JButton lftBtn=createNavButton(0,400,80,80,"resources/SwingArt/left.png","go left");
+        JButton rgtBtn=createNavButton(380,400,80,80,"resources/SwingArt/right.png","go right");
+
+        MainBG_Panel.setLayout(null);
+        MainBG_Panel.add(chair);
+        MainBG_Panel.add(lftBtn);
+        MainBG_Panel.add(rgtBtn);
+        MainBG_Panel.setLayout(null);
+        MainBG_Panel.add(roomLabel);
+    }
+
+    public void windowScreen() {
+
+        MainBG_Panel.updateUI();
+        MainBG_Panel.removeAll();
+
+        MainBG_Panel.setVisible(true);
+        MenuBG_panel.setVisible(false);
+        menuPanel.setVisible(false);
+        textArea.setVisible(true);
+
+        JLabel window=createGameObj(100,210,100,100,"inspect","get","drop","inspect window","GET","DROP","resources/SwingArt/window1.png");
+        JButton lftBtn=createNavButton(0,400,80,80,"resources/SwingArt/left.png","go left");
+        JButton rgtBtn=createNavButton(380,400,80,80,"resources/SwingArt/right.png","go right");
 
 
         MainBG_Panel.setLayout(null);
-        MainBG_Panel.add(door);
         MainBG_Panel.add(window);
         MainBG_Panel.add(lftBtn);
         MainBG_Panel.add(rgtBtn);
@@ -252,14 +280,14 @@ public class MainFrame extends JFrame{
 
     // method creating the text field
     public void writeToTextArea(String s) {
-            textArea.setText(s);
-            textArea.setFont(new Font("Arial", Font.BOLD, 15));
-            textArea.setBounds(10, 550, 300, 150);
-            textArea.setBackground(Color.RED);
-            textArea.setForeground(Color.white);
-            textArea.setWrapStyleWord(true);
-            textArea.setLineWrap(true);
-            textArea.setEditable(false);
+        textArea.setText(s);
+        textArea.setFont(new Font("Arial", Font.BOLD, 15));
+        textArea.setBounds(10, 550, 300, 150);
+        textArea.setBackground(Color.RED);
+        textArea.setForeground(Color.white);
+        textArea.setWrapStyleWord(true);
+        textArea.setLineWrap(true);
+        textArea.setEditable(false);
     }
 
     // creating the gameObj on the main area
@@ -322,7 +350,7 @@ public class MainFrame extends JFrame{
 
 
     public JButton createNavButton(int x, int y, int width, int height, String arrowFileName,
-                                String command) {
+                                   String command) {
 
         ImageIcon NavIcon = new ImageIcon(arrowFileName);
         JButton NavButton = new JButton();
@@ -341,7 +369,39 @@ public class MainFrame extends JFrame{
         keyLabel=createJLabel("resources/SwingArt/key.png");
         keyLabel.setBounds(350,550,50,50);
         keyLabel.setVisible(false);
+
+        matchLabel = createJLabel("resources/SwingArt/matchbox.png");
+        matchLabel.setBounds(350,550,50,50);
+        matchLabel.setVisible(false);
+
+        walletLabel = createJLabel("resources/SwingArt/wallet.png");
+        walletLabel.setBounds(350,550,50,50);
+        walletLabel.setVisible(false);
+
+        laptopLabel = createJLabel("resources/SwingArt/laptop.png");
+        laptopLabel.setBounds(350,550,50,50);
+        laptopLabel.setVisible(false);
+
+        crowbarLabel = createJLabel("resources/SwingArt/crowbar.png");
+        crowbarLabel.setBounds(350,550,50,50);
+        crowbarLabel.setVisible(false);
+
+        paperLabel = createJLabel("resources/SwingArt/folded-paper.png");
+        paperLabel.setBounds(350,550,50,50);
+        paperLabel.setVisible(false);
+
+        candleLabel = createJLabel("resources/SwingArt/candle-holder.png");
+        candleLabel.setBounds(350,550,50,50);
+        candleLabel.setVisible(false);
+
+
         itemsPanel.add(keyLabel);
+        itemsPanel.add(matchLabel);
+        itemsPanel.add(walletLabel);
+        itemsPanel.add(laptopLabel);
+        itemsPanel.add(crowbarLabel);
+        itemsPanel.add(paperLabel);
+        itemsPanel.add(candleLabel);
     }
 
 }

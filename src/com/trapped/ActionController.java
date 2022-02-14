@@ -501,7 +501,6 @@ class ActionController implements ActionListener {
                     // if user input correct answer
                     if (ANSWER.equals(furniture.get("easy_answer")) || randomAnswer.contains(ANSWER)) {
                         System.out.println(furniture.get("puzzle_reward"));
-                        Sounds.changeVolume(puzzle_sounds, 1000, volume);
                         System.out.println("You found " + puzzle_reward_item.get(0) + ".");
                         pickUpItem(puzzle_reward_item.get(0));
                         solved = true;
@@ -558,11 +557,9 @@ class ActionController implements ActionListener {
                     System.out.println("Which of the item you'd like to use?");
                     String ans = scan.nextLine();
                     if ((ans.equalsIgnoreCase(puzzle_verb + " " + puzzle_itemsNeeded.get(0))) || ans.equalsIgnoreCase(puzzle_itemsNeeded.get(0))) {
-                        Sounds.changeVolume(puzzle_sounds, 1000, volume);
                         System.out.println(puzzle_reward + " and you've found " + puzzle_reward_item.get(0));
                         inventory.remove(puzzle_itemsNeeded.get(0));
                         inventory.add(puzzle_reward_item.get(0));
-                        Sounds.changeVolume("pick.wav", 1000, volume);
                         System.out.println("Added " + puzzle_reward_item.get(0) + " to your inventory");
                     } else if ((inventory.contains(ans) && (!ans.equals(puzzle_itemsNeeded)))) {
                         System.out.println("Wrong item. The puzzle has not been solved. Please come back later.");
@@ -595,7 +592,6 @@ class ActionController implements ActionListener {
             while (max_attempts-- > 0) {
                 if (ANSWER.trim().equals(puzzle_answer)) {
                     System.out.println(puzzle_reward);
-                    Sounds.changeVolume(puzzle_sounds, 2000, volume);
                     System.out.println("You won the game! Thanks for playing!");
                     System.exit(0);
                 } else if (max_attempts == 0) {
