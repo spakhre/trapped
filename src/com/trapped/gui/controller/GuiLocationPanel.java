@@ -2,6 +2,7 @@ package com.trapped.gui.controller;
 
 import com.google.gson.internal.LinkedTreeMap;
 import com.gui.utility.GuiUtil;
+import com.gui.utility.TextCollector;
 import com.trapped.player.Player;
 import com.trapped.utilities.FileManager;
 
@@ -26,6 +27,8 @@ import java.util.Set;
 import static com.trapped.gui.controller.GuiMainWindow.displayAreaFont;
 
 public class GuiLocationPanel extends GuiPanel {
+    private Player player = Player.getInstance();
+    private TextCollector textCollector = TextCollector.getInstance();
 
     private static final int IMAGE_WIDTH = GuiMainWindow.GUI_WIDTH;
     private static final int IMAGE_HEIGHT = 300;
@@ -170,6 +173,7 @@ public class GuiLocationPanel extends GuiPanel {
                 if(command.isEmpty() || command.isBlank()) {
                     JOptionPane.showMessageDialog( getGuiMainWindow(), "Invalid Command!!!!");
                 }
+//                TextCollector.executeCommand(command);
                 executeCommand(command);
             }
         });
@@ -222,5 +226,6 @@ public class GuiLocationPanel extends GuiPanel {
 
     private void executeCommand(String command) {
         System.out.println("Command: " + command);
+        textCollector.executeCommand(command);
     }
 }
