@@ -244,25 +244,6 @@ class ActionController implements ActionListener {
         FileManager.writeJSON(map, furniturePuzzlesJsonPath);
         gHandler.mainFrame.writeToTextArea(noun + " has been added to your inventory");
         Sounds.playSounds("pick.wav", 1000);
-        switch (noun){
-            case "key":
-                gHandler.mainFrame.keyLabel.setVisible(true);
-                break;
-            case "wallet":
-                gHandler.mainFrame.walletLabel.setVisible(true);
-                break;
-            case "crowbar":
-                gHandler.mainFrame.crowbarLabel.setVisible(true);
-                break;
-            case "a piece of papert with number 104":
-                gHandler.mainFrame.paperLabel.setVisible(true);
-            case "candle":
-                gHandler.mainFrame.candleLabel.setVisible(true);
-            case "laptop":
-                gHandler.mainFrame.laptopLabel.setVisible(true);
-            case "matches":
-                gHandler.mainFrame.matchLabel.setVisible(true);
-        }
         hideItemOnNavScreen(noun);
     }
 
@@ -304,11 +285,9 @@ class ActionController implements ActionListener {
         if (puzzle_exist.equals("Y")) {
             switch (puzzle_type) {
                 case "riddles":
-                    //  if solved
                     riddles(location);
                     break;
                 case "use tool":
-                    //  if solved
                     toolPuzzle(location);
                     break;
                 case "final":
