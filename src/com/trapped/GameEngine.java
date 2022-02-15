@@ -20,7 +20,7 @@ public class GameEngine implements Serializable {
     static float volume;
 
 
-    public static void startGame()  {
+    public static void startGame() {
         FileManager.writeDefaults();
         FileManager.getResource("./splash_screen.txt");   // displaying splash screen
 
@@ -42,10 +42,12 @@ public class GameEngine implements Serializable {
                         scanner.nextLine();
                         startGame();
             }
+
         }
+    }
 
 
-    public static void menu(){
+    public static void menu() {
         System.out.println("You can currently only change the music, other settings will be implemented later." +
                 " \nWhat would you like the music level to be?" +
                 "\nEnter volume in the form of '+/- XX.X', for example -30.0 or 30.0");
@@ -58,20 +60,22 @@ public class GameEngine implements Serializable {
                 System.out.println("volume must be between -80.0 and 6.0206");
                 menu();
             }
+
     }
+
     public static void playGame() {
-        //                    FileManager.readMessageSlowly("greeting.txt", 20);
-//                    FileManager.readMessageSlowly("warning.txt", 10);
+        FileManager.readMessageSlowly("greeting.txt", 20);
+        FileManager.readMessageSlowly("warning.txt", 10);
         System.out.println("\n--------------------------------");
         System.out.println("What is your name: ");
         String userName = scanner.nextLine();
         System.out.println("\n\nHello, " + BLUE_BOLD + userName.toUpperCase() + RESET);
 
-//        FileManager.readMessageSlowly("introstory.txt", 10);
-//        Sounds.changeVolume("phone.wav", 3000, volume);
-//        System.out.println("Press Enter to Continue...");
-//        scanner.nextLine();
-//        FileManager.readMessageSlowly("intro_after_phone.txt", 0);
+        FileManager.readMessageSlowly("introstory.txt", 10);
+        Sounds.changeVolume("phone.wav", 3000, volume);
+        System.out.println("Press Enter to Continue...");
+        scanner.nextLine();
+        FileManager.readMessageSlowly("intro_after_phone.txt", 0);
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
             @Override
