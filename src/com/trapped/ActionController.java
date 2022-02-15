@@ -104,12 +104,12 @@ class ActionController implements ActionListener {
         ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
         FileManager.getResource(furniture_picture);
         gHandler.mainFrame.writeToTextArea("You see: " + furniture_items + ".");
-        for (String item: furniture_items) {
+        for (String item : furniture_items) {
             unhideItemOnNavScreen(item);
         }
     }
 
-    private static void unhideItemOnNavScreen(String item){
+    private static void unhideItemOnNavScreen(String item) {
         switch (item) {
             case "key":
                 gHandler.mainFrame.key.setVisible(true);
@@ -142,7 +142,7 @@ class ActionController implements ActionListener {
         }
     }
 
-    private static void hideItemOnNavScreen(String item){
+    private static void hideItemOnNavScreen(String item) {
         switch (item) {
             case "key":
                 gHandler.mainFrame.key.setVisible(false);
@@ -156,7 +156,7 @@ class ActionController implements ActionListener {
                 gHandler.mainFrame.crowbar.setVisible(false);
                 gHandler.mainFrame.crowbarLabel.setVisible(true);
                 break;
-            case "a piece of papert with number 104":
+            case "a piece of paper with number 104":
                 gHandler.mainFrame.paper.setVisible(false);
                 gHandler.mainFrame.paperLabel.setVisible(true);
                 break;
@@ -189,54 +189,10 @@ class ActionController implements ActionListener {
         gHandler.mainFrame.writeToTextArea("Your current inventory: " + inventory);
     }
 
-    // pickup item method.
-    public static boolean pickUpItem(String noun) {
-        boolean success = false;
 
-        if (map.get(location) != null) {
-            Map<String, Object> furniture = map.get(location);
-            ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
-            // if inventory is full. player need to drop an item, then item found in current location will be added to inventory.
-            if (!furniture_items.isEmpty() && !furniture_items.contains(null) && furniture_items.contains(noun) ) {
-                while (inventory.size() >= 5) {
-                    gHandler.mainFrame.writeToTextArea("You can't hold more than 5 items. Please drop one item.");
-                    gHandler.mainFrame.writeToTextArea("Which item would you like to drop?");
-                    String selection = scan.nextLine();
-                    while (!inventory.contains(selection.toLowerCase())) {
-                        gHandler.mainFrame.writeToTextArea("Sorry, the item you entered is not in your inventory, please select again.");
-                        selection = scan.nextLine();
-                    }
-                    dropItem(selection);
-                }
-                addItemAndUpdateJson(furniture_items, furniture, noun);
-                success = true;
-            }
-            //if furniture has an item available to be picked up
-            else if (!inventory.contains(noun) && !furniture_items.contains(null) && furniture_items.contains(noun)) {
-                gHandler.mainFrame.writeToTextArea("\nDo you want to add " + noun + " to inventory? [Y/N]");
-                String response = scan.nextLine();
-                if (response.isEmpty()) {
-                    gHandler.mainFrame.writeToTextArea("Sorry, I didn't understand your entry. You did not pick anything up from " + location);
-                } else if (response.equalsIgnoreCase("Y")) {
-                    addItemAndUpdateJson(furniture_items, furniture, noun);
-                    success = true;
-                } else if (response.equalsIgnoreCase("N")) {
-                    gHandler.mainFrame.writeToTextArea("You did not pick anything from " + location);
-                } else {
-                    gHandler.mainFrame.writeToTextArea("Sorry, I didn't understand your entry. You did not pick anything up from " + location);
-                }
-            }
-            //if furniture has no item available to be picked up
-            if (furniture_items.isEmpty()) {
-                gHandler.mainFrame.writeToTextArea("There's nothing here...");
-            }
-        } else {
-            gHandler.mainFrame.writeToTextArea("There's nothing here");
-        }
-        return success;
-    }
-
-    private static void addItemAndUpdateJson(ArrayList<String> furniture_items, Map<String, Object> furniture, String noun) {
+    private static void addItemAndUpdateJson(String noun) {
+        Map<String, Object> furniture = map.get(location);
+        ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
         inventory.add(noun);
         furniture_items.remove(noun);
         furniture.put("furniture_items", furniture_items);
@@ -276,28 +232,6 @@ class ActionController implements ActionListener {
         }
     }
 
-    private static void solvePuzzle(String loc) {
-        Map<String, Object> furniture = map.get(loc);
-        location = loc;
-        String puzzle_exist = (String) furniture.get("puzzle_exist");
-        String puzzle_type = (String) furniture.get("puzzle_type");
-        // check if a location has puzzle
-        if (puzzle_exist.equals("Y")) {
-            switch (puzzle_type) {
-                case "riddles":
-                    riddles(location);
-                    break;
-                case "use tool":
-                    toolPuzzle(location);
-                    break;
-                case "final":
-                    doorPuzzle(location);
-                    break;
-            }
-        }
-    }
-
-
     @Override
     public void actionPerformed(ActionEvent e) {
         String actionClicked = e.getActionCommand();
@@ -310,7 +244,7 @@ class ActionController implements ActionListener {
         System.out.println("printing out the verb " + verb);
         noun = TextParser.getNoun(actionClicked);
         ////////////////////////////////////////////////////////////////////////////////////////////////////////
-            playerInputLogic(verb, noun);
+        playerInputLogic(verb, noun);
     }
 
     public static void playerInputLogic(String verb, String noun) {
@@ -340,6 +274,12 @@ class ActionController implements ActionListener {
             case "final":
                 System.out.println("clicked on door");
                 doorPuzzle("door");
+                break;
+            case "tool":
+                toolPuzzle(location);
+                break;
+            case "riddles":
+                riddles(location);
                 break;
             default:
                 System.out.println("Sorry, I don't understand your input, please enter again. ");
@@ -379,7 +319,7 @@ class ActionController implements ActionListener {
         if (noun != null) {
             if (furniture_items.contains(noun)) {
                 System.out.println("You added " + noun + " to your inventory");
-                pickUpItem(noun);
+                addItemAndUpdateJson(noun);
             } else if (puzzle_reward_item.contains(noun)) {
                 inventory.add(noun);
             } else {
@@ -416,6 +356,7 @@ class ActionController implements ActionListener {
                 break;
             case "window":
                 gHandler.mainFrame.windowScreen();
+
                 break;
             case "drawer":
                 gHandler.mainFrame.deskScreen();
@@ -487,7 +428,7 @@ class ActionController implements ActionListener {
                     if (ANSWER.equals(furniture.get("easy_answer")) || randomAnswer.contains(ANSWER)) {
                         System.out.println(furniture.get("puzzle_reward"));
                         System.out.println("You found " + puzzle_reward_item.get(0) + ".");
-                        pickUpItem(puzzle_reward_item.get(0));
+                        addItemAndUpdateJson(puzzle_reward_item.get(0));
                         solved = true;
                     } else if (ANSWER.equalsIgnoreCase("easy")) {
                         System.out.println(furniture.get("easy_question"));
@@ -501,16 +442,16 @@ class ActionController implements ActionListener {
                 System.out.println("Sorry I don't understand your command. The puzzle has not been solved. Please come back later.");
             }
         }
+
     }
 
     public static boolean puzzleSolved() {
         //checks to see if the player has solved any of the puzzles, if they have, returns true to the caller!
         Map<String, Object> furniture = map.get(location);
-        ArrayList<String> puzzle_reward_item = (ArrayList<String>) furniture.get("puzzle_reward_item");
         Boolean solved = false;
-        if (((inventory.contains("key") && location.equals("safe")) ||
-                (inventory.contains("a piece of paper with number 104") && location.equals("window")) ||
-                (inventory.contains("a piece of paper with number 104") && location.equals("safe")))) {
+        if (((inventory.contains("crowbar") && location.equals("safe")) ||
+                (inventory.contains("key") && location.equals("window")) ||
+                (inventory.contains("a piece of paper with number 104") && location.equals("drawer")))) {
             System.out.println("The puzzle has been solved. Please feel free to explore other furniture :)");
             solved = true;
         }
@@ -522,43 +463,41 @@ class ActionController implements ActionListener {
         Map<String, Object> furniture = map.get(loc);
         ArrayList<String> puzzle_reward_item = (ArrayList<String>) furniture.get("puzzle_reward_item");
         String puzzle_desc = (String) furniture.get("puzzle_desc");
-        String puzzle_sounds = (String) furniture.get("puzzle_sounds");
         ArrayList<String> puzzle_itemsNeeded = (ArrayList<String>) furniture.get("puzzle_itemsNeeded");
-        String puzzle_verb = (String) furniture.get("puzzle_verb");
         String puzzle_reward = (String) furniture.get("puzzle_reward");
         //
         //
         if (!puzzleSolved()) {
-            System.out.println("A puzzle has been found in " + loc + ".");
+            gHandler.mainFrame.writeToTextArea("A puzzle has been found in " + loc + ".");
             System.out.println(puzzle_desc);
-            System.out.println("Would you like to solve this puzzle now? Y/N");
-            String solve_ans = scan.nextLine();
-            if (solve_ans.equalsIgnoreCase("Y")) {
-                System.out.println("You need to use an item from your inventory. Let's see if you got needed item in your inventory...");
-                System.out.println("Your current inventory: " + inventory);
-                if (!inventory.contains(puzzle_itemsNeeded.get(0))) {
-                    System.out.println("Sorry, you don't have the tools. Explore the room and see if you can find anything");
-                } else if (inventory.contains(puzzle_itemsNeeded.get(0))) {
-                    System.out.println("Which of the item you'd like to use?");
-                    String ans = scan.nextLine();
-                    if ((ans.equalsIgnoreCase(puzzle_verb + " " + puzzle_itemsNeeded.get(0))) || ans.equalsIgnoreCase(puzzle_itemsNeeded.get(0))) {
-                        System.out.println(puzzle_reward + " and you've found " + puzzle_reward_item.get(0));
-                        inventory.remove(puzzle_itemsNeeded.get(0));
-                        inventory.add(puzzle_reward_item.get(0));
-                        System.out.println("Added " + puzzle_reward_item.get(0) + " to your inventory");
-                    } else if ((inventory.contains(ans) && (!ans.equals(puzzle_itemsNeeded)))) {
-                        System.out.println("Wrong item. The puzzle has not been solved. Please come back later.");
-                    } else {
-                        System.out.println("Sorry I don't understand your command. The puzzle has not been solved. Please come back later.");
-                    }
+            gHandler.mainFrame.writeToTextArea("You need to use an item from your inventory. Let's see if you got needed item in your inventory...");
+            gHandler.mainFrame.writeToTextArea("Your current inventory: " + inventory);
+            if (!inventory.contains(puzzle_itemsNeeded.get(0))) {
+                System.out.println("Sorry, you don't have the tools. Explore the room and see if you can find anything");
+            } else if (inventory.contains(puzzle_itemsNeeded.get(0))) {
+                gHandler.mainFrame.writeToTextArea(puzzle_reward + " and you've found " + puzzle_reward_item.get(0));
+                inventory.remove(puzzle_itemsNeeded.get(0));
+                switch (puzzle_itemsNeeded.get(0)){
+                    case "crowbar":
+                        gHandler.mainFrame.crowbar.setVisible(false);
+                        gHandler.mainFrame.crowbarLabel.setVisible(false);
+                        gHandler.mainFrame.windowWithKey.setVisible(false);
+                        gHandler.mainFrame.windowWithoutKey.setVisible(true);
+                        break;
+                    case "key":
+                        gHandler.mainFrame.key.setVisible(false);
+                        gHandler.mainFrame.keyLabel.setVisible(false);
+                        break;
                 }
-            } else if (solve_ans.equalsIgnoreCase("N")) {
-                System.out.println("You chose not to solve the puzzle.");
-            } else {
-                System.out.println("Sorry I don't understand your command. The puzzle has not been solved. Please come back later.");
+                inventory.add(puzzle_reward_item.get(0));
+                addItemAndUpdateJson(puzzle_reward_item.get(0));
+                gHandler.mainFrame.writeToTextArea("Added " + puzzle_reward_item.get(0) + " to your inventory");
             }
+        } else {
+            System.out.println("Sorry I don't understand your command. The puzzle has not been solved. Please come back later.");
         }
     }
+
 
     private static void doorPuzzle(String loc) {
         //Final puzzle in the game, can be solved at any time if you know the secret number (104)

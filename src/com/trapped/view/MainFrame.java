@@ -19,7 +19,7 @@ public class MainFrame extends JFrame {
     public JButton  startButton, settingButton, exitButton;
     public JPanel MenuBG_panel, menuPanel,itemsPanel,MainBG_Panel,TextBox_panel;
     public JLabel themeLabel,roomLabel,keyLabel,matchLabel,laptopLabel,walletLabel,candleLabel,paperLabel,crowbarLabel;
-    public JLabel matches,key,wallet,laptop,candle,paper,crowbar;
+    public JLabel matches,key,wallet,laptop,candle,paper,crowbar,windowWithKey,windowWithoutKey;
     public JTextArea introText = new JTextArea();
     public JTextArea textArea = new JTextArea();
     public TextField inputText = new TextField("What would you say ?", 20);
@@ -261,14 +261,17 @@ public class MainFrame extends JFrame {
         itemsPanel.setVisible(true);
         inputText.setVisible(true);
 
-        JLabel vault = createGameObj(250, 250, 150, 150, "Inspect", "get", "drop", "inspect safe", "", "", "resources/SwingArt/vault1.png");
+        JLabel safe = createGameObj(250, 250, 150, 150, "Inspect", "Puzzle", "drop", "inspect safe", "riddles safe", "", "resources/SwingArt/vault1.png");
+        crowbar = createGameObj(200,380,120,103,"Inspect","Get","","inspect crowbar","get crowbar","","resources/SwingArt/crowbar_world_item.png");
         candle = createGameObj(100, 380, 24, 51, "Inspect", "Get", "", "inspect candle", "get candle", "", "resources/SwingArt/candle_world_item.png");
         JButton lftBtn = createNavButton(0, 400, 80, 80, "resources/SwingArt/left.png", "go left");
         JButton rgtBtn = createNavButton(380, 400, 80, 80, "resources/SwingArt/right.png", "go right");
 
         MainBG_Panel.setLayout(null);
-        MainBG_Panel.add(vault);
+        MainBG_Panel.add(safe);
         MainBG_Panel.add(candle);
+        MainBG_Panel.add(crowbar);
+        crowbar.setVisible(false);
         MainBG_Panel.add(lftBtn);
         MainBG_Panel.add(rgtBtn);
         MainBG_Panel.setLayout(null);
@@ -310,7 +313,8 @@ public class MainFrame extends JFrame {
         textArea.setVisible(true);
         inputText.setVisible(true);
 
-        JLabel desk = createGameObj(220, 230, 200, 200, "Inspect", "get", "drop", "inspect drawer", "GET", "DROP", "resources/SwingArt/desk1.png");
+        JLabel desk = createGameObj(220, 230, 200, 200, "Inspect", "puzzle", "", "inspect drawer", "tool puzzle", "DROP", "resources/SwingArt/desk1.png");
+        paper = createGameObj(400,250,181,164,"Inspect","Get","","inspect paper", "get paper","","resources/SwingArt/paper+world_item.png");
         wallet = createGameObj(210, 245, 36, 31, "Inspect", "Get", "", "inspect wallet", "get wallet", "", "resources/SwingArt/wallet_world_item.png");
         JButton lftBtn = createNavButton(0, 400, 80, 80, "resources/SwingArt/left.png", "go left");
         JButton rgtBtn = createNavButton(380, 400, 80, 80, "resources/SwingArt/right.png", "go right");
@@ -318,6 +322,8 @@ public class MainFrame extends JFrame {
         MainBG_Panel.setLayout(null);
         MainBG_Panel.add(desk);
         MainBG_Panel.add(wallet);
+        MainBG_Panel.add(paper);
+        paper.setVisible(false);
         MainBG_Panel.add(lftBtn);
         MainBG_Panel.add(rgtBtn);
         MainBG_Panel.setLayout(null);
@@ -380,8 +386,8 @@ public class MainFrame extends JFrame {
         textArea.setVisible(true);
         inputText.setVisible(true);
 
-        JLabel windowWithKey = createGameObj(100, 210, 100, 100, "inspect", "", "", "inspect window", "", "", "resources/SwingArt/window_world_item_with_key2.png");
-        JLabel windowWithoutKey = createGameObj(100, 210, 100, 100, "inspect", "", "", "inspect window", "", "", "resources/SwingArt/window_world_item_no_key2.png");
+        windowWithKey = createGameObj(100, 210, 100, 100, "inspect", "puzzle", "", "inspect window", "tool puzzle", "", "resources/SwingArt/window_world_item_with_key2.png");
+        windowWithoutKey = createGameObj(100, 210, 100, 100, "inspect", "", "", "inspect window", "", "", "resources/SwingArt/window_world_item_no_key2.png");
 
         key = createGameObj(60,250,30,30,"Inspect","Get","","inspect key","get key","","resources/SwingArt/key_world_item.png");
         JButton lftBtn = createNavButton(0, 400, 80, 80, "resources/SwingArt/left.png", "go left");
