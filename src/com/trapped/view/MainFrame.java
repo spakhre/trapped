@@ -1,6 +1,7 @@
 package com.trapped.view;
 
 import com.trapped.GameHandler;
+import com.trapped.utilities.Sounds;
 
 import javax.swing.*;
 import java.awt.*;
@@ -63,6 +64,46 @@ public class MainFrame extends JFrame{
         setVisible(true);
     }
 
+    public void settingScreen(){
+        MainBG_Panel.updateUI();  // reset the panels
+        MainBG_Panel.removeAll(); // remove all the layers
+        menuPanel.setVisible(true);
+        changeVolume();
+        introText.setVisible(false);
+        startButton.addActionListener(e -> introScreen());
+        exitButton.addActionListener(e -> System.exit(0));
+    }
+
+    public void changeVolume(){
+        JFrame frame = new JFrame("Volume Changer");
+        frame.setSize(200, 200);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+        JOptionPane.showMessageDialog(frame, "Hello, this is the volume selector");
+        int result = JOptionPane.showConfirmDialog(null, "Do wish to change the volume? "
+        );
+        switch (result) {
+            case JOptionPane.YES_OPTION:
+                String name = JOptionPane.showInputDialog(null,
+                        "Please enter a number from -80 to 6 to change volume");
+                float num = Float.parseFloat(name);
+                if (-80.0f <= num && num <= 6.0206f) {
+                    Sounds.changeSoundVolume("startsound.wav", 0, num);
+                    frame.dispose();
+                }
+                else{
+                    JOptionPane.showMessageDialog(frame, "Please enter a number from -80 to 6 to change volume");
+                    frame.dispose();
+                    changeVolume();
+                    break;
+                }
+                break;
+            case JOptionPane.NO_OPTION:
+            case JOptionPane.CANCEL_OPTION:
+                frame.dispose();
+                break;
+        }
+    }
 
     private void setFrameConfigs() {
         setSize(500, 750);
@@ -99,6 +140,8 @@ public class MainFrame extends JFrame{
         MenuBG_panel.setVisible(true);
         startButton.addActionListener(e -> introScreen());
         exitButton.addActionListener(e -> System.exit(0));
+        settingButton.addActionListener(e -> settingScreen());
+        Sounds.changeSoundVolume("startsound.wav", 0, -50);
     }
 
     private void introScreen() {
