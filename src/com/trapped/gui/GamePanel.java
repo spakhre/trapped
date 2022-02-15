@@ -7,7 +7,6 @@ import com.trapped.utilities.Puzzle;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import java.awt.Color;
@@ -47,10 +46,12 @@ public class GamePanel extends GuiPanel {
     private void setLocationDetails() {
         //get intro location description
         //mainWindow.setTitle("Current Location: " + player.getLocation());
+
         Map<String, Object> currentLoc = Puzzle.MAP.get(player.getLocation());
         String desc = (String) currentLoc.get("furniture_desc");
+        textArea.setText("Current Location: " + player.getLocation());
         textArea.setText(desc);
-
+       // textPanel.add(textArea);
         setLocationImage();
     }
 
@@ -97,6 +98,8 @@ public class GamePanel extends GuiPanel {
 
         //Set bounds (x, y, width, height) of the image same as that of the imagePanel
         imageLabel.setBounds(imagePanel.getBounds());
+        //remove old image
+        imagePanel.removeAll();
         imagePanel.add(imageLabel);
     }
 
@@ -209,11 +212,8 @@ public class GamePanel extends GuiPanel {
         this.add(inventoryPanel);
     }
 
-
-
     public void changeTextShow(String text) {
         String showText = "Location: "+ player.getLocation() +"\n\n" +text;
         textArea.setText(showText);
     }
-
 }
