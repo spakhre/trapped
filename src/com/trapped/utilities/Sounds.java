@@ -22,7 +22,7 @@ public class Sounds {
         }
     }
 
-    public static void changeVolume(String location_soundFile, int milliseconds, float volume){
+    public static void changeSoundVolume(String location_soundFile, int milliseconds, float volume){
         File file = new File("resources/sounds/"+location_soundFile);
 
         try {

@@ -14,6 +14,7 @@ import static com.trapped.utilities.TextColor.BLUE_BOLD;
 import static com.trapped.utilities.TextColor.RESET;
 
 public class GameEngine implements Serializable {
+
     private boolean quitGame = false;
     static Scanner scanner = new Scanner(System.in);
     static float volume;
@@ -25,21 +26,23 @@ public class GameEngine implements Serializable {
 
         System.out.println("\nPlease select an option from the menu.");
         int userInput;
-        userInput = TextParser.integerParse();
-        switch (userInput) {
-            case 1:
-                Sounds.playSounds("startsound.wav", 0);
-                playGame();
-            case 2: // menu option sound must be between 6.0206 and -80
-                menu();
-            case 3: // quit game option
-                System.out.println("Exiting the game. Thank you for playing");
-                System.exit(0);
-            default:
-                System.out.println("Invalid input! Please enter a number corresponding to one of the menu options.");
-                System.out.println("Press enter to continue");
-                scanner.nextLine();
-                startGame();
+                userInput = TextParser.integerParse();
+                switch (userInput) {
+                    case 1:
+                        Sounds.playSounds("startsound.wav", 0);
+                        playGame();
+                    case 2: // menu option sound must be between 6.0206 and -80
+                        menu();
+                    case 3: // quit game option
+                        System.out.println("Exiting the game. Thank you for playing");
+                        System.exit(0);
+                    default:
+                        System.out.println("Invalid input! Please enter a number corresponding to one of the menu options.");
+                        System.out.println("Press enter to continue");
+                        scanner.nextLine();
+                        startGame();
+            }
+
         }
     }
 
@@ -49,14 +52,15 @@ public class GameEngine implements Serializable {
                 " \nWhat would you like the music level to be?" +
                 "\nEnter volume in the form of '+/- XX.X', for example -30.0 or 30.0");
         volume = TextParser.floatParse();
-        if (-80.0f <= volume && volume <= 6.0206f) {
-            Sounds.changeVolume("startsound.wav", 0, volume);
-            Player.volume = volume;
-            playGame();
-        } else {
-            System.out.println("volume must be between -80.0 and 6.0206");
-            menu();
-        }
+            if (-80.0f <= volume && volume <= 6.0206f) {
+                Sounds.changeSoundVolume("startsound.wav", 0, volume);
+                Player.volume = volume;
+                playGame();
+            } else {
+                System.out.println("volume must be between -80.0 and 6.0206");
+                menu();
+            }
+
     }
 
     public static void playGame() {

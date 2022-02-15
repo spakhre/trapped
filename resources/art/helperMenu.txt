@@ -1,4 +1,9 @@
-1. Where am I?
-2. Current inventory
-3. Continue the game
-4. Quit Game
+::::::::::::::::::::::::::::
+::   Help Menu Options    ::
+::                        ::
+::   1. Where am I?       ::
+::   2. Current inventory ::
+::   3. Continue the game ::
+::   4. Quit Game         ::
+::                        ::
+::::::::::::::::::::::::::::
