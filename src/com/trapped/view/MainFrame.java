@@ -1,24 +1,29 @@
 package com.trapped.view;
 
 import com.trapped.GameHandler;
-import com.trapped.utilities.Sounds;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 
 public class MainFrame extends JFrame{
 
     GameHandler gHandler;
 
+
     public JButton  startButton, settingButton, exitButton;
-    public JPanel MenuBG_panel, menuPanel,itemsPanel,MainBG_Panel;
+    public JPanel MenuBG_panel, menuPanel,itemsPanel,MainBG_Panel,TextBox_panel;
     public JLabel themeLabel,roomLabel,keyLabel,matchLabel,laptopLabel,walletLabel,candleLabel,paperLabel,crowbarLabel;
     public JLabel matches,key,wallet,laptop,candle,paper,crowbar;
+    public JTextArea introText = new JTextArea();
     public JTextArea textArea = new JTextArea();
-
+    public TextField inputText = new TextField("What would you say ?", 20);
 
 
     public MainFrame(GameHandler gHandler){
@@ -35,6 +40,7 @@ public class MainFrame extends JFrame{
         setAllButtons();
         setAllPanels();
         createStatusField();
+        inputTextField();
 
         // ---- LABELS ADDED TO PANELS ----
         themeLabel=createJLabel("resources/SwingArt/MainTheme1.png");
@@ -51,59 +57,12 @@ public class MainFrame extends JFrame{
         con.add(MainBG_Panel);
         con.add(menuPanel);
         con.add(textArea);
+        con.add(inputText);
         con.add(itemsPanel);
+        con.add(introText);
         setVisible(true);
     }
 
-    public void settingScreen(){
-        menuPanel.setVisible(true);
-        startButton.addActionListener(e -> bedScreen());
-        exitButton.addActionListener(e -> System.exit(0));
-        MainBG_Panel.updateUI();  // reset the panels
-        MainBG_Panel.removeAll(); // remove all the layers
-
-        MainBG_Panel.setVisible(true);
-        MenuBG_panel.setVisible(true);
-        menuPanel.setVisible(true);
-        textArea.setVisible(true);
-        itemsPanel.setVisible(true);
-
-        textArea = new JTextArea(5, 20);
-        JScrollPane scrollPane = new JScrollPane(textArea);
-        textArea.setEditable(false);
-
-        changeVolume();
-    }
-
-    public void changeVolume(){
-        JFrame frame = new JFrame("Volume Changer");
-        frame.setSize(200, 200);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-        JOptionPane.showMessageDialog(frame, "Hello, this is the volume selector");
-        int result = JOptionPane.showConfirmDialog(null, "Do wish to change the volume? "
-        );
-        switch (result) {
-            case JOptionPane.YES_OPTION:
-                String name = JOptionPane.showInputDialog(null,
-                        "Please enter a number from -80 to 6 to change volume");
-                float num = Float.parseFloat(name);
-                if (-80.0f <= num && num <= 6.0206f) {
-                    Sounds.changeSoundVolume("startsound.wav", 0, num);
-                }
-                else{
-                    JOptionPane.showMessageDialog(frame, "Please enter a number from -80 to 6 to change volume");
-                    frame.dispose();
-                    changeVolume();
-                    break;
-                }
-                break;
-            case JOptionPane.NO_OPTION:
-            case JOptionPane.CANCEL_OPTION:
-                frame.dispose();
-                break;
-        }
-    }
 
     private void setFrameConfigs() {
         setSize(500, 750);
@@ -116,16 +75,14 @@ public class MainFrame extends JFrame{
     }
 
     private void setAllPanels() {
-        MenuBG_panel = createJPanel(-10, 0, 500, 750, true);
-        menuPanel = createJPanel(150, 350, 100, 180, true);
+        MenuBG_panel = createJPanel(-10, 0, 500, 750, false);
+        menuPanel = createJPanel(150, 350, 100, 180, false);
         menuPanel.setBackground(Color.decode("#302a1e"));
 
         MainBG_Panel=createJPanel(10,40,460,500,false);
         itemsPanel=createJPanel(350,550,120,150,false);
         itemsPanel.setBackground(Color.lightGray);
         itemsPanel.setLayout(new GridLayout(2,3));
-
-
     }
 
     private void setAllButtons() {
@@ -135,27 +92,68 @@ public class MainFrame extends JFrame{
     }
 
 
+
     // display the MainMenu
     public void showMainMenu() {
         menuPanel.setVisible(true);
-        startButton.addActionListener(e -> bedScreen());
+        MenuBG_panel.setVisible(true);
+        startButton.addActionListener(e -> introScreen());
         exitButton.addActionListener(e -> System.exit(0));
-        settingButton.addActionListener(e -> settingScreen());
-        Sounds.changeSoundVolume("startsound.wav", 0, -50);
+    }
 
+    private void introScreen() {
+        menuPanel.setVisible(false);
+        MenuBG_panel.setVisible(false);
+
+        introText.setVisible(true);
+        writeToIntro(readFileFromResources("introstory"));
+        introText.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode()==10){
+                    bedScreen();
+                }
+                else if (e.getKeyChar()==27)
+                    System.exit(0);
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                System.out.println("you released "+e.getKeyCode());
+
+            }
+        });
 
     }
+
+    private String readFileFromResources(String fileName) {
+        String aboutUs = null;
+        try {
+            aboutUs = Files.readString(Path.of("resources", fileName + ".txt"));
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+        }
+        return aboutUs;
+    }
+
 
     // Create the game sense
     public void bedScreen() {
         MainBG_Panel.updateUI();  // reset the panels
         MainBG_Panel.removeAll(); // remove all the layers
 
+        introText.setVisible(false);
         MainBG_Panel.setVisible(true);
         MenuBG_panel.setVisible(false);
         menuPanel.setVisible(false);
         textArea.setVisible(true);
         itemsPanel.setVisible(true);
+        inputText.setVisible(true);
 
         JLabel bed=createGameObj(130,250,200,200,"Inspect","","","inspect bed","","","resources/SwingArt/bed1.png");
         matches= createGameObj(100,380,18,17, "Inspect", "Get","","inspect matches","get matches","","resources/SwingArt/matches.png");
@@ -171,6 +169,7 @@ public class MainFrame extends JFrame{
         MainBG_Panel.setLayout(null);
         MainBG_Panel.add(roomLabel);
 
+
     }
 
     public void safeScreen(){
@@ -181,6 +180,7 @@ public class MainFrame extends JFrame{
         menuPanel.setVisible(false);
         textArea.setVisible(true);
         itemsPanel.setVisible(true);
+        inputText.setVisible(true);
 
         JLabel vault=createGameObj(250,250,150,150,"Inspect","get","drop","inspect safe","GET","DROP","resources/SwingArt/vault1.png");
         JButton lftBtn=createNavButton(0,400,80,80,"resources/SwingArt/left.png","go left");
@@ -202,6 +202,7 @@ public class MainFrame extends JFrame{
         menuPanel.setVisible(false);
         textArea.setVisible(true);
         itemsPanel.setVisible(true);
+        inputText.setVisible(true);
 
         JLabel door=createGameObj(200,180,200,200,"Inspect","open","","inspect door","openDoor","","resources/SwingArt/door1.png");
         JButton lftBtn=createNavButton(0,400,80,80,"resources/SwingArt/left.png","go left");
@@ -224,6 +225,7 @@ public class MainFrame extends JFrame{
         MenuBG_panel.setVisible(false);
         menuPanel.setVisible(false);
         textArea.setVisible(true);
+        inputText.setVisible(true);
 
         JLabel desk=createGameObj(220,230,200,200,"Inspect","get","drop","inspect drawer","GET","DROP","resources/SwingArt/desk1.png");
         JButton lftBtn=createNavButton(0,400,80,80,"resources/SwingArt/left.png","go left");
@@ -246,6 +248,7 @@ public class MainFrame extends JFrame{
         MenuBG_panel.setVisible(false);
         menuPanel.setVisible(false);
         textArea.setVisible(true);
+        inputText.setVisible(true);
 
         JLabel lamp=createGameObj(90,190,200,200,"Inspect","get","drop","inspect lamp","GET","DROP","resources/SwingArt/lamp1.png");
         JButton lftBtn=createNavButton(0,400,80,80,"resources/SwingArt/left.png","go left");
@@ -267,6 +270,7 @@ public class MainFrame extends JFrame{
         MenuBG_panel.setVisible(false);
         menuPanel.setVisible(false);
         textArea.setVisible(true);
+        inputText.setVisible(true);
 
         JLabel chair=createGameObj(60,250,200,200,"Inspect","get","drop","inspect chair","GET","DROP","resources/SwingArt/chair1.png");
         JButton lftBtn=createNavButton(0,400,80,80,"resources/SwingArt/left.png","go left");
@@ -289,6 +293,7 @@ public class MainFrame extends JFrame{
         MenuBG_panel.setVisible(false);
         menuPanel.setVisible(false);
         textArea.setVisible(true);
+        inputText.setVisible(true);
 
         JLabel window=createGameObj(100,210,100,100,"inspect","get","drop","inspect window","GET","DROP","resources/SwingArt/window1.png");
         JButton lftBtn=createNavButton(0,400,80,80,"resources/SwingArt/left.png","go left");
@@ -331,18 +336,38 @@ public class MainFrame extends JFrame{
         return label;
     }
 
+    public void writeToIntro(String string) {
+        introText.setFont(new Font("Arial", Font.BOLD, 15));
+        introText.setBounds(10, 150, 470, 500);
+        introText.setBackground(Color.yellow);
+        introText.setText(string);
+        introText.setPreferredSize(new Dimension(480, 150));
+        introText.setEditable(false);
+    }
 
     // method creating the text field
     public void writeToTextArea(String s) {
         textArea.setText(s);
         textArea.setFont(new Font("Arial", Font.BOLD, 15));
-        textArea.setBounds(10, 550, 300, 150);
+        textArea.setBounds(10, 550, 300, 100);
         textArea.setBackground(Color.RED);
         textArea.setForeground(Color.white);
         textArea.setWrapStyleWord(true);
         textArea.setLineWrap(true);
         textArea.setEditable(false);
     }
+
+    public void inputTextField(){
+        inputText.setFont(new Font("Arial", Font.BOLD, 13));
+        inputText.setForeground(Color.red);
+        inputText.setBackground(Color.white);
+        inputText.setBounds(10, 660, 300, 40);
+        inputText.setVisible(false);
+
+        // to access the TextField using " getText() [ for example: inputText.getText() ]
+
+    }
+
 
     // creating the gameObj on the main area
     public JLabel createGameObj(int x,int y,int width,int height, String action1,String action2, String action3,
@@ -456,6 +481,7 @@ public class MainFrame extends JFrame{
         itemsPanel.add(crowbarLabel);
         itemsPanel.add(paperLabel);
         itemsPanel.add(candleLabel);
+
     }
 
 }
