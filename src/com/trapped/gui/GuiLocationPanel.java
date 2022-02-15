@@ -1,4 +1,4 @@
-package com.trapped.gui.controller;
+package com.trapped.gui;
 
 import com.google.gson.internal.LinkedTreeMap;
 import com.gui.utility.GuiUtil;
@@ -20,17 +20,14 @@ import java.awt.Font;
 import java.awt.Label;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import static com.trapped.gui.controller.GuiMainWindow.displayAreaFont;
 
 public class GuiLocationPanel extends GuiPanel {
     private Player player = Player.getInstance();
     private TextCollector textCollector = TextCollector.getInstance();
 
-    private static final int IMAGE_WIDTH = GuiMainWindow.GUI_WIDTH;
+    private static final int IMAGE_WIDTH = MainWindow.GUI_WIDTH;
     private static final int IMAGE_HEIGHT = 300;
     private JTextArea inventoryText;
     private JTextArea availableCommandsText;
@@ -44,7 +41,7 @@ public class GuiLocationPanel extends GuiPanel {
      *
      * @param gui
      */
-    public GuiLocationPanel(GuiMainWindow gui) {
+    public GuiLocationPanel(MainWindow gui) {
         super(gui);
         gui.setTitle(Player.location);
 
@@ -171,7 +168,7 @@ public class GuiLocationPanel extends GuiPanel {
             public void actionPerformed(ActionEvent e) {
                 String command = commandTextField.getText().trim();
                 if(command.isEmpty() || command.isBlank()) {
-                    JOptionPane.showMessageDialog( getGuiMainWindow(), "Invalid Command!!!!");
+                    JOptionPane.showMessageDialog( getMainWindow(), "Invalid Command!!!!");
                 }
 //                TextCollector.executeCommand(command);
                 executeCommand(command);
@@ -189,7 +186,7 @@ public class GuiLocationPanel extends GuiPanel {
         if(inventoryText == null) {
             inventoryText = new JTextArea(10, 25);
             inventoryText.setEditable(false);
-            inventoryText.setFont(displayAreaFont);
+            inventoryText.setFont(MainWindow.displayAreaFont);
             inventoryText.setBackground(Color.CYAN);
             inventoryText.setForeground(Color.BLACK);
             inventoryText.setWrapStyleWord(true);
@@ -210,7 +207,7 @@ public class GuiLocationPanel extends GuiPanel {
         if(availableCommandsText == null) {
             availableCommandsText = new JTextArea(10, 30);
             availableCommandsText.setEditable(false);
-            availableCommandsText.setFont(displayAreaFont);
+            availableCommandsText.setFont(MainWindow.displayAreaFont);
             availableCommandsText.setBackground(Color.CYAN);
             availableCommandsText.setForeground(Color.BLACK);
             availableCommandsText.setLineWrap(true);

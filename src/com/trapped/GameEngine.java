@@ -64,7 +64,7 @@ public class GameEngine implements Serializable {
 
     public void playGame() {
         while (true) {
-            player.viewRoom();
+           // player.viewRoom();
         }
     }
 }

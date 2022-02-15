@@ -1,7 +1,5 @@
 package com.gui.utility;
 
-import com.trapped.gui.controller.GuiPanel;
-
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -137,5 +135,4 @@ public class GuiUtil {
             return;
         }
     }
-
 }

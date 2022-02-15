@@ -1,12 +1,12 @@
-package com.trapped.gui.controller;
+package com.trapped.gui;
 
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 
-public class GuiPlayPanel extends GuiBackgroundImageLabelPanel {
+public class GuiPlayPanel extends BackgroundImageLabelPanel {
     private JPanel mainPanel;
 
-    public GuiPlayPanel(GuiMainWindow gui) {
+    public GuiPlayPanel(MainWindow gui) {
         super(gui);
         setToBackgroundLabel(createMainPanel());
     }
