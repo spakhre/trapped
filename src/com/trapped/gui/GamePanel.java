@@ -7,6 +7,7 @@ import com.trapped.utilities.Puzzle;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import java.awt.Color;
@@ -196,7 +197,12 @@ public class GamePanel extends GuiPanel {
         quitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //pending
+               int response = JOptionPane.showConfirmDialog(mainWindow, "Are you sure you'd like to quit the game right now? Your prgoress will not be saved.", "QuitDialog", JOptionPane.YES_NO_OPTION);
+               if(response == JOptionPane.YES_OPTION) {
+                   System.exit(0);
+               } else
+                   return;
+
             }
         });
 
