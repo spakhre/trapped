@@ -49,5 +49,7 @@
   ],
   "save": [],
   "commands": ["command"],
-  "final": ["final"]
+  "final": ["final"],
+  "riddles": ["riddles"],
+  "tool": ["tool"]
 }
