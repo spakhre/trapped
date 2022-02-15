@@ -1,4 +1,4 @@
-package com.trapped.gui.controller;
+package com.trapped.gui;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -9,10 +9,10 @@ import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.net.URL;
 
-public class GuiBackgroundImageLabelPanel extends GuiPanel {
+public class BackgroundImageLabelPanel extends GuiPanel {
     private JLabel backgroundImageLabel;
 
-    public GuiBackgroundImageLabelPanel(GuiMainWindow gui) {
+    public BackgroundImageLabelPanel(MainWindow gui) {
         super(gui);
         JPanel backgroundPanel = createBackgroundPanel(gui);
         this.add(backgroundPanel);
@@ -29,7 +29,7 @@ public class GuiBackgroundImageLabelPanel extends GuiPanel {
         backgroundImageLabel.setSize(backgroundPanel.getWidth(), backgroundPanel.getHeight());
 
         // setting background image
-        URL imageURL = GuiBackgroundImageLabelPanel.class.getResource("/image/image.jpg");
+        URL imageURL = BackgroundImageLabelPanel.class.getResource("/image/image.jpg");
         ImageIcon backgroundImage = new ImageIcon(new ImageIcon(imageURL).getImage()
                 .getScaledInstance(backgroundImageLabel.getWidth(), backgroundImageLabel.getHeight(), Image.SCALE_SMOOTH));
         backgroundImageLabel.setIcon(backgroundImage);

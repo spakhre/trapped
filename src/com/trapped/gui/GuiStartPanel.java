@@ -1,4 +1,4 @@
-package com.trapped.gui.controller;
+package com.trapped.gui;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -7,8 +7,8 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class GuiStartPanel extends GuiBackgroundImageLabelPanel {
-    public GuiStartPanel(GuiMainWindow gui) {
+public class GuiStartPanel extends BackgroundImageLabelPanel {
+    public GuiStartPanel(MainWindow gui) {
         super(gui);
 
         //start panel design
@@ -54,7 +54,7 @@ public class GuiStartPanel extends GuiBackgroundImageLabelPanel {
         JButton startButton = new JButton(" START ");
 
         startButton.setSize(dimension);
-        startButton.setFont(GuiMainWindow.btnFont);
+        startButton.setFont(MainWindow.btnFont);
         startButton.setOpaque(false);
         startButton.setForeground(Color.BLACK);
         startButton.setBackground(Color.GRAY);
@@ -68,7 +68,7 @@ public class GuiStartPanel extends GuiBackgroundImageLabelPanel {
     private JButton createExitButton(Dimension dimension) {
         JButton exitButton = new JButton(" EXIT ");
         exitButton.setSize(dimension);
-        exitButton.setFont(GuiMainWindow.btnFont);
+        exitButton.setFont(MainWindow.btnFont);
         exitButton.setOpaque(false);
         exitButton.setForeground(Color.BLACK);
         exitButton.setBackground(Color.GRAY);
@@ -85,7 +85,7 @@ public class GuiStartPanel extends GuiBackgroundImageLabelPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             //Create Game Screen
-            getGuiMainWindow().createGameScreen();
+            getMainWindow().createGameScreen();
         }
     }
 
