@@ -5,7 +5,9 @@ import com.trapped.utilities.FileManager;
 import com.trapped.utilities.Sounds;
 import com.trapped.utilities.TextColor;
 import com.trapped.utilities.TextParser;
+import com.trapped.view.MainFrame;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -15,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
+import static com.sun.java.accessibility.util.AWTEventMonitor.addActionListener;
 import static com.trapped.utilities.TextColor.MAGENTA_UNDERLINE;
 import static com.trapped.utilities.TextColor.RESET;
 
@@ -104,7 +107,6 @@ class ActionController implements ActionListener {
         for (String item: furniture_items) {
             unhideItemOnNavScreen(item);
         }
-        solvePuzzle(something);
     }
 
     private static void unhideItemOnNavScreen(String item){
@@ -180,7 +182,6 @@ class ActionController implements ActionListener {
 
         FileManager.getResource(furniture_picture);
         gHandler.mainFrame.writeToTextArea("Inspecting...\nNo items found here.");
-        solvePuzzle(something);
     }
 
     // check current inventory
@@ -327,6 +328,7 @@ class ActionController implements ActionListener {
          */
         ///////////////////////////////////////////////////////////////////////////////////////////////////////
         verb = TextParser.getVerb(actionClicked);
+        System.out.println("printing out the verb " + verb);
         noun = TextParser.getNoun(actionClicked);
         ////////////////////////////////////////////////////////////////////////////////////////////////////////
             playerInputLogic(verb, noun);
@@ -355,6 +357,10 @@ class ActionController implements ActionListener {
                 break;
             case "drop":
                 drop(noun);
+                break;
+            case "final":
+                System.out.println("clicked on door");
+                doorPuzzle("door");
                 break;
             default:
                 System.out.println("Sorry, I don't understand your input, please enter again. ");
@@ -577,28 +583,70 @@ class ActionController implements ActionListener {
 
     private static void doorPuzzle(String loc) {
         //Final puzzle in the game, can be solved at any time if you know the secret number (104)
+
+        System.out.println("door puzzle GUI 1");
+
         Map<String, Object> furniture = map.get(loc);
         String puzzle_desc = (String) furniture.get("puzzle_desc");
         String puzzle_sounds = (String) furniture.get("puzzle_sounds");
         String puzzle_answer = (String) furniture.get("puzzle_answer");
         String puzzle_reward = (String) furniture.get("puzzle_reward");
-        System.out.println(puzzle_desc);
-        System.out.println("What's the password? You have " + MAGENTA_UNDERLINE + max_attempts + RESET + " attempts remaining. If you's like to try later, enter[later]");
-        ANSWER = scan.nextLine();
+        gHandler.mainFrame.writeToTextArea(puzzle_desc);
+        gHandler.mainFrame.writeToTextArea("What's the password? You have " + max_attempts +
+                " attempts remaining. If you'll like to try later, enter[later]");
+
+        ANSWER = gHandler.mainFrame.inputText.getText();
+
+
+        System.out.println("door puzzle GUI 2");
+
+//        JFrame frame = new JFrame("Door Puzzle");
+//        frame.setSize(200, 200);
+//        frame.setLocationRelativeTo(null);
+//        frame.setVisible(true);
+//        JOptionPane.showMessageDialog(frame, "What's the password? You have " + max_attempts + " attempts remaining. If you'll like to try later, enter[later]");
+//        int result = JOptionPane.showConfirmDialog(null, "Do wish to solve the puzzle ");
+//        while (0 <= max_attempts && max_attempts <= 3){
+//        switch (result) {
+//            case JOptionPane.YES_OPTION:
+//                String name = JOptionPane.showInputDialog(null,
+//                        "Please enter the passcode");
+//                int num = Integer.parseInt(name);
+//                if (num == 104) {
+//                    System.out.println("door puzzle 6");
+//                    Sounds.changeSoundVolume("open_door.wav", 0, num);
+//                    JOptionPane.showMessageDialog(frame, "Congratulations, you've exited the game");
+//                    frame.dispose();
+//                } else {
+//                    JOptionPane.showMessageDialog(frame, "You entered the wrong number");
+//                    max_attempts = max_attempts - 1;
+//                    JOptionPane.showMessageDialog(frame, "You have " + max_attempts + " left.");
+//                    frame.dispose();
+//                    break;
+//                }
+//                break;
+//            case JOptionPane.NO_OPTION:
+//            case JOptionPane.CANCEL_OPTION:
+//                frame.dispose();
+//                break;
+//        }
 
         if (ANSWER.trim().equals("later") || ANSWER.trim().equals("")) {
-            System.out.println("No worries! Try next time!");
+            System.out.println("door puzzle GUI 3");
+            gHandler.mainFrame.writeToTextArea("No worries! Try next time!");
+            System.out.println("door puzzle GUI 4");
         } else {
             while (max_attempts-- > 0) {
                 if (ANSWER.trim().equals(puzzle_answer)) {
-                    System.out.println(puzzle_reward);
-                    System.out.println("You won the game! Thanks for playing!");
-                    System.exit(0);
+                    gHandler.mainFrame.writeToTextArea(puzzle_reward);
+                    gHandler.mainFrame.writeToTextArea("You won the game! Thanks for playing!");
+                    System.out.println("game won");
+                    gHandler.mainFrame.endScreen("end_game");
                 } else if (max_attempts == 0) {
-                    System.out.println("You lost the game! You are Trapped. Please try again later.");
-                    System.exit(0);
+                    gHandler.mainFrame.writeToTextArea("You lost the game! You are Trapped. Please try again later.");
+                    gHandler.mainFrame.endScreen("end_game");
                 } else {
-                    System.out.println("Wrong password. Try again next time! " + MAGENTA_UNDERLINE + max_attempts + RESET + " attempts remaining");
+                    gHandler.mainFrame.writeToTextArea("Wrong password. Try again next time! " + MAGENTA_UNDERLINE + max_attempts + RESET + " attempts remaining");
                 }
             }
         }

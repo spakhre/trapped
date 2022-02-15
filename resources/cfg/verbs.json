@@ -48,6 +48,6 @@
     "discard"
   ],
   "save": [],
-  "commands": ["command"]
-
+  "commands": ["command"],
+  "final": ["final"]
 }

@@ -70,7 +70,7 @@ public class MainFrame extends JFrame{
         menuPanel.setVisible(true);
         changeVolume();
         introText.setVisible(false);
-        startButton.addActionListener(e -> introScreen());
+        startButton.addActionListener(e -> introScreen("introstory"));
         exitButton.addActionListener(e -> System.exit(0));
     }
 
@@ -136,20 +136,58 @@ public class MainFrame extends JFrame{
 
     // display the MainMenu
     public void showMainMenu() {
-        menuPanel.setVisible(true);
         MenuBG_panel.setVisible(true);
-        startButton.addActionListener(e -> introScreen());
+        menuPanel.setVisible(true);
+        startButton.addActionListener(e -> introScreen("introstory"));
         exitButton.addActionListener(e -> System.exit(0));
         settingButton.addActionListener(e -> settingScreen());
         Sounds.changeSoundVolume("startsound.wav", 0, -50);
     }
 
-    private void introScreen() {
+    public void endScreen(String fileName) {
         menuPanel.setVisible(false);
+        textArea.setVisible(false);
+        MainBG_Panel.setVisible(false);
         MenuBG_panel.setVisible(false);
+        itemsPanel.setVisible(false);
+        inputText.setVisible(false);
 
         introText.setVisible(true);
-        writeToIntro(readFileFromResources("introstory"));
+        writeToIntro(readFileFromResources(fileName));
+        introText.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode()==10){
+                    System.exit(0);
+                }
+                else if (e.getKeyChar()==27)
+                    System.exit(0);
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                System.out.println("you released "+e.getKeyCode());
+
+            }
+        });
+
+    }
+
+    public void introScreen(String fileName) {
+        menuPanel.setVisible(false);
+        textArea.setVisible(false);
+        MainBG_Panel.setVisible(false);
+        MenuBG_panel.setVisible(false);
+        itemsPanel.setVisible(false);
+        inputText.setVisible(false);
+
+        introText.setVisible(true);
+        writeToIntro(readFileFromResources(fileName));
         introText.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -247,7 +285,7 @@ public class MainFrame extends JFrame{
         itemsPanel.setVisible(true);
         inputText.setVisible(true);
 
-        JLabel door=createGameObj(200,180,200,200,"Inspect","open","","inspect door","openDoor","","resources/SwingArt/door1.png");
+        JLabel door=createGameObj(200,180,200,200,"Inspect","puzzle","","inspect door","final door","","resources/SwingArt/door1.png");
         JButton lftBtn=createNavButton(0,400,80,80,"resources/SwingArt/left.png","go left");
         JButton rgtBtn=createNavButton(380,400,80,80,"resources/SwingArt/right.png","go right");
 
@@ -257,6 +295,8 @@ public class MainFrame extends JFrame{
         MainBG_Panel.add(rgtBtn);
         MainBG_Panel.setLayout(null);
         MainBG_Panel.add(roomLabel);
+
+
     }
 
     public void deskScreen() {
