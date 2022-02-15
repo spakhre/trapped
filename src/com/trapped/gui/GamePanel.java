@@ -13,6 +13,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Map;
 
 public class GamePanel extends GuiPanel {
@@ -183,6 +184,22 @@ public class GamePanel extends GuiPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //pending
+                // pass location, create popup, and pass it the puzzle intro text
+                // popup btn ActionListeners will return text based on input
+                Boolean itemExists = player.inspectItem(Player.getLocation());
+                if (itemExists){
+                    createItemPopup();
+                } else {
+                    noItemFoundPopup();
+                }
+
+                Map<String, String> inspectedPuzzle = player.inspectPuzzle(Player.getLocation());
+                if ("Y".equals(inspectedPuzzle.get("puzzle_exists"))){
+                    // attemptPuzzlePopup will ask if the player wants to attempt the puzzle
+                    // and create an associated puzzle window.
+                    attemptPuzzlePopup();
+                }  // else nothing
+
             }
         });
 

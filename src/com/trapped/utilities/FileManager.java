@@ -16,6 +16,10 @@ public class FileManager {
      * Primarily used for ASCII art and menus
      * Expects to be passed the filename as a string
      */
+
+    // WHAT IF
+    // getResource returns a String of the select file
+    // public static String getResource(String fileName) {...}
     public static void getResource(String fileName) {
         String art = "./resources/art/" + fileName;
         try {
