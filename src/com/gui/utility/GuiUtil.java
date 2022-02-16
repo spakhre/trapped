@@ -65,6 +65,7 @@ public class GuiUtil {
 
     /**
      *
+     * Creates a label with image without text
      * @param imagePath
      * @param width
      * @param height

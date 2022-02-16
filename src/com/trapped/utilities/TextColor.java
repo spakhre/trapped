@@ -13,7 +13,4 @@ public class TextColor {
     //Background Colors
     public static final String RED_BACKGROUND = "\u001B[41m";
     public static final String YELLOW_BACKGROUND = "\u001B[43m";
-
-
-
 }

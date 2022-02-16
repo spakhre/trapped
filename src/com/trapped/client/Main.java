@@ -1,5 +1,6 @@
 package com.trapped.client;
 
+import com.trapped.GameEngine;
 import com.trapped.gui.MainWindow;
 
 import java.io.Serializable;
@@ -11,8 +12,5 @@ public class Main implements Serializable {
 
 //        GuiGameEngine gameEngine = new GuiGameEngine();
           new MainWindow();
-//        gameEngine.playGame();
-
-        //new MainFrame();
     }
 }
