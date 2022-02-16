@@ -11,6 +11,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class MainFrame extends JFrame {
@@ -23,6 +26,8 @@ public class MainFrame extends JFrame {
     public JTextArea introText = new JTextArea();
     public JTextArea textArea = new JTextArea();
     public TextField inputText = new TextField("What would you say ?", 20);
+    static List<Boolean> initArr = Arrays.asList(true,false,false,false,false,false,false,false,false,false,false,false,false,false);
+
 
     public MainFrame(GameHandler gHandler) {
         super("Trapped");
@@ -63,7 +68,7 @@ public class MainFrame extends JFrame {
 
     public void settingScreen() {
         menuPanel.setVisible(true);
-        startButton.addActionListener(e -> bedScreen());
+        startButton.addActionListener(e -> gameScreen((ArrayList<Boolean>) initArr));
         exitButton.addActionListener(e -> System.exit(0));
         MainBG_Panel.updateUI();  // reset the panels
         MainBG_Panel.removeAll(); // remove all the layers
@@ -195,7 +200,7 @@ public class MainFrame extends JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode()==10){
-                    bedScreen();
+                    gameScreen(initArr);
                 }
                 else if (e.getKeyChar()==27)
                     System.exit(0);
@@ -222,7 +227,7 @@ public class MainFrame extends JFrame {
 
 
     // Create the game sense
-    public void bedScreen() {
+    public void gameScreen(List<Boolean> arr) {
         MainBG_Panel.updateUI();  // reset the panels
         MainBG_Panel.removeAll(); // remove all the layers
 
@@ -234,177 +239,58 @@ public class MainFrame extends JFrame {
         itemsPanel.setVisible(true);
         inputText.setVisible(true);
 
+        JLabel lamp = createGameObj(90, 190, 200, 200, "Inspect", "get", "drop", "inspect lamp", "GET", "DROP", "resources/SwingArt/lamp1.png");
+        JLabel door=createGameObj(200,180,200,200,"Inspect","puzzle","","inspect door","final door","","resources/SwingArt/door1.png");
         JLabel bed = createGameObj(130, 250, 200, 200, "Inspect", "", "", "inspect bed", "", "", "resources/SwingArt/bed1.png");
+        JLabel chair = createGameObj(60, 250, 200, 200, "Inspect", "get", "drop", "inspect chair", "GET", "DROP", "resources/SwingArt/chair1.png");
         matches = createGameObj(100, 380, 18, 17, "Inspect", "Get", "", "inspect matches", "get matches", "", "resources/SwingArt/matches.png");
         JButton lftBtn = createNavButton(0, 400, 80, 80, "resources/SwingArt/left.png", "go left");
         JButton rgtBtn = createNavButton(380, 400, 80, 80, "resources/SwingArt/right.png", "go right");
-
-        MainBG_Panel.setLayout(null);
-        MainBG_Panel.add(bed);
-        MainBG_Panel.add(matches);
-        matches.setVisible(false);
-        MainBG_Panel.add(lftBtn);
-        MainBG_Panel.add(rgtBtn);
-        MainBG_Panel.setLayout(null);
-        MainBG_Panel.add(roomLabel);
-
-
-    }
-
-    public void safeScreen() {
-        MainBG_Panel.updateUI();  // reset the panels
-        MainBG_Panel.removeAll(); // remove all the layers
-        MainBG_Panel.setVisible(true);
-        MenuBG_panel.setVisible(false);
-        menuPanel.setVisible(false);
-        textArea.setVisible(true);
-        itemsPanel.setVisible(true);
-        inputText.setVisible(true);
-
         JLabel safe = createGameObj(250, 250, 150, 150, "Inspect", "Puzzle", "drop", "inspect safe", "riddles safe", "", "resources/SwingArt/vault1.png");
         crowbar = createGameObj(200,380,120,103,"Inspect","Get","","inspect crowbar","get crowbar","","resources/SwingArt/crowbar_world_item.png");
         candle = createGameObj(100, 380, 24, 51, "Inspect", "Get", "", "inspect candle", "get candle", "", "resources/SwingArt/candle_world_item.png");
-        JButton lftBtn = createNavButton(0, 400, 80, 80, "resources/SwingArt/left.png", "go left");
-        JButton rgtBtn = createNavButton(380, 400, 80, 80, "resources/SwingArt/right.png", "go right");
-
-        MainBG_Panel.setLayout(null);
-        MainBG_Panel.add(safe);
-        MainBG_Panel.add(candle);
-        MainBG_Panel.add(crowbar);
-        crowbar.setVisible(false);
-        MainBG_Panel.add(lftBtn);
-        MainBG_Panel.add(rgtBtn);
-        MainBG_Panel.setLayout(null);
-        MainBG_Panel.add(roomLabel);
-    }
-
-    public void doorScreen() {
-        MainBG_Panel.updateUI();  // reset the panels
-        MainBG_Panel.removeAll(); // remove all the layers
-        MainBG_Panel.setVisible(true);
-        MenuBG_panel.setVisible(false);
-        menuPanel.setVisible(false);
-        textArea.setVisible(true);
-        itemsPanel.setVisible(true);
-        inputText.setVisible(true);
-      
-        JLabel door=createGameObj(200,180,200,200,"Inspect","puzzle","","inspect door","final door","","resources/SwingArt/door1.png");
-        JButton lftBtn=createNavButton(0,400,80,80,"resources/SwingArt/left.png","go left");
-        JButton rgtBtn=createNavButton(380,400,80,80,"resources/SwingArt/right.png","go right");
-
-        MainBG_Panel.setLayout(null);
-        MainBG_Panel.add(door);
-        MainBG_Panel.add(lftBtn);
-        MainBG_Panel.add(rgtBtn);
-        MainBG_Panel.setLayout(null);
-        MainBG_Panel.add(roomLabel);
-
-
-    }
-
-    public void deskScreen() {
-
-        MainBG_Panel.updateUI();
-        MainBG_Panel.removeAll();
-
-        MainBG_Panel.setVisible(true);
-        MenuBG_panel.setVisible(false);
-        menuPanel.setVisible(false);
-        textArea.setVisible(true);
-        inputText.setVisible(true);
-
         JLabel desk = createGameObj(220, 230, 200, 200, "Inspect", "puzzle", "", "inspect drawer", "tool puzzle", "DROP", "resources/SwingArt/desk1.png");
         paper = createGameObj(400,250,181,164,"Inspect","Get","","inspect paper", "get paper","","resources/SwingArt/paper+world_item.png");
         wallet = createGameObj(210, 245, 36, 31, "Inspect", "Get", "", "inspect wallet", "get wallet", "", "resources/SwingArt/wallet_world_item.png");
-        JButton lftBtn = createNavButton(0, 400, 80, 80, "resources/SwingArt/left.png", "go left");
-        JButton rgtBtn = createNavButton(380, 400, 80, 80, "resources/SwingArt/right.png", "go right");
-
-        MainBG_Panel.setLayout(null);
-        MainBG_Panel.add(desk);
-        MainBG_Panel.add(wallet);
-        MainBG_Panel.add(paper);
-        paper.setVisible(false);
-        MainBG_Panel.add(lftBtn);
-        MainBG_Panel.add(rgtBtn);
-        MainBG_Panel.setLayout(null);
-        MainBG_Panel.add(roomLabel);
-    }
-
-    public void lampScreen() {
-
-        MainBG_Panel.updateUI();
-        MainBG_Panel.removeAll();
-
-        MainBG_Panel.setVisible(true);
-        MenuBG_panel.setVisible(false);
-        menuPanel.setVisible(false);
-        textArea.setVisible(true);
-        inputText.setVisible(true);
-
-        JLabel lamp = createGameObj(90, 190, 200, 200, "Inspect", "get", "drop", "inspect lamp", "GET", "DROP", "resources/SwingArt/lamp1.png");
-        JButton lftBtn = createNavButton(0, 400, 80, 80, "resources/SwingArt/left.png", "go left");
-        JButton rgtBtn = createNavButton(380, 400, 80, 80, "resources/SwingArt/right.png", "go right");
-
-        MainBG_Panel.setLayout(null);
-        MainBG_Panel.add(lamp);
-        MainBG_Panel.add(lftBtn);
-        MainBG_Panel.add(rgtBtn);
-        MainBG_Panel.setLayout(null);
-        MainBG_Panel.add(roomLabel);
-    }
-
-    public void chairScreen() {
-
-        MainBG_Panel.updateUI();
-        MainBG_Panel.removeAll();
-        MainBG_Panel.setVisible(true);
-        MenuBG_panel.setVisible(false);
-        menuPanel.setVisible(false);
-        textArea.setVisible(true);
-        inputText.setVisible(true);
-
-        JLabel chair = createGameObj(60, 250, 200, 200, "Inspect", "get", "drop", "inspect chair", "GET", "DROP", "resources/SwingArt/chair1.png");
-        JButton lftBtn = createNavButton(0, 400, 80, 80, "resources/SwingArt/left.png", "go left");
-        JButton rgtBtn = createNavButton(380, 400, 80, 80, "resources/SwingArt/right.png", "go right");
-
-        MainBG_Panel.setLayout(null);
-        MainBG_Panel.add(chair);
-        MainBG_Panel.add(lftBtn);
-        MainBG_Panel.add(rgtBtn);
-        MainBG_Panel.setLayout(null);
-        MainBG_Panel.add(roomLabel);
-    }
-
-    public void windowScreen() {
-
-        MainBG_Panel.updateUI();
-        MainBG_Panel.removeAll();
-
-        MainBG_Panel.setVisible(true);
-        MenuBG_panel.setVisible(false);
-        menuPanel.setVisible(false);
-        textArea.setVisible(true);
-        inputText.setVisible(true);
-
         windowWithKey = createGameObj(100, 210, 100, 100, "inspect", "puzzle", "", "inspect window", "tool puzzle", "", "resources/SwingArt/window_world_item_with_key2.png");
         windowWithoutKey = createGameObj(100, 210, 100, 100, "inspect", "", "", "inspect window", "", "", "resources/SwingArt/window_world_item_no_key2.png");
-
         key = createGameObj(60,250,30,30,"Inspect","Get","","inspect key","get key","","resources/SwingArt/key_world_item.png");
-        JButton lftBtn = createNavButton(0, 400, 80, 80, "resources/SwingArt/left.png", "go left");
-        JButton rgtBtn = createNavButton(380, 400, 80, 80, "resources/SwingArt/right.png", "go right");
 
         MainBG_Panel.setLayout(null);
+        MainBG_Panel.add(bed);
+        MainBG_Panel.add(door);
+        MainBG_Panel.add(safe);
+        MainBG_Panel.add(desk);
+        MainBG_Panel.add(lamp);
+        MainBG_Panel.add(chair);
         MainBG_Panel.add(windowWithKey);
         MainBG_Panel.add(windowWithoutKey);
         MainBG_Panel.add(key);
-        key.setVisible(false);
-        windowWithoutKey.setVisible(false);
+        MainBG_Panel.add(wallet);
+        MainBG_Panel.add(paper);
+        MainBG_Panel.add(matches);
+        MainBG_Panel.add(candle);
+        MainBG_Panel.add(crowbar);
         MainBG_Panel.add(lftBtn);
         MainBG_Panel.add(rgtBtn);
         MainBG_Panel.setLayout(null);
         MainBG_Panel.add(roomLabel);
-    }
 
+        bed.setVisible(arr.get(0));
+        door.setVisible(arr.get(1));
+        safe.setVisible(arr.get(2));
+        desk.setVisible(arr.get(3));
+        lamp.setVisible(arr.get(4));
+        chair.setVisible(arr.get(5));
+        windowWithKey.setVisible(arr.get(6));
+        windowWithoutKey.setVisible(arr.get(7));
+        key.setVisible(arr.get(8));
+        wallet.setVisible(arr.get(9));
+        paper.setVisible(arr.get(10));
+        matches.setVisible(arr.get(11));
+        candle.setVisible(arr.get(12));
+        crowbar.setVisible(arr.get(13));
+    }
 
     // method to set the JButton
     private JButton createJButton(String title, int width, int height, boolean focusable, Color foreground, Color background) {

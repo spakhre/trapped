@@ -13,11 +13,12 @@ public class GameHandler {
 
 
     public static void main(String[] args) {
+        FileManager.writeDefaults();
         new GameHandler();
     }
 
     public GameHandler(){
-        FileManager.writeDefaults();
+
         player.playerDefault();
     }
 
