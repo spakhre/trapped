@@ -19,14 +19,15 @@ import java.util.List;
 public class MainFrame extends JFrame {
 
     GameHandler gHandler;
-    public JButton  startButton, settingButton, exitButton;
-    public JPanel MenuBG_panel, menuPanel,itemsPanel,MainBG_Panel,TextBox_panel;
-    public JLabel themeLabel,roomLabel,keyLabel,matchLabel,laptopLabel,walletLabel,candleLabel,paperLabel,crowbarLabel;
-    public JLabel matches,key,wallet,laptop,candle,paper,crowbar,windowWithKey,windowWithoutKey;
+    public JButton startButton, settingButton, exitButton;
+    public JPanel MenuBG_panel, menuPanel, itemsPanel, MainBG_Panel, TextBox_panel;
+    public JLabel themeLabel, roomLabel, keyLabel, matchLabel, laptopLabel, walletLabel, candleLabel, paperLabel, crowbarLabel;
+    public JLabel matches, key, wallet, laptop, candle, paper, crowbar, windowWithKey, windowWithoutKey;
     public JTextArea introText = new JTextArea();
     public JTextArea textArea = new JTextArea();
-    public TextField inputText = new TextField("What would you say ?", 20);
-    static List<Boolean> initArr = Arrays.asList(true,false,false,false,false,false,false,false,false,false,false,false,false,false);
+    public TextField inputText = new TextField(20);
+    public JButton SUBMIT;
+    static List<Boolean> initArr = Arrays.asList(true, false, false, false, false, false, false, false, false, false, false, false, false, false);
 
 
     public MainFrame(GameHandler gHandler) {
@@ -136,7 +137,6 @@ public class MainFrame extends JFrame {
     }
 
 
-
     // display the MainMenu
     public void showMainMenu() {
         MenuBG_panel.setVisible(true);
@@ -147,7 +147,7 @@ public class MainFrame extends JFrame {
         Sounds.changeSoundVolume("startsound.wav", 0, -50);
     }
 
-    public void endScreen(String fileName) {
+    public void winScreen(String fileName) {
         menuPanel.setVisible(false);
         textArea.setVisible(false);
         MainBG_Panel.setVisible(false);
@@ -165,16 +165,48 @@ public class MainFrame extends JFrame {
 
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode()==10){
+                if (e.getKeyCode() == 10) {
                     System.exit(0);
-                }
-                else if (e.getKeyChar()==27)
+                } else if (e.getKeyChar() == 27)
                     System.exit(0);
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
-                System.out.println("you released "+e.getKeyCode());
+                System.out.println("you released " + e.getKeyCode());
+
+            }
+        });
+
+    }
+
+    public void loseScreen(String fileName) {
+        menuPanel.setVisible(false);
+        textArea.setVisible(false);
+        MainBG_Panel.setVisible(false);
+        MenuBG_panel.setVisible(false);
+        itemsPanel.setVisible(false);
+        inputText.setVisible(false);
+
+        introText.setVisible(true);
+        writeToIntro(readFileFromResources(fileName));
+        introText.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == 10) {
+                    System.exit(0);
+                } else if (e.getKeyChar() == 27)
+                    System.exit(0);
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                System.out.println("you released " + e.getKeyCode());
 
             }
         });
@@ -199,16 +231,15 @@ public class MainFrame extends JFrame {
 
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode()==10){
+                if (e.getKeyCode() == 10) {
                     gameScreen(initArr);
-                }
-                else if (e.getKeyChar()==27)
+                } else if (e.getKeyChar() == 27)
                     System.exit(0);
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
-                System.out.println("you released "+e.getKeyCode());
+                System.out.println("you released " + e.getKeyCode());
 
             }
         });
@@ -239,22 +270,24 @@ public class MainFrame extends JFrame {
         itemsPanel.setVisible(true);
         inputText.setVisible(true);
 
-        JLabel lamp = createGameObj(90, 190, 200, 200, "Inspect", "get", "drop", "inspect lamp", "GET", "DROP", "resources/SwingArt/lamp1.png");
-        JLabel door=createGameObj(200,180,200,200,"Inspect","puzzle","","inspect door","final door","","resources/SwingArt/door1.png");
-        JLabel bed = createGameObj(130, 250, 200, 200, "Inspect", "", "", "inspect bed", "", "", "resources/SwingArt/bed1.png");
-        JLabel chair = createGameObj(60, 250, 200, 200, "Inspect", "get", "drop", "inspect chair", "GET", "DROP", "resources/SwingArt/chair1.png");
-        matches = createGameObj(100, 380, 18, 17, "Inspect", "Get", "", "inspect matches", "get matches", "", "resources/SwingArt/matches.png");
+        JLabel lamp = createGameObj(90, 190, 200, 200, "Inspect", "inspect lamp", "resources/SwingArt/lamp1.png");
+        JLabel door = createGameObj(200, 180, 200, 200, "Inspect", "Input Code", "inspect door", "final door", "resources/SwingArt/door1.png");
+        JLabel bed = createGameObj(130, 250, 200, 200, "Inspect", "inspect bed", "resources/SwingArt/bed1.png");
+        JLabel chair = createGameObj(60, 250, 200, 200, "Inspect", "inspect chair", "resources/SwingArt/chair1.png");
+        JLabel safe = createGameObj(250, 250, 150, 150, "Inspect", "Open", "inspect safe", "riddles safe", "resources/SwingArt/vault1.png");
+        JLabel desk = createGameObj(220, 230, 200, 200, "Inspect", "Open", "inspect drawer", "tool puzzle", "resources/SwingArt/desk1.png");
+        crowbar = createGameObj(200, 380, 120, 103, "Inspect", "Get", "inspect crowbar", "get crowbar", "resources/SwingArt/crowbar_world_item.png");
+        candle = createGameObj(100, 380, 24, 51, "Inspect", "Get", "inspect candle", "get candle", "resources/SwingArt/candle_world_item.png");
+        matches = createGameObj(100, 380, 18, 17, "Inspect", "Get", "inspect matches", "get matches", "resources/SwingArt/matches.png");
+        paper = createGameObj(400, 250, 181, 164, "Inspect", "Get", "inspect paper", "get paper", "resources/SwingArt/paper+world_item.png");
+        wallet = createGameObj(210, 245, 36, 31, "Inspect", "Get", "inspect wallet", "get wallet", "resources/SwingArt/wallet_world_item.png");
+        windowWithKey = createGameObj(100, 210, 100, 100, "inspect", "Break", "inspect window", "tool puzzle", "resources/SwingArt/window_world_item_with_key2.png");
+        windowWithoutKey = createGameObj(100, 210, 100, 100, "inspect", "inspect window", "resources/SwingArt/window_world_item_no_key2.png");
+        key = createGameObj(60, 250, 30, 30, "Inspect", "Get", "inspect key", "get key", "resources/SwingArt/key_world_item.png");
         JButton lftBtn = createNavButton(0, 400, 80, 80, "resources/SwingArt/left.png", "go left");
         JButton rgtBtn = createNavButton(380, 400, 80, 80, "resources/SwingArt/right.png", "go right");
-        JLabel safe = createGameObj(250, 250, 150, 150, "Inspect", "Puzzle", "drop", "inspect safe", "riddles safe", "", "resources/SwingArt/vault1.png");
-        crowbar = createGameObj(200,380,120,103,"Inspect","Get","","inspect crowbar","get crowbar","","resources/SwingArt/crowbar_world_item.png");
-        candle = createGameObj(100, 380, 24, 51, "Inspect", "Get", "", "inspect candle", "get candle", "", "resources/SwingArt/candle_world_item.png");
-        JLabel desk = createGameObj(220, 230, 200, 200, "Inspect", "puzzle", "", "inspect drawer", "tool puzzle", "DROP", "resources/SwingArt/desk1.png");
-        paper = createGameObj(400,250,181,164,"Inspect","Get","","inspect paper", "get paper","","resources/SwingArt/paper+world_item.png");
-        wallet = createGameObj(210, 245, 36, 31, "Inspect", "Get", "", "inspect wallet", "get wallet", "", "resources/SwingArt/wallet_world_item.png");
-        windowWithKey = createGameObj(100, 210, 100, 100, "inspect", "puzzle", "", "inspect window", "tool puzzle", "", "resources/SwingArt/window_world_item_with_key2.png");
-        windowWithoutKey = createGameObj(100, 210, 100, 100, "inspect", "", "", "inspect window", "", "", "resources/SwingArt/window_world_item_no_key2.png");
-        key = createGameObj(60,250,30,30,"Inspect","Get","","inspect key","get key","","resources/SwingArt/key_world_item.png");
+        SUBMIT = createJButton("Submit",50,50,false,Color.red,Color.white);
+        SUBMIT.setBounds(310,550,50,50);
 
         MainBG_Panel.setLayout(null);
         MainBG_Panel.add(bed);
@@ -273,6 +306,8 @@ public class MainFrame extends JFrame {
         MainBG_Panel.add(crowbar);
         MainBG_Panel.add(lftBtn);
         MainBG_Panel.add(rgtBtn);
+        MainBG_Panel.add(SUBMIT);
+        SUBMIT.setVisible(true);
         MainBG_Panel.setLayout(null);
         MainBG_Panel.add(roomLabel);
 
@@ -322,7 +357,8 @@ public class MainFrame extends JFrame {
     public void writeToIntro(String string) {
         introText.setFont(new Font("Arial", Font.BOLD, 15));
         introText.setBounds(10, 150, 470, 500);
-        introText.setBackground(Color.yellow);
+        introText.setBackground(Color.black);
+        introText.setForeground(Color.white);
         introText.setText(string);
         introText.setPreferredSize(new Dimension(480, 150));
         introText.setEditable(false);
@@ -333,20 +369,19 @@ public class MainFrame extends JFrame {
         textArea.setText(s);
         textArea.setFont(new Font("Arial", Font.BOLD, 15));
         textArea.setBounds(10, 550, 300, 100);
-        textArea.setBackground(Color.RED);
+        textArea.setBackground(Color.black);
         textArea.setForeground(Color.white);
         textArea.setWrapStyleWord(true);
         textArea.setLineWrap(true);
         textArea.setEditable(false);
     }
 
-    public void inputTextField(){
+    public void inputTextField() {
         inputText.setFont(new Font("Arial", Font.BOLD, 13));
         inputText.setForeground(Color.red);
         inputText.setBackground(Color.white);
         inputText.setBounds(10, 660, 300, 40);
         inputText.setVisible(false);
-
         // to access the TextField using " getText() [ for example: inputText.getText() ]
 
     }
@@ -378,6 +413,105 @@ public class MainFrame extends JFrame {
         ObjLabel = createJLabel(fileName);
         ObjLabel.setBounds(x, y, width, height);
         ObjLabel.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (SwingUtilities.isRightMouseButton(e)) {
+                    popMenu.show(ObjLabel, e.getX(), e.getY());
+                }
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+
+        return ObjLabel;
+    }
+
+    public JLabel createGameObj(int x, int y, int width, int height, String action1, String action2,
+                                String Command1, String Command2, String fileName) {
+
+        JPopupMenu popMenu = new JPopupMenu();
+        JMenuItem[] menuItem = new JMenuItem[5];
+        menuItem[1] = new JMenuItem(action1);
+        popMenu.add(menuItem[1]);
+        menuItem[1].addActionListener(gHandler.aHandler);
+        menuItem[1].setActionCommand(Command1);
+
+        menuItem[2] = new JMenuItem(action2);
+        popMenu.add(menuItem[2]);
+        menuItem[2].addActionListener(gHandler.aHandler);
+        menuItem[2].setActionCommand(Command2);
+
+        JLabel ObjLabel;
+        ObjLabel = createJLabel(fileName);
+        ObjLabel.setBounds(x, y, width, height);
+        ObjLabel.addMouseListener(new MouseListener() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (SwingUtilities.isRightMouseButton(e)) {
+                    popMenu.show(ObjLabel, e.getX(), e.getY());
+                }
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+
+        return ObjLabel;
+    }
+
+    public JLabel createGameObj(int x, int y, int width, int height, String action1,
+                                String Command1, String fileName) {
+
+        JPopupMenu popMenu = new JPopupMenu();
+        JMenuItem[] menuItem = new JMenuItem[5];
+        menuItem[1] = new JMenuItem(action1);
+        popMenu.add(menuItem[1]);
+        menuItem[1].addActionListener(gHandler.aHandler);
+        menuItem[1].setActionCommand(Command1);
+
+        JLabel ObjLabel;
+        ObjLabel = createJLabel(fileName);
+        ObjLabel.setBounds(x, y, width, height);
+        ObjLabel.addMouseListener(new MouseListener() {
+
             @Override
             public void mouseClicked(MouseEvent e) {
 
