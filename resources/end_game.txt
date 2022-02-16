@@ -1,1 +1,5 @@
-End Place Holder
+You heave open the door and run out of the building!
+
+You escaped!
+
+Press any key to exit the game.
