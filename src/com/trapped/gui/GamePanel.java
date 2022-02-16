@@ -1,6 +1,7 @@
 package com.trapped.gui;
 
 import com.gui.utility.GuiUtil;
+import com.gui.utility.Keypad;
 import com.trapped.player.Player;
 import com.trapped.utilities.Puzzle;
 
@@ -184,23 +185,9 @@ public class GamePanel extends GuiPanel {
         inspectButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //pending
-                // pass location, create popup, and pass it the puzzle intro text
-                // popup btn ActionListeners will return text based on input
-                Boolean itemExists = player.inspectItem(Player.getLocation());
-                if (itemExists){
-                    createItemPopup();
-                } else {
-                    noItemFoundPopup();
+                if("door".equals(Player.getLocation())){
+                    new Keypad();
                 }
-
-                Map<String, String> inspectedPuzzle = player.inspectPuzzle(Player.getLocation());
-                if ("Y".equals(inspectedPuzzle.get("puzzle_exists"))){
-                    // attemptPuzzlePopup will ask if the player wants to attempt the puzzle
-                    // and create an associated puzzle window.
-                    attemptPuzzlePopup();
-                }  // else nothing
-
             }
         });
 
