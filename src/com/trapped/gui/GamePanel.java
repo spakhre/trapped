@@ -1,6 +1,7 @@
 package com.trapped.gui;
 
 import com.gui.utility.GuiUtil;
+import com.gui.utility.Keypad;
 import com.trapped.player.Player;
 import com.trapped.utilities.Puzzle;
 
@@ -179,7 +180,12 @@ public class GamePanel extends GuiPanel {
         inspectB.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 inspectLocation();
+              
+                if("door".equals(Player.getLocation())){
+                    new Keypad();
+                }
             }
         });
 
