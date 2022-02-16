@@ -95,7 +95,7 @@ public class GamePanel extends GuiPanel {
     private void setLocationImage() {
         String filePath = "/image/" + Player.getLocation() + ".jpg";
         imageLabel = GuiUtil.getImageLabel(filePath, IMAGE_WIDTH, IMAGE_HEIGHT);
-
+        System.out.println("THIS IS THE FILE PATH FO RTHIS LOCATION: " + filePath);
         //Set bounds (x, y, width, height) of the image same as that of the imagePanel
         imageLabel.setBounds(imagePanel.getBounds());
         //remove old image

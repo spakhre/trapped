@@ -29,10 +29,10 @@ public class MainFrame extends JFrame {
     }
 
     private void createPanel() {
-       createTextPanel();
-       createImagePanel();
-       createButtonsPanel();
-       createInventoryPanel();
+        createTextPanel();
+        createImagePanel();
+        createButtonsPanel();
+        createInventoryPanel();
     }
 
     private void createTextPanel() {
@@ -49,9 +49,9 @@ public class MainFrame extends JFrame {
         textArea.setWrapStyleWord(true);
 
         // get intro location description
-       Map<String, Object> currentLoc = Puzzle.MAP.get(player.getLocation());
-       String desc = (String) currentLoc.get("furniture_desc");
-       changeTextShow(desc);
+        Map<String, Object> currentLoc = Puzzle.MAP.get(player.getLocation());
+        String desc = (String) currentLoc.get("furniture_desc");
+        changeTextShow(desc);
 
         textPanel.add(textArea);
         this.add(textPanel);
@@ -82,12 +82,10 @@ public class MainFrame extends JFrame {
     }
 
 
-
     public void changeTextShow(String text) {
-        String showText = "Location: "+ player.getLocation() +"\n\n" +text;
+        String showText = "Location: " + player.getLocation() + "\n\n" + text;
         textArea.setText(showText);
     }
-
 
 
 }
