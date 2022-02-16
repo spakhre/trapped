@@ -109,6 +109,7 @@ public class Puzzle{
 
             String puzzleText = FileManager.getResource(randomPuzzle);  //print random puzzle.
             JOptionPane.showMessageDialog(Main.mainWindow, puzzleText, "Puzzle", JOptionPane.OK_CANCEL_OPTION);
+
             // Scanner scan = new Scanner(System.in);
             //System.out.println("\nYour answer:      (If it's too hard to answer, please enter [easy] to get a easier question.)");
 

@@ -10,7 +10,7 @@
     "left": "door",
     "right": "safe",
     "furniture_items": [
-      "crowbar"
+      "matches"
     ],
     "puzzle_exist": "N",
     "puzzle_type": "",
