@@ -20,7 +20,6 @@ import static com.trapped.utilities.TextColor.RESET;
 public class Puzzle{
     private static Gson gson = new Gson();
     public static final Map<String, Map<String, Object>> MAP = furniturePuzzleGenerator();
-    private int max_attempts = 3;
     private String puzzleDesc;
     private String puzzleExist;
     private String puzzleVerb;
@@ -40,7 +39,7 @@ public class Puzzle{
 
     private String currentLocation;
     private List<String> currentInventory;
-
+    int attemptsLeft = 3;
 
     private Puzzle() {
     }
@@ -211,33 +210,45 @@ public class Puzzle{
     }
 
 
-    public void finalPuzzle() {
-        System.out.println(getPuzzleDesc());
+//    public void finalPuzzle() {
+//        System.out.println(getPuzzleDesc());
+//
+//        System.out.println("What's the password? You have " + MAGENTA_UNDERLINE + attemptsLeft + RESET + " attempts remaining. If you's like to try later, enter[later]");
+//
+//        String ans = Prompts.getStringInput();
+//
+//        if (ans.trim().equals("later") || ans.trim().equals("")) {
+//            System.out.println("No worries! Try next time!");
+//        } else {
+//            while (attemptsLeft-- > 0) {
+//                if (ans.trim().equals(getPuzzleAnswer())) {
+//                    System.out.println(getPuzzleReward());
+//                    Sounds.playSounds(getPuzzleSounds(), 2000);
+//                    System.out.println("You won the game! Thanks for playing!");
+//                    System.exit(0);
+//
+//                } else if (attemptsLeft == 0) {
+//                    System.out.println("You loss the game! You are Trapped. Please try again later.");
+//                    System.exit(0);
+//                } else {
+//                    System.out.println("Wrong password. Try again next time! " + MAGENTA_UNDERLINE + attemptsLeft + RESET + " attempts remaining");
+//                }
+//            }
+//        }
+//    }
 
-        System.out.println("What's the password? You have " + MAGENTA_UNDERLINE + max_attempts + RESET + " attempts remaining. If you's like to try later, enter[later]");
+    public String finalPuzzle(String attempt){
+        this.currentLocation = "door";
 
-        String ans = Prompts.getStringInput();
-
-        if (ans.trim().equals("later") || ans.trim().equals("")) {
-            System.out.println("No worries! Try next time!");
-        } else {
-            while (max_attempts-- > 0) {
-                if (ans.trim().equals(getPuzzleAnswer())) {
-                    System.out.println(getPuzzleReward());
-                    Sounds.playSounds(getPuzzleSounds(), 2000);
-                    System.out.println("You won the game! Thanks for playing!");
-                    System.exit(0);
-
-                } else if (max_attempts == 0) {
-                    System.out.println("You loss the game! You are Trapped. Please try again later.");
-                    System.exit(0);
-                } else {
-                    System.out.println("Wrong password. Try again next time! " + MAGENTA_UNDERLINE + max_attempts + RESET + " attempts remaining");
-                }
-            }
+        if ("104".equals(attempt)){
+            Sounds.playSounds(getPuzzleSounds(), 2000);
+            return "Success";
+        }
+        else {
+            attemptsLeft--;
+            return attemptsLeft + " left";
         }
     }
-
 
     public String getPuzzleDesc() {
         return puzzleDesc;

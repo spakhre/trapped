@@ -5,12 +5,7 @@ import com.gui.utility.Keypad;
 import com.trapped.player.Player;
 import com.trapped.utilities.Puzzle;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,10 +22,12 @@ public class GamePanel extends GuiPanel {
     private static final int ITEM_IMAGE_WIDTH = 50;
     private static final int ITEM_IMAGE_HEIGHT = 50;
 
+    JLayeredPane layeredPane;
     JPanel imagePanel;
     JPanel textPanel;
     JPanel buttonsPanel;
     JPanel inventoryPanel;
+    JPanel keypadPanel;
     JTextArea textArea;
     JLabel imageLabel;
 
@@ -46,6 +43,11 @@ public class GamePanel extends GuiPanel {
 
         this.setLayout(null);
         this.setSize(MainWindow.GUI_WIDTH, MainWindow.GUI_HEIGHT);
+
+        layeredPane = new JLayeredPane();
+        layeredPane.setLayout(null);
+        layeredPane.setSize(MainWindow.GUI_WIDTH, MainWindow.GUI_HEIGHT);
+        this.add(layeredPane);
         createPanel();
 
         setLocationDetails();
@@ -63,6 +65,7 @@ public class GamePanel extends GuiPanel {
     }
 
     private void createPanel() {
+        createKeypadPanel();
         createTextPanel();
         createImagePanel();
         createButtonsPanel();
@@ -82,14 +85,14 @@ public class GamePanel extends GuiPanel {
         textArea.setWrapStyleWord(true);
 
         textPanel.add(textArea);
-        this.add(textPanel);
+        layeredPane.add(textPanel);
     }
 
     private void createImagePanel() {
         imagePanel = new JPanel();
         imagePanel.setBounds(400, 0, 800, 400);
 
-        this.add(imagePanel);
+        layeredPane.add(imagePanel);
     }
 
     private void setLocationImage() {
@@ -180,12 +183,14 @@ public class GamePanel extends GuiPanel {
         inspectB.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 inspectLocation();
-                player.solvePuzzle(player.getLocation());
-              
-                if("door".equals(Player.getLocation())){
-                    new Keypad();
+                if (!"door".equals(player.getLocation())){
+                    player.solvePuzzle(player.getLocation());
+                } else {
+//                    KeypadPane
+//                    createKeypadPanel();
+                    keypadPanel.setVisible(true);
+
                 }
             }
         });
@@ -204,7 +209,13 @@ public class GamePanel extends GuiPanel {
             }
         });
 
-        this.add(buttonsPanel);
+        layeredPane.add(buttonsPanel);
+    }
+
+    private void createKeypadPanel(){
+        keypadPanel = new KeypadPanel(mainWindow);
+        keypadPanel.setVisible(false);
+        layeredPane.add(keypadPanel);
     }
 
     private void inspectLocation() {
@@ -256,7 +267,7 @@ public class GamePanel extends GuiPanel {
         JLabel label = new JLabel("Inventory List:");
         label.setBounds(inventoryPanel.getBounds());
         inventoryPanel.add(label);
-        this.add(inventoryPanel);
+        layeredPane.add(inventoryPanel);
     }
 
     public void displayInventoryDetails() {
