@@ -70,4 +70,8 @@ public class MainWindow extends JFrame {
     public static GamePanel getGamePanel() {
         return gamePanel;
     }
+
+//    public void createGameOverLoseScreen(){
+//        EndingPanel lockedIn = new
+//    }
 }
