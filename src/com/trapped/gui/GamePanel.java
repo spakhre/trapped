@@ -14,16 +14,18 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.util.Map;
 
 public class GamePanel extends GuiPanel {
-    //public static final Font btnFont = new Font("Times New Roman", Font.BOLD, 20); // ORIGINAL
-    private static final Font displayAreaFont = new Font("Times New Roman", Font.ITALIC, 24); // ORIGINAL
-    private static final Font BUTTON_FONT = new Font("Arial", Font.BOLD, 20);
-    //public static final int GUI_WIDTH = 1200;
-    //public static final int GUI_HEIGHT = 800;
+
+    public static final Font BUTTON_FONT = new Font("Arial", Font.BOLD, 20); // ORIGINAL
+
     private static final int IMAGE_WIDTH = 800;
     private static final int IMAGE_HEIGHT = 400;
+
+    private static final int ITEM_IMAGE_WIDTH = 50;
+    private static final int ITEM_IMAGE_HEIGHT = 50;
 
     JPanel imagePanel;
     JPanel textPanel;
@@ -32,54 +34,51 @@ public class GamePanel extends GuiPanel {
     JTextArea textArea;
 
     Player player = Player.getInstance();
-    private JLabel imageLabel;
 
+    /**
+     * Constructor.
+     *
+     * @param mainWindow
+     */
     public GamePanel(MainWindow mainWindow) {
         super(mainWindow);
+
         this.setLayout(null);
         this.setSize(MainWindow.GUI_WIDTH, MainWindow.GUI_HEIGHT);
         createPanel();
 
         setLocationDetails();
-
     }
 
     private void setLocationDetails() {
-        //get intro location description
-        //mainWindow.setTitle("Current Location: " + player.getLocation());
 
+        // set location description
         Map<String, Object> currentLoc = Puzzle.MAP.get(player.getLocation());
         String desc = (String) currentLoc.get("furniture_desc");
-        textArea.setText("Current Location: " + player.getLocation());
         textArea.setText(desc);
-       // textPanel.add(textArea);
+
+        // set location image
         setLocationImage();
     }
 
     private void createPanel() {
-       createTextPanel();
-       createImagePanel();
-       createButtonsPanel();
-       createInventoryPanel();
+        createTextPanel();
+        createImagePanel();
+        createButtonsPanel();
+        createInventoryPanel();
     }
 
     private void createTextPanel() {
         textPanel = new JPanel();
         textPanel.setBounds(0, 0, 400, 400);
         textPanel.setBackground(Color.WHITE);
-        //textPanel.setForeground(Color.white);
 
         textArea = new JTextArea();
         textArea.setBounds(textPanel.getBounds());
-        textArea.setFont(displayAreaFont);
+        textArea.setFont(MainWindow.DISPLAY_AREA_FONT);
         textArea.setEditable(false);
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
-
-//        // get intro location description
-//       Map<String, Object> currentLoc = Puzzle.MAP.get(player.getLocation());
-//       String desc = (String) currentLoc.get("furniture_desc");
-//       changeTextShow(desc);
 
         textPanel.add(textArea);
         this.add(textPanel);
@@ -88,58 +87,55 @@ public class GamePanel extends GuiPanel {
     private void createImagePanel() {
         imagePanel = new JPanel();
         imagePanel.setBounds(400, 0, 800, 400);
-//        imagePanel.setBackground(Color.yellow);
-//        imagePanel.setForeground(Color.white);
+
         this.add(imagePanel);
     }
 
     private void setLocationImage() {
         String filePath = "/image/" + Player.getLocation() + ".jpg";
-        imageLabel = GuiUtil.getImageLabel(filePath, IMAGE_WIDTH, IMAGE_HEIGHT);
+        JLabel imageLabel = GuiUtil.getImageLabel(filePath, IMAGE_WIDTH, IMAGE_HEIGHT);
 
         //Set bounds (x, y, width, height) of the image same as that of the imagePanel
         imageLabel.setBounds(imagePanel.getBounds());
         //remove old image
         imagePanel.removeAll();
+        //add new image
         imagePanel.add(imageLabel);
     }
 
     private void createButtonsPanel() {
         buttonsPanel = new JPanel();
         buttonsPanel.setBounds(0, 400, 400, 400);
-//        buttonsPanel.setBackground(Color.black);
-//        buttonsPanel.setForeground(Color.white);
 
-        JButton leftButton = new JButton("Left");
-        leftButton.setFont(BUTTON_FONT);
+        JButton leftB = new JButton("Left");
+        leftB.setFont(BUTTON_FONT);
+        JButton rightB = new JButton("Right");
+        rightB.setFont(BUTTON_FONT);
 
-        JButton rightButton = new JButton("Right");
-        rightButton.setFont(BUTTON_FONT);
+        JButton inspectB = new JButton("Inspect Room");
+        inspectB.setFont(BUTTON_FONT);
 
-        JButton inspectButton = new JButton("Inspect Room");
-        inspectButton.setFont(BUTTON_FONT);
+        JButton helpB = new JButton("Help");
+        helpB.setFont(BUTTON_FONT);
 
-        JButton helpButton = new JButton("Help");
-        helpButton.setFont(BUTTON_FONT);
-
-        JButton quitButton = new JButton("Quit");
-        quitButton.setFont(BUTTON_FONT);
+        JButton quitB = new JButton("Quit");
+        quitB.setFont(BUTTON_FONT);
 
         JPanel p1 = new JPanel();
         p1.setLayout(new BoxLayout(p1, BoxLayout.X_AXIS));
-        p1.add(leftButton);
-        p1.add(new JLabel("    "));
-        p1.add(rightButton);
+        p1.add(leftB);
+        p1.add(new JLabel("     "));
+        p1.add(rightB);
 
         JPanel p2 = new JPanel();
         p2.setLayout(new BoxLayout(p2, BoxLayout.X_AXIS));
-        p2.add(inspectButton);
+        p2.add(inspectB);
         p2.add(new JLabel("     "));
-        p2.add(helpButton);
+        p2.add(helpB);
 
         JPanel p3 = new JPanel();
         p3.setLayout(new BoxLayout(p3, BoxLayout.X_AXIS));
-        p3.add(quitButton);
+        p3.add(quitB);
 
         JPanel panelY = new JPanel();
         panelY.setLayout(new BoxLayout(panelY, BoxLayout.Y_AXIS));
@@ -160,11 +156,12 @@ public class GamePanel extends GuiPanel {
         panelY.add(p3);
         panelY.add(new JLabel(" "));
 
+
         //Set bounds (x, y, width, height) of the panelY same as that of the buttonsPanel
         panelY.setBounds(buttonsPanel.getBounds());
         buttonsPanel.add(panelY);
 
-        leftButton.addActionListener(new ActionListener() {
+        leftB.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 player.moveDirection("left");
@@ -172,54 +169,132 @@ public class GamePanel extends GuiPanel {
             }
         });
 
-        rightButton.addActionListener(new ActionListener() {
+        rightB.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 player.moveDirection("right");
                 setLocationDetails();
             }
         });
+        inspectB.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                inspectLocation();
+            }
+        });
 
-        inspectButton.addActionListener(new ActionListener() {
+        helpB.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //pending
             }
         });
-
-        helpButton.addActionListener(new ActionListener() {
+        quitB.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //pending
+                JOptionPane.showMessageDialog(mainWindow, "Good Bye!");
+                System.exit(0);
             }
         });
-
-        quitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-               int response = JOptionPane.showConfirmDialog(mainWindow, "Are you sure you'd like to quit the game right now? Your prgoress will not be saved.", "QuitDialog", JOptionPane.YES_NO_OPTION);
-               if(response == JOptionPane.YES_OPTION) {
-                   System.exit(0);
-               } else
-                   return;
-
-            }
-        });
-
 
         this.add(buttonsPanel);
+    }
+
+    private void inspectLocation() {
+        List<String> items = JsonMap.getFurnitureItems(player.getLocation());
+        if (items.isEmpty()) {
+            JOptionPane.showMessageDialog(mainWindow, "No items found at: " + player.getLocation());
+            return;
+        }
+        String item = items.get(0);
+        int response = JOptionPane.showConfirmDialog(mainWindow, "Item " + item +
+                " found in '" + player.getLocation() + "'. Do you want to add it to your inventory?", "CONFIRM", JOptionPane.YES_NO_OPTION);
+        if (response == JOptionPane.NO_OPTION) {
+            return;
+        }
+        player.getInventory().addItem(item);
+
+        displayInventoryDetails();
+    }
+
+    private JLabel createItemImageLabel(String item) {
+        String filePath = "/image/items/" + item + ".jpg";
+//        JLabel imageLabel = GuiUtil.getImageLabel(item, filePath, ITEM_IMAGE_WIDTH, ITEM_IMAGE_HEIGHT, SwingConstants.TOP);
+        JLabel imageLabel = GuiUtil.getImageLabel(filePath, ITEM_IMAGE_WIDTH, ITEM_IMAGE_HEIGHT);
+        imageLabel.setText(item);
+        imageLabel.setHorizontalTextPosition(JLabel.CENTER);
+        imageLabel.setVerticalTextPosition(JLabel.BOTTOM);
+        return imageLabel;
     }
 
     private void createInventoryPanel() {
         inventoryPanel = new JPanel();
         inventoryPanel.setBounds(400, 400, 800, 400);
-        inventoryPanel.setBackground(Color.gray);
-        inventoryPanel.setForeground(Color.white);
+        inventoryPanel.setBackground(Color.white);
+
+        JLabel label = new JLabel("Inventory List:");
+        label.setBounds(inventoryPanel.getBounds());
+        inventoryPanel.add(label);
         this.add(inventoryPanel);
     }
 
-    public void changeTextShow(String text) {
-        String showText = "Location: "+ player.getLocation() +"\n\n" +text;
-        textArea.setText(showText);
+    private void displayInventoryDetails() {
+        List<String> invList = player.getInventory().getInvList();
+        if ((invList == null) || (invList.isEmpty())) {
+            return;
+        }
+
+        JPanel itemsPanel = new JPanel();
+        itemsPanel.setLayout(new BoxLayout(itemsPanel, BoxLayout.X_AXIS));
+        itemsPanel.setBackground(Color.white);
+
+        //Add image labels
+        for (String inventoryItem : invList) {
+            itemsPanel.add(new JLabel("      "));
+            JPanel p = createItemImagePanel(invList, inventoryItem);
+            itemsPanel.add(p);
+        }
+
+        JPanel panelY = new JPanel();
+        panelY.setLayout(new BoxLayout(panelY, BoxLayout.Y_AXIS));
+        panelY.setBackground(Color.white);
+
+        //add space at the top of buttons
+        panelY.add(new JLabel(" "));
+
+        //add title label
+        JLabel titleLabel = new JLabel("Inventory List:");
+        panelY.add(titleLabel);
+        panelY.add(new JLabel("  "));
+        panelY.add(new JLabel("  "));
+        panelY.add(new JLabel("  "));
+
+        //add image panel
+        panelY.add(itemsPanel);
+        panelY.add(new JLabel(" "));
+        panelY.add(new JLabel(" "));
+        panelY.add(new JLabel(" "));
+
+        //Set bounds (x, y, width, height) of panelY same as that of the inventoryPanel
+        panelY.setBounds(inventoryPanel.getBounds());
+
+        //Clear OLD Inventory images
+        inventoryPanel.removeAll();
+        //Add NEW Inventory images
+        inventoryPanel.add(panelY);
+
+        //refresh main window
+        mainWindow.revalidate();
+    }
+
+    private JPanel createItemImagePanel(List<String> invList, String inventoryItem) {
+        JPanel p = new JPanel();
+        p.setBackground(Color.white);
+        p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
+        JLabel label = createItemImageLabel(inventoryItem);
+
+        p.add(label);
+        p.add(new JLabel("    "));
+        return p;
     }
 }

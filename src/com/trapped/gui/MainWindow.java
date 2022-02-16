@@ -12,7 +12,7 @@ public class MainWindow extends JFrame {
 
     // Font and styling
     public static final Font btnFont = new Font("Times New Roman", Font.BOLD, 10); // ORIGINAL
-    public static final Font displayAreaFont = new Font("Times New Roman", Font.ITALIC, 18); // ORIGINAL
+    public static final Font DISPLAY_AREA_FONT = new Font("Times New Roman", Font.ITALIC, 18); // ORIGINAL
     public static final int GUI_WIDTH = 1200;
     public static final int GUI_HEIGHT = 800;
 
