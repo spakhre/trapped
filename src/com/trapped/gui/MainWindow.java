@@ -15,6 +15,7 @@ public class MainWindow extends JFrame {
     public static final Font DISPLAY_AREA_FONT = new Font("Times New Roman", Font.ITALIC, 18); // ORIGINAL
     public static final int GUI_WIDTH = 1200;
     public static final int GUI_HEIGHT = 800;
+    private static GamePanel gamePanel = null;
 
 
     /**
@@ -23,6 +24,12 @@ public class MainWindow extends JFrame {
 
     public MainWindow() {
         super("Trapped: Try to escape!"); //game window design
+
+        //Initilize GamePanel
+
+        gamePanel = new GamePanel(this);
+
+
         this.setSize(GUI_WIDTH, GUI_HEIGHT);//sets the x-dimension and y-dimension of the frame
 
         BackgroundImageLabelPanel backgroundPanel =
@@ -44,6 +51,7 @@ public class MainWindow extends JFrame {
         this.setVisible(true);
     }
 
+
     public void setMainPanel(JPanel panel) {
         Container contentPane = this.getContentPane();
         //remove all existing components
@@ -57,5 +65,9 @@ public class MainWindow extends JFrame {
     public void createGameScreen() {
         GuiIntroPanel panel = new GuiIntroPanel(this);
         setMainPanel(panel);
+    }
+
+    public static GamePanel getGamePanel() {
+        return gamePanel;
     }
 }

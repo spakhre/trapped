@@ -1,5 +1,4 @@
 ===================================================================================
-|| Double my number, I'm less than a score, Half of my number is less than four. ||
-|| Add one to my double when bakers are near, Days of the week are still greater,|| 
-|| I fear.                                                                       ||
+Double my number, I'm less than a score, Half of my number is less than four.
+Add one to my double when bakers are near, Days of the week are still greater, I fear.
 ===================================================================================
