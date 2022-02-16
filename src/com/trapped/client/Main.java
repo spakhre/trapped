@@ -9,8 +9,6 @@ public class Main implements Serializable {
 //        GameEngine game = new GameEngine();
 //        game.startGame();
 //        GuiGameEngine gameEngine = new GuiGameEngine();
-//        gameEngine.playGame();
-        //new MainFrame();
-        new MainWindow();
+          new MainWindow();
     }
 }

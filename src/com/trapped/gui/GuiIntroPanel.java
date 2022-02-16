@@ -63,7 +63,7 @@ public class GuiIntroPanel extends GuiPanel {
         if (displayTextArea == null) {
             displayTextArea = new JTextArea(MAIN_PANEL_TEXT_AREA_ROWS, MAIN_PANEL_TEXT_AREA_COLS);
             displayTextArea.setEditable(false);
-            displayTextArea.setFont(MainWindow.displayAreaFont);
+            displayTextArea.setFont(MainWindow.DISPLAY_AREA_FONT);
             displayTextArea.setBackground(Color.CYAN);
             displayTextArea.setForeground(Color.BLACK);
             displayTextArea.setLineWrap(true);
@@ -74,78 +74,12 @@ public class GuiIntroPanel extends GuiPanel {
         }
         return displayTextAreaScroll;
     }
-//
-//
-//    /**
-//     * Creates main display text area.
-//     * @return
-//     */
-//    public JScrollPane getIntroScrollPane() {
-//        JScrollPane introTextScroll = null;
-//        if (introText == null) {
-//            introText = new JTextArea(12, MAIN_PANEL_TEXT_AREA_COLS);
-//            introText.setEditable(false);
-//            introText.setFont(displayAreaFont);
-//            introText.setBackground(Color.CYAN);
-//            introText.setForeground(Color.BLACK);
-//            introText.setLineWrap(true);
-//            introText.setWrapStyleWord(true);
-//
-//            //Add scrollbar
-//            introTextScroll = GuiUtil.createScrollPane(introText);
-//        }
-//        return introTextScroll;
-//    }
-
-
-//    private void displayIntroText(String name) {
-//        List<String> lines = new ArrayList<>();
-//
-//        lines.add("Hello " + name + "!");
-//
-//        GuiUtil.displayText(lines, Arrays.asList("resources/textfile/introstory.txt"), introText, true, getGuiMainWindow());
-//    }
-//
-//    private JPanel createNamePanel() {
-//        JPanel namePanel = new JPanel();
-//        namePanel.setLayout(new BoxLayout(namePanel, BoxLayout.X_AXIS));
-//
-//        JTextField nameTextField = new JTextField(15);
-//        JButton submitButton = new JButton("Submit");
-//
-//        submitButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                String name = nameTextField.getText().trim();
-//                if(name.isEmpty() || name.isBlank()){
-//                    JOptionPane.showMessageDialog(getGuiMainWindow(), "Invalid name.");
-//                    return;
-//                }
-//                displayIntroText(name);
-//            }
-//        });
-//
-//        namePanel.add(new JLabel("Enter Name:"));
-//        namePanel.add(nameTextField);
-//        namePanel.add(submitButton);
-//
-//        return namePanel;
-//    }
 
     private JPanel createContinuePanel() {
         JPanel namePanel = new JPanel();
         namePanel.setLayout(new BoxLayout(namePanel, BoxLayout.X_AXIS));
 
         JButton continueButton = new JButton("Continue");
-       // JButton quitButton = new JButton("Quit");
-
-//        quitButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                //JOptionPane.showMessageDialog(getGui(), "Good Bye!");
-//                System.exit(0);
-//            }
-//        });
 
 
         continueButton.addActionListener(new ActionListener() {
@@ -157,7 +91,6 @@ public class GuiIntroPanel extends GuiPanel {
         });
 
         namePanel.add(continueButton);
-       // namePanel.add(quitButton);
 
         return namePanel;
     }
