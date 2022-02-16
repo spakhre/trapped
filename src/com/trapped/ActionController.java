@@ -370,7 +370,7 @@ class ActionController implements ActionListener {
             ArrayList<String> randomAnswer = (ArrayList<String>) multiple_puzzle_answer.get(randomItem);
             FileManager.getResource(randomPuzzle);
             gHandler.mainFrame.writeToTextArea("\nYour answer:      (If it's too hard to answer, please enter [easy] to get a easier question.)");
-            gHandler.mainFrame.SUBMIT.addActionListener(e -> {
+            gHandler.mainFrame.SUBMITbtn.addActionListener(e -> {
                 ANSWER = gHandler.mainFrame.inputText.getText();
                 // if user input correct answer
                 if (ANSWER.equals(furniture.get("easy_answer")) || randomAnswer.contains(ANSWER)) {

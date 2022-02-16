@@ -19,14 +19,13 @@ import java.util.List;
 public class MainFrame extends JFrame {
 
     GameHandler gHandler;
-    public JButton startButton, settingButton, exitButton;
+    public JButton startButton, settingButton, exitButton,SUBMITbtn;
     public JPanel MenuBG_panel, menuPanel, itemsPanel, MainBG_Panel, TextBox_panel;
     public JLabel themeLabel, roomLabel, keyLabel, matchLabel, laptopLabel, walletLabel, candleLabel, paperLabel, crowbarLabel;
     public JLabel matches, key, wallet, laptop, candle, paper, crowbar, windowWithKey, windowWithoutKey;
     public JTextArea introText = new JTextArea();
     public JTextArea textArea = new JTextArea();
     public TextField inputText = new TextField(20);
-    public JButton SUBMIT;
     static List<Boolean> initArr = Arrays.asList(true, false, false, false, false, false, false, false, false, false, false, false, false, false);
 
 
@@ -62,6 +61,7 @@ public class MainFrame extends JFrame {
         con.add(menuPanel);
         con.add(textArea);
         con.add(inputText);
+        con.add(SUBMITbtn);
         con.add(itemsPanel);
         con.add(introText);
         setVisible(true);
@@ -134,13 +134,19 @@ public class MainFrame extends JFrame {
         startButton = createJButton("Start", 100, 40, false, Color.lightGray, Color.decode("#302a1e"));
         settingButton = createJButton("Setting", 100, 40, false, Color.lightGray, Color.decode("#302a1e"));
         exitButton = createJButton("Exit", 100, 40, false, Color.lightGray, Color.black);
+        SUBMITbtn = createJButton("Submit",80,40,false,Color.red,Color.white);
+        SUBMITbtn.setBounds(220,660,80,40);
     }
 
 
     // display the MainMenu
     public void showMainMenu() {
+        MainBG_Panel.updateUI();
+        MainBG_Panel.removeAll();
+
         MenuBG_panel.setVisible(true);
         menuPanel.setVisible(true);
+        SUBMITbtn.setVisible(false);
         startButton.addActionListener(e -> introScreen("introstory"));
         exitButton.addActionListener(e -> System.exit(0));
         settingButton.addActionListener(e -> settingScreen());
@@ -166,7 +172,8 @@ public class MainFrame extends JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == 10) {
-                    System.exit(0);
+                    gameScreen(initArr);
+                    Sounds.playSounds("phone.wav", 1000);
                 } else if (e.getKeyChar() == 27)
                     System.exit(0);
             }
@@ -220,6 +227,7 @@ public class MainFrame extends JFrame {
         MenuBG_panel.setVisible(false);
         itemsPanel.setVisible(false);
         inputText.setVisible(false);
+        SUBMITbtn.setVisible(false);
 
         introText.setVisible(true);
         writeToIntro(readFileFromResources(fileName));
@@ -270,6 +278,7 @@ public class MainFrame extends JFrame {
         textArea.setVisible(true);
         itemsPanel.setVisible(true);
         inputText.setVisible(true);
+        SUBMITbtn.setVisible(true);
 
         JLabel lamp = createGameObj(90, 190, 200, 200, "Inspect", "inspect lamp", "resources/SwingArt/lamp1.png");
         JLabel door = createGameObj(200, 180, 200, 200, "Inspect", "Input Code", "inspect door", "final door", "resources/SwingArt/door1.png");
@@ -287,8 +296,6 @@ public class MainFrame extends JFrame {
         key = createGameObj(60, 250, 30, 30, "Inspect", "Get", "inspect key", "get key", "resources/SwingArt/key_world_item.png");
         JButton lftBtn = createNavButton(0, 400, 80, 80, "resources/SwingArt/left.png", "go left");
         JButton rgtBtn = createNavButton(380, 400, 80, 80, "resources/SwingArt/right.png", "go right");
-        SUBMIT = createJButton("Submit",50,50,false,Color.red,Color.white);
-        SUBMIT.setBounds(310,550,50,50);
 
         keyLabel = createGameObj(350, 550, 50, 50,"drop","","","","","drop key","resources/SwingArt/key.png");
         matchLabel=createGameObj(350, 550, 50, 50,"drop","","","drop matches","","","resources/SwingArt/matchbox.png");
@@ -297,7 +304,6 @@ public class MainFrame extends JFrame {
         crowbarLabel = createGameObj(350, 550, 50, 50,"drop","","","drop crowbar","","","resources/SwingArt/crowbar.png");
         paperLabel = createGameObj(350, 550, 50, 50,"drop","","","drop paper","","","resources/SwingArt/folded-paper.png");
         candleLabel = createGameObj(350, 550, 50, 50,"drop","","","drop candle","","","resources/SwingArt/candle-holder.png");
-
 
         keyLabel.setVisible(false);
         matchLabel.setVisible(false);
@@ -314,6 +320,7 @@ public class MainFrame extends JFrame {
         itemsPanel.add(crowbarLabel);
         itemsPanel.add(paperLabel);
         itemsPanel.add(candleLabel);
+
 
         MainBG_Panel.setLayout(null);
         MainBG_Panel.add(bed);
@@ -332,8 +339,6 @@ public class MainFrame extends JFrame {
         MainBG_Panel.add(crowbar);
         MainBG_Panel.add(lftBtn);
         MainBG_Panel.add(rgtBtn);
-        MainBG_Panel.add(SUBMIT);
-        SUBMIT.setVisible(true);
         MainBG_Panel.setLayout(null);
         MainBG_Panel.add(roomLabel);
 
@@ -406,7 +411,7 @@ public class MainFrame extends JFrame {
         inputText.setFont(new Font("Arial", Font.BOLD, 13));
         inputText.setForeground(Color.red);
         inputText.setBackground(Color.white);
-        inputText.setBounds(10, 660, 300, 40);
+        inputText.setBounds(10, 660, 200, 40);
         inputText.setVisible(false);
         // to access the TextField using " getText() [ for example: inputText.getText() ]
 
