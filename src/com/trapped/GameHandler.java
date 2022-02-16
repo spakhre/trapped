@@ -17,9 +17,9 @@ public class GameHandler {
         new GameHandler();
     }
 
-    public GameHandler(){
-
-        player.playerDefault();
-    }
+//    public GameHandler(){
+//
+//        player.playerDefault();
+//    }
 
 }
