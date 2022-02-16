@@ -87,6 +87,8 @@ public class Puzzle{
         }
     }
 
+
+
     public void solveRiddle() {
         System.out.println("A puzzle has been found in " + this.currentLocation + ".");
         System.out.println(getPuzzleDesc());
