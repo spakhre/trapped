@@ -20,13 +20,14 @@ public class FileManager {
     // WHAT IF
     // getResource returns a String of the select file
     // public static String getResource(String fileName) {...}
-    public static void getResource(String fileName) {
+    public static String getResource(String fileName) {
         String art = "./resources/art/" + fileName;
         try {
-            Files.lines(Path.of(art)).forEach(System.out::println);
+            return Files.readString(Path.of(art));
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return "";
     }
 
     /*

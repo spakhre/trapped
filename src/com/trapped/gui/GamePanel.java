@@ -182,6 +182,7 @@ public class GamePanel extends GuiPanel {
             public void actionPerformed(ActionEvent e) {
 
                 inspectLocation();
+                player.solvePuzzle(player.getLocation());
               
                 if("door".equals(Player.getLocation())){
                     new Keypad();
@@ -244,7 +245,7 @@ public class GamePanel extends GuiPanel {
         this.add(inventoryPanel);
     }
 
-    private void displayInventoryDetails() {
+    public void displayInventoryDetails() {
         List<String> invList = player.getInventory().getInvList();
         if ((invList == null) || (invList.isEmpty())) {
             return;

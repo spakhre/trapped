@@ -1,6 +1,7 @@
 package com.gui.utility;
 
 import com.trapped.gui.GuiPanel;
+import com.trapped.gui.MainWindow;
 
 import javax.swing.*;
 import java.awt.*;

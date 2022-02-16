@@ -1,12 +1,14 @@
 package com.trapped.player;
 
 
+
+
+
+
 import com.trapped.utilities.*;
 
 import java.io.Serializable;
 import java.util.*;
-
-import static com.trapped.utilities.TextColor.*;
 
 public class Player implements Serializable {
     private String userInput;
@@ -15,8 +17,6 @@ public class Player implements Serializable {
     public static String location = "bed";
     private Puzzle puzzle = Puzzle.getInstance();
     private Inventory inventory = Inventory.getInstance();
-
-
     // Player Singleton
     private static final Player PLAYER = new Player();
 
@@ -25,8 +25,6 @@ public class Player implements Serializable {
     public static Player getInstance() {
         return PLAYER;
     }
-
-
 
 //    public boolean inspectItem(String loc) {
 //        //furniture
@@ -148,7 +146,6 @@ public class Player implements Serializable {
         }
 //        new_command();
     }
-
 
     public Map<String, String> moveDirection(String direction) {
         Map<String, String> result = new HashMap<>();
