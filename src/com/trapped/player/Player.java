@@ -141,12 +141,16 @@ public class Player implements Serializable {
             if ("riddles".equals(puzzle.getPuzzleType())) {
                 puzzle.checkRiddle(inventory.invList, loc);
             } else if ("use tool".equals(puzzle.getPuzzleType())) {
-                puzzle.useTool(inventory.invList, loc);
+//                puzzle.useTool(inventory.invList, loc);
             } else if ("final".equals(puzzle.getPuzzleType())) {
                 puzzle.finalPuzzle();
             }
         }
 //        new_command();
+    }
+
+    public Map<String, String> solveUseTool(String item) {
+        return puzzle.useTool(location, item);
     }
 
 

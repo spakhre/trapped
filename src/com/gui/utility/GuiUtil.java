@@ -1,13 +1,6 @@
 package com.gui.utility;
 
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import java.awt.Color;
@@ -73,9 +66,21 @@ public class GuiUtil {
      */
     public static JLabel getImageLabel(String imagePath, int width, int height) {
         Image img = transformImage(createImageIcon(imagePath, ""), width, height);
+        System.out.println(img);
         ImageIcon icon = new ImageIcon(img); //transform it back
         JLabel imageLabel = new JLabel("", icon, JLabel.CENTER);
         return imageLabel;
+    }
+
+    public static JButton getButtonImage(String imagePath, int width, int height) {
+        Image img = transformImage(createImageIcon(imagePath, ""), width, height);
+        System.out.println(img);
+        ImageIcon icon = new ImageIcon(img); //transform it back
+        JButton imageButton = new JButton();
+        imageButton.setIcon(icon);
+        imageButton.setHorizontalTextPosition(JButton.CENTER);
+        imageButton.setVerticalTextPosition(JButton.BOTTOM);
+        return imageButton;
     }
 
     /**

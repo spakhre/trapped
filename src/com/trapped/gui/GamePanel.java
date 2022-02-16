@@ -11,8 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import java.awt.Color;
-import java.awt.Font;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -33,6 +32,7 @@ public class GamePanel extends GuiPanel {
     JPanel buttonsPanel;
     JPanel inventoryPanel;
     JTextArea textArea;
+    JLabel imageLabel;
 
     Player player = Player.getInstance();
 
@@ -94,7 +94,7 @@ public class GamePanel extends GuiPanel {
 
     private void setLocationImage() {
         String filePath = "/image/" + Player.getLocation() + ".jpg";
-        JLabel imageLabel = GuiUtil.getImageLabel(filePath, IMAGE_WIDTH, IMAGE_HEIGHT);
+        imageLabel = GuiUtil.getImageLabel(filePath, IMAGE_WIDTH, IMAGE_HEIGHT);
 
         //Set bounds (x, y, width, height) of the image same as that of the imagePanel
         imageLabel.setBounds(imagePanel.getBounds());
@@ -212,14 +212,15 @@ public class GamePanel extends GuiPanel {
             JOptionPane.showMessageDialog(mainWindow, "No items found at: " + player.getLocation());
             return;
         }
+
         String item = items.get(0);
         int response = JOptionPane.showConfirmDialog(mainWindow, "Item " + item +
                 " found in '" + player.getLocation() + "'. Do you want to add it to your inventory?", "CONFIRM", JOptionPane.YES_NO_OPTION);
         if (response == JOptionPane.NO_OPTION) {
             return;
         }
-        player.getInventory().addItem(item);
 
+        player.getInventory().addItem(item);
         displayInventoryDetails();
     }
 
@@ -231,6 +232,19 @@ public class GamePanel extends GuiPanel {
         imageLabel.setHorizontalTextPosition(JLabel.CENTER);
         imageLabel.setVerticalTextPosition(JLabel.BOTTOM);
         return imageLabel;
+    }
+
+    private JButton createButtonImage(String item) {
+        String filePath = "/image/items/" + item + ".jpg";
+//        JLabel imageLabel = GuiUtil.getImageLabel(item, filePath, ITEM_IMAGE_WIDTH, ITEM_IMAGE_HEIGHT, SwingConstants.TOP);
+        JButton btn = GuiUtil.getButtonImage(filePath, ITEM_IMAGE_WIDTH, ITEM_IMAGE_HEIGHT);
+        btn.setText(item);
+        btn.setOpaque(false);
+        btn.setContentAreaFilled(false);
+        btn.setBorderPainted(false);
+        btn.setFocusPainted(true);
+        btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        return btn;
     }
 
     private void createInventoryPanel() {
@@ -257,7 +271,7 @@ public class GamePanel extends GuiPanel {
         //Add image labels
         for (String inventoryItem : invList) {
             itemsPanel.add(new JLabel("      "));
-            JPanel p = createItemImagePanel(invList, inventoryItem);
+            JPanel p = createItemImagePanel(inventoryItem);
             itemsPanel.add(p);
         }
 
@@ -293,13 +307,24 @@ public class GamePanel extends GuiPanel {
         mainWindow.revalidate();
     }
 
-    private JPanel createItemImagePanel(List<String> invList, String inventoryItem) {
+    private JPanel createItemImagePanel(String inventoryItem) {
         JPanel p = new JPanel();
         p.setBackground(Color.white);
         p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
-        JLabel label = createItemImageLabel(inventoryItem);
+        JButton btn = createButtonImage(inventoryItem);
 
-        p.add(label);
+
+        btn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Map<String, String> result = player.solveUseTool(inventoryItem);
+                String desc = result.get("puzzleDescription");
+                String error = result.get("error");
+                textArea.setText(error != null ? error : desc);
+                displayInventoryDetails();
+            }
+        });
+        p.add(btn);
         p.add(new JLabel("    "));
         return p;
     }

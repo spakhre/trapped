@@ -146,24 +146,31 @@ public class Puzzle{
         }
     }
 
-    public void useTool(List<String> inventory, String loc) {
-        this.currentInventory = inventory;
-        this.currentLocation = loc;
-
-        if (inventory.contains(this.getPuzzleRewardItem().get(0))) {
-            System.out.println("The puzzle has been solved. Please feel free to explore other furnitures :)");
-        } else if ((inventory.contains("key") && loc.equals("safe")) ||
-                (inventory.contains("a piece of paper with number 104") && loc.equals("window")) ||
-                (inventory.contains("a piece of paper with number 104") && loc.equals("safe"))) {
-            System.out.println("The puzzle has been solved. Please feel free to explore other furniture :)");
-
-        } else {
-            System.out.println("A puzzle has been found in " + loc + ".");
-            System.out.println(getPuzzleDesc());
-            System.out.println("Would you like to solve this puzzle now? Y/N");
-            String solve_ans = Prompts.getStringInput();
-            checkItemsPuzzle(solve_ans);
+    public Map<String, String> useTool(String location, String item) {
+        Map<String, String> result = new HashMap<>();
+        generatePuzzle(location);
+        if (!"use tool".equals(getPuzzleType())) {
+            System.out.println("Sorry cannot use this item here");
+            result.put("error", "Sorry cannot use this item here");
+            return result;
         }
+
+
+        if(inventory.getInvList().contains(this.getPuzzleRewardItem().get(0))) {
+            System.out.println("The puzzle has been solved. Please feel free to explore other furnitures :)");
+        }
+        if (item.equals(getPuzzleItemsNeeded().get(0))) {
+
+            result.put("puzzleDescription", getPuzzleDesc());
+            System.out.println(getPuzzleReward() + " and you've found " + this.getPuzzleRewardItem().get(0));
+            inventory.addItem(getPuzzleRewardItem().get(0));
+//            System.out.println("A puzzle has been found in " + loc + ".");
+//            System.out.println(getPuzzleDesc());
+//            System.out.println("Would you like to solve this puzzle now? Y/N");
+//            String solve_ans = Prompts.getStringInput();
+//            checkItemsPuzzle(solve_ans);
+        }
+        return result;
     }
 
     private void checkItemsPuzzle(String solve_ans) {
