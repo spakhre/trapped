@@ -42,7 +42,7 @@ public class MainFrame extends JFrame {
         setFrameConfigs();
         setAllButtons();
         setAllPanels();
-        createStatusField();
+//        createStatusField();
         inputTextField();
 
         // ---- LABELS ADDED TO PANELS ----
@@ -124,9 +124,9 @@ public class MainFrame extends JFrame {
         menuPanel.setBackground(Color.decode("#302a1e"));
 
         MainBG_Panel = createJPanel(10, 40, 460, 500, false);
-        itemsPanel = createJPanel(350, 550, 120, 150, false);
+        itemsPanel = createJPanel(320,550,155,155, false);
         itemsPanel.setBackground(Color.lightGray);
-        itemsPanel.setLayout(new GridLayout(2, 3));
+        itemsPanel.setLayout(new GridLayout(3, 2));
     }
 
     private void setAllButtons() {
@@ -231,6 +231,7 @@ public class MainFrame extends JFrame {
         MainBG_Panel.updateUI();  // reset the panels
         MainBG_Panel.removeAll(); // remove all the layers
 
+
         introText.setVisible(false);
         MainBG_Panel.setVisible(true);
         MenuBG_panel.setVisible(false);
@@ -255,6 +256,31 @@ public class MainFrame extends JFrame {
         windowWithKey = createGameObj(100, 210, 100, 100, "inspect", "puzzle", "", "inspect window", "tool puzzle", "", "resources/SwingArt/window_world_item_with_key2.png");
         windowWithoutKey = createGameObj(100, 210, 100, 100, "inspect", "", "", "inspect window", "", "", "resources/SwingArt/window_world_item_no_key2.png");
         key = createGameObj(60,250,30,30,"Inspect","Get","","inspect key","get key","","resources/SwingArt/key_world_item.png");
+
+        keyLabel = createGameObj(350, 550, 50, 50,"drop","","","","","drop key","resources/SwingArt/key.png");
+        matchLabel=createGameObj(350, 550, 50, 50,"drop","","","drop matches","","","resources/SwingArt/matchbox.png");
+        walletLabel = createGameObj(350, 550, 50, 50,"drop","","","drop wallet","","","resources/SwingArt/wallet.png");
+        laptopLabel = createGameObj(350, 550, 50, 50,"drop","","","drop laptop","","","resources/SwingArt/laptop.png");
+        crowbarLabel = createGameObj(350, 550, 50, 50,"drop","","","drop crowbar","","","resources/SwingArt/crowbar.png");
+        paperLabel = createGameObj(350, 550, 50, 50,"drop","","","drop paper","","","resources/SwingArt/folded-paper.png");
+        candleLabel = createGameObj(350, 550, 50, 50,"drop","","","drop candle","","","resources/SwingArt/candle-holder.png");
+
+
+        keyLabel.setVisible(false);
+        matchLabel.setVisible(false);
+        walletLabel.setVisible(false);
+        laptopLabel.setVisible(false);
+        crowbarLabel.setVisible(false);
+        paperLabel.setVisible(false);
+        candleLabel.setVisible(false);
+
+        itemsPanel.add(keyLabel);
+        itemsPanel.add(matchLabel);
+        itemsPanel.add(walletLabel);
+        itemsPanel.add(laptopLabel);
+        itemsPanel.add(crowbarLabel);
+        itemsPanel.add(paperLabel);
+        itemsPanel.add(candleLabel);
 
         MainBG_Panel.setLayout(null);
         MainBG_Panel.add(bed);
@@ -427,44 +453,44 @@ public class MainFrame extends JFrame {
         return NavButton;
     }
 
-    public void createStatusField() {
-        keyLabel = createJLabel("resources/SwingArt/key.png");
-        keyLabel.setBounds(350, 550, 50, 50);
-        keyLabel.setVisible(false);
-
-        matchLabel = createJLabel("resources/SwingArt/matchbox.png");
-        matchLabel.setBounds(350, 550, 50, 50);
-        matchLabel.setVisible(false);
-
-        walletLabel = createJLabel("resources/SwingArt/wallet.png");
-        walletLabel.setBounds(350, 550, 50, 50);
-        walletLabel.setVisible(false);
-
-        laptopLabel = createJLabel("resources/SwingArt/laptop.png");
-        laptopLabel.setBounds(350, 550, 50, 50);
-        laptopLabel.setVisible(false);
-
-        crowbarLabel = createJLabel("resources/SwingArt/crowbar.png");
-        crowbarLabel.setBounds(350, 550, 50, 50);
-        crowbarLabel.setVisible(false);
-
-        paperLabel = createJLabel("resources/SwingArt/folded-paper.png");
-        paperLabel.setBounds(350, 550, 50, 50);
-        paperLabel.setVisible(false);
-
-        candleLabel = createJLabel("resources/SwingArt/candle-holder.png");
-        candleLabel.setBounds(350, 550, 50, 50);
-        candleLabel.setVisible(false);
-
-
-        itemsPanel.add(keyLabel);
-        itemsPanel.add(matchLabel);
-        itemsPanel.add(walletLabel);
-        itemsPanel.add(laptopLabel);
-        itemsPanel.add(crowbarLabel);
-        itemsPanel.add(paperLabel);
-        itemsPanel.add(candleLabel);
-
-    }
+//    public void createStatusField() {
+//        keyLabel = createJLabel("resources/SwingArt/key.png");
+//        keyLabel.setBounds(350, 550, 50, 50);
+//        keyLabel.setVisible(false);
+//
+//        matchLabel = createJLabel("resources/SwingArt/matchbox.png");
+//        matchLabel.setBounds(350, 550, 50, 50);
+//        matchLabel.setVisible(false);
+//
+//        walletLabel = createJLabel("resources/SwingArt/wallet.png");
+//        walletLabel.setBounds(350, 550, 50, 50);
+//        walletLabel.setVisible(false);
+//
+//        laptopLabel = createJLabel("resources/SwingArt/laptop.png");
+//        laptopLabel.setBounds(350, 550, 50, 50);
+//        laptopLabel.setVisible(false);
+//
+//        crowbarLabel = createJLabel("resources/SwingArt/crowbar.png");
+//        crowbarLabel.setBounds(350, 550, 50, 50);
+//        crowbarLabel.setVisible(false);
+//
+//        paperLabel = createJLabel("resources/SwingArt/folded-paper.png");
+//        paperLabel.setBounds(350, 550, 50, 50);
+//        paperLabel.setVisible(false);
+//
+//        candleLabel = createJLabel("resources/SwingArt/candle-holder.png");
+//        candleLabel.setBounds(350, 550, 50, 50);
+//        candleLabel.setVisible(false);
+//
+//
+//        itemsPanel.add(keyLabel);
+//        itemsPanel.add(matchLabel);
+//        itemsPanel.add(walletLabel);
+//        itemsPanel.add(laptopLabel);
+//        itemsPanel.add(crowbarLabel);
+//        itemsPanel.add(paperLabel);
+//        itemsPanel.add(candleLabel);
+//
+//    }
 
 }
