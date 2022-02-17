@@ -1,7 +1,7 @@
 package com.trapped.gui;
 
 import com.gui.utility.GuiUtil;
-import com.gui.utility.Keypad;
+import com.trapped.player.Inventory;
 import com.trapped.player.Player;
 import com.trapped.utilities.Puzzle;
 
@@ -226,6 +226,13 @@ public class GamePanel extends GuiPanel {
         }
 
         String item = items.get(0);
+
+        Inventory inventory = player.getInventory();
+        if(inventory.hasItem(item)) {
+            JOptionPane.showMessageDialog(mainWindow, "You already have item: " + item + " from " + player.getLocation());
+            return;
+        }
+
         int response = JOptionPane.showConfirmDialog(mainWindow, "Item " + item +
                 " found in '" + player.getLocation() + "'. Do you want to add it to your inventory?", "CONFIRM", JOptionPane.YES_NO_OPTION);
         if (response == JOptionPane.NO_OPTION) {
