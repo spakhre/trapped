@@ -1,15 +1,13 @@
 package com.trapped.player;
 
 
-
-
-
-
-import com.gui.utility.Keypad;
-import com.trapped.utilities.*;
+import com.trapped.utilities.Puzzle;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Player implements Serializable {
     private int attemptsLeft = 3;
@@ -144,7 +142,7 @@ public class Player implements Serializable {
 //                puzzle.useTool(inventory.invList, loc);
             } else if ("final".equals(puzzle.getPuzzleType())) {
 //                puzzle.finalPuzzle();
-                new Keypad(3);
+              // new Keypad(3);
             }
         }
 //        new_command();
