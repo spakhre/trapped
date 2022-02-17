@@ -1,6 +1,5 @@
 package com.trapped.gui;
 
-import com.trapped.player.Player;
 import com.trapped.utilities.Puzzle;
 
 import javax.swing.*;
@@ -11,36 +10,39 @@ import java.awt.event.ActionListener;
 class KeypadPanel extends GuiPanel{
 
     private Puzzle puzzle = Puzzle.getInstance();
-    private Player player = Player.getInstance();
     //
     private String currentDigits = "";
     private int attemptsLeft = 3;
-    private JLabel display = new JLabel();
+    private JPanel keypadPanel = this;
+    private JLabel display;
     //
-    private static final int FRAME_WIDTH = 360;
-    private static final int FRAME_HEIGHT = 550;
-    private static final int KP_HEIGHT = 425;
-    private static final int DISPLAY_HEIGHT = 90;
-//    public static final Dimension btnD = new Dimension(100, 100);
+    private static final int BOX_WIDTH = 360;
+    private static final int BOX_HEIGHT = 400;
+    private static final int KP_WIDTH = 360;
+    private static final int KP_HEIGHT = 330;
+    private static final int DISPLAY_HEIGHT = 70;
 
-    public KeypadPanel(MainWindow mainWindow) {
+    public KeypadPanel(MainWindow mainWindow){
         super(mainWindow);
-        this.setBackground(Color.darkGray);
-        this.setBounds(420, 125, FRAME_WIDTH, FRAME_HEIGHT);
-        this.setLayout(new BorderLayout());
-        this.add(createDisplayPanel(), BorderLayout.NORTH);
-        this.add(createKeypadPanel(), BorderLayout.SOUTH);
+        keypadPanel.setBackground(Color.darkGray);
+        keypadPanel.setBounds(400, 0, BOX_WIDTH, BOX_HEIGHT);
+        keypadPanel.setLayout(null);
+        keypadPanel.add(createDisplayPanel());
+        keypadPanel.add(createKeypadPanel());
     }
 
     private JPanel createDisplayPanel(){
+        // Make Panel
         JPanel screen = new JPanel();
-        screen.setPreferredSize(new Dimension(FRAME_WIDTH, DISPLAY_HEIGHT));
         screen.setBackground(Color.black);
+        screen.setBounds(0, 0, KP_WIDTH, DISPLAY_HEIGHT);
 
+        // Set and add digit display to panel
+        display = new JLabel();
         display.setText( attemptsLeft + " trys");
         display.setForeground(new Color(53, 255, 31));
         display.setFont(new Font("Monospaced", Font.PLAIN, 50));
-
+        //
         screen.add(display);
 
         return screen;
@@ -48,9 +50,9 @@ class KeypadPanel extends GuiPanel{
 
     private JPanel createKeypadPanel(){
         JPanel keypad = new JPanel();
-        keypad.setPreferredSize(new Dimension(FRAME_WIDTH, KP_HEIGHT));
         keypad.setBackground(new Color(160, 160, 160));
         keypad.setLayout(new GridLayout(4,3, 10, 10));
+        keypad.setBounds(0, DISPLAY_HEIGHT, KP_WIDTH, KP_HEIGHT);
 
         // Make buttons
         JButton one_btn = new JButton("1");
@@ -63,7 +65,6 @@ class KeypadPanel extends GuiPanel{
         JButton eight_btn = new JButton("8");
         JButton nine_btn = new JButton("9");
         JButton zero_btn = new JButton("0");
-        JButton exit_btn = new JButton("exit");
         // Add action listeners
         one_btn.addActionListener(new KeypadListener("1"));
         two_btn.addActionListener(new KeypadListener("2"));
@@ -75,12 +76,6 @@ class KeypadPanel extends GuiPanel{
         eight_btn.addActionListener(new KeypadListener("8"));
         nine_btn.addActionListener(new KeypadListener("9"));
         zero_btn.addActionListener(new KeypadListener("0"));
-        exit_btn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
         // Add btns to panel
         keypad.add(one_btn);
         keypad.add(two_btn);
@@ -95,7 +90,6 @@ class KeypadPanel extends GuiPanel{
 
         return keypad;
     }
-
 
     private class KeypadListener implements ActionListener {
         String value = "";

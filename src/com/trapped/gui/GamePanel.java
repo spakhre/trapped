@@ -14,6 +14,7 @@ import java.util.Map;
 
 public class GamePanel extends GuiPanel {
 
+    private boolean keypadActive = false;
     public static final Font BUTTON_FONT = new Font("Arial", Font.BOLD, 20); // ORIGINAL
 
     private static final int IMAGE_WIDTH = 800;
@@ -29,7 +30,10 @@ public class GamePanel extends GuiPanel {
     JPanel inventoryPanel;
     JPanel keypadPanel;
     JTextArea textArea;
+    JPanel instructionsPanel;
     JLabel imageLabel;
+    JButton leftB;
+    JButton rightB;
 
     Player player = Player.getInstance();
 
@@ -66,6 +70,7 @@ public class GamePanel extends GuiPanel {
 
     private void createPanel() {
         createKeypadPanel();
+        createKeypadInstructionsPanel();
         createTextPanel();
         createImagePanel();
         createButtonsPanel();
@@ -111,9 +116,9 @@ public class GamePanel extends GuiPanel {
         buttonsPanel = new JPanel();
         buttonsPanel.setBounds(0, 400, 400, 400);
 
-        JButton leftB = new JButton("Left");
+        leftB = new JButton("Left");
         leftB.setFont(BUTTON_FONT);
-        JButton rightB = new JButton("Right");
+        rightB = new JButton("Right");
         rightB.setFont(BUTTON_FONT);
 
         JButton inspectB = new JButton("Inspect Room");
@@ -184,13 +189,15 @@ public class GamePanel extends GuiPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 inspectLocation();
-                if (!"door".equals(player.getLocation())){
-                    player.solvePuzzle(player.getLocation());
-                } else {
-//                    KeypadPane
-//                    createKeypadPanel();
+                if ("door".equals(player.getLocation())){
+                    // show keypad and instructions
                     keypadPanel.setVisible(true);
-
+                    instructionsPanel.setVisible(true);
+                    // disable left & right
+                    leftB.setEnabled(false);
+                    rightB.setEnabled(false);
+                } else {
+                    player.solvePuzzle(player.getLocation());
                 }
             }
         });
@@ -212,10 +219,40 @@ public class GamePanel extends GuiPanel {
         layeredPane.add(buttonsPanel);
     }
 
+    // create keypad for door exit
     private void createKeypadPanel(){
         keypadPanel = new KeypadPanel(mainWindow);
-        keypadPanel.setVisible(false);
+        keypadPanel.setVisible(false);  // hide panel
         layeredPane.add(keypadPanel);
+    }
+
+    // create instructions to the right of keypad
+    private void createKeypadInstructionsPanel(){
+        // create and place panel
+        instructionsPanel = new GuiPanel(mainWindow);
+        instructionsPanel.setBackground(Color.darkGray);
+        instructionsPanel.setBounds(760, 0, 440, 400);
+
+        // create and add instructions label
+        JLabel instructions = new JLabel("Here's how the keypad works...\n\nMORE TO COME SOON...\n:)");
+        instructionsPanel.add(instructions);
+
+        // exit btn, hides the Keypad and Instructions
+        // activates left & right btns
+        JButton exit_btn = new JButton("exit");
+        exit_btn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                keypadPanel.setVisible(false);
+                instructionsPanel.setVisible(false);
+                leftB.setEnabled(true);
+                rightB.setEnabled(true);
+            }
+        });
+        instructionsPanel.add(exit_btn);
+
+        instructionsPanel.setVisible(false); // hide
+        layeredPane.add(instructionsPanel);
     }
 
     private void inspectLocation() {
