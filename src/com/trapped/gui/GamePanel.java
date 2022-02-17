@@ -1,7 +1,6 @@
 package com.trapped.gui;
 
 import com.gui.utility.GuiUtil;
-import com.gui.utility.Keypad;
 import com.trapped.player.Player;
 import com.trapped.utilities.Puzzle;
 

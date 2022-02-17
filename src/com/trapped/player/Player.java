@@ -5,7 +5,6 @@ package com.trapped.player;
 
 
 
-import com.gui.utility.Keypad;
 import com.trapped.utilities.*;
 
 import java.io.Serializable;
@@ -144,7 +143,6 @@ public class Player implements Serializable {
 //                puzzle.useTool(inventory.invList, loc);
             } else if ("final".equals(puzzle.getPuzzleType())) {
 //                puzzle.finalPuzzle();
-                new Keypad(3);
             }
         }
 //        new_command();
