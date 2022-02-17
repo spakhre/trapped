@@ -61,7 +61,6 @@ class ActionController implements ActionListener {
     private static void inspectItem(String noun) {
         //furniture
         Map<String, Object> furniture = map.get(location);
-        String furniture_desc = (String) furniture.get("furniture_desc");
         ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
         switch (noun) {
             case "bed":
@@ -71,7 +70,6 @@ class ActionController implements ActionListener {
             case "safe":
             case "lamp":
             case "chair":
-                gHandler.mainFrame.writeToTextArea(furniture_desc);
                 if (furniture_items.isEmpty() || furniture_items == null) {
                     noItemsInRoom(location);
                 } else {
@@ -89,7 +87,8 @@ class ActionController implements ActionListener {
     private static void roomWithItems(String something) {
         Map<String, Object> furniture = map.get(something);
         ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
-        gHandler.mainFrame.writeToTextArea("You see: " + furniture_items + ".");
+        String furniture_desc = (String) furniture.get("furniture_desc");
+        gHandler.mainFrame.writeToTextArea(furniture_desc + "\nYou see: " + furniture_items + ".");
         for (String item : furniture_items) {
             unhideItemOnNavScreen(item, getLocationBoolArr(location));
         }
@@ -168,10 +167,8 @@ class ActionController implements ActionListener {
 
     private static void noItemsInRoom(String something) {
         Map<String, Object> furniture = map.get(something);
-        String furniture_picture = (String) furniture.get("furniture_picture");
-
-        FileManager.getResource(furniture_picture);
-        gHandler.mainFrame.writeToTextArea("Inspecting...\nNo items found here.");
+        String furniture_desc = (String) furniture.get("furniture_desc");
+        gHandler.mainFrame.writeToTextArea(furniture_desc + "\nNo items found here.");
     }
 
     // check current inventory
@@ -356,29 +353,39 @@ class ActionController implements ActionListener {
         Map<String, Object> furniture = map.get(loc);
         ArrayList<String> puzzle_reward_item = (ArrayList<String>) furniture.get("puzzle_reward_item");
         String puzzle_desc = (String) furniture.get("puzzle_desc");
-        ArrayList<Object> puzzle_filename = (ArrayList<Object>) furniture.get("puzzle_filename");
-        ArrayList<String> converted_puzzle_filename = (ArrayList<String>) (ArrayList<?>) (puzzle_filename);
-        ArrayList<Object> multiple_puzzle_answer = (ArrayList<Object>) furniture.get("multiple_puzzle_answer");
+        String riddle1 = "Double my number, I'm less than a score, Half of my number is less than four.\n" +
+                "Add one to my double when bakers are near, Days of the week are still greater,\n" +
+                "I fear. ";
+        String riddle2 = "If there are three apples and you take away two, how many apples do you have?";
+        String riddle3 = "If you buy a rooster for the purpose of laying eggs and you expect to get three eggs each\n" +
+                "day for breakfast, how many eggs will you have after three weeks?";
+        String ans1 = "6";
+        String ans2 = "2";
+        String ans3 = "0";
+        ArrayList<String> riddles = new ArrayList<>();
+        riddles.add(riddle1);
+        riddles.add(riddle2);
+        riddles.add(riddle3);
+        ArrayList<String> answers = new ArrayList<>();
+        answers.add(ans1);
+        answers.add(ans2);
+        answers.add(ans3);
 
         if (!puzzleSolved()) {
             System.out.println("A puzzle has been found in " + loc + ".");
             System.out.println(puzzle_desc);
             // riddles puzzle
             Random r = new Random();
-            int randomItem = r.nextInt(converted_puzzle_filename.size());
-            String randomPuzzle = converted_puzzle_filename.get(randomItem);
-            ArrayList<String> randomAnswer = (ArrayList<String>) multiple_puzzle_answer.get(randomItem);
-            FileManager.getResource(randomPuzzle);
-            gHandler.mainFrame.writeToTextArea("\nYour answer:      (If it's too hard to answer, please enter [easy] to get a easier question.)");
+            int randomItem = r.nextInt(3);
+            String randomPuzzle = riddles.get(randomItem);
+            gHandler.mainFrame.writeToTextArea(randomPuzzle);
             gHandler.mainFrame.SUBMITbtn.addActionListener(e -> {
                 ANSWER = gHandler.mainFrame.inputText.getText();
                 // if user input correct answer
-                if (ANSWER.equals(furniture.get("easy_answer")) || randomAnswer.contains(ANSWER)) {
+                if (ANSWER.equals(answers.get(randomItem))) {
                     gHandler.mainFrame.writeToTextArea("puzzle_reward");
                     gHandler.mainFrame.writeToTextArea("You found " + puzzle_reward_item.get(0) + ".");
                     addItemAndUpdateJson(puzzle_reward_item.get(0));
-                } else if (ANSWER.equalsIgnoreCase("easy")) {
-                    gHandler.mainFrame.writeToTextArea((String) furniture.get("easy_question"));
                 } else {
                     gHandler.mainFrame.writeToTextArea("you didn't solve the puzzle. Try again.");
                 }
@@ -409,10 +416,7 @@ class ActionController implements ActionListener {
         //
         //
         if (!puzzleSolved()) {
-            gHandler.mainFrame.writeToTextArea("A puzzle has been found in " + loc + ".");
-            gHandler.mainFrame.writeToTextArea(puzzle_desc);
-            gHandler.mainFrame.writeToTextArea("You need to use an item from your inventory. Let's see if you got needed item in your inventory...");
-            gHandler.mainFrame.writeToTextArea("Your current inventory: " + inventory);
+            gHandler.mainFrame.writeToTextArea("A puzzle has been found in " + loc + "." + puzzle_desc + "You need to use an item from your inventory. Let's see if you got needed item in your inventory...\n Your current inventory: " + inventory);
             if (!inventory.contains(puzzle_itemsNeeded.get(0))) {
                 gHandler.mainFrame.writeToTextArea("Sorry, you don't have the right tool. Explore the room and see if you can find anything");
             } else if (inventory.contains(puzzle_itemsNeeded.get(0))) {
@@ -444,68 +448,31 @@ class ActionController implements ActionListener {
 
     private static void doorPuzzle() {
         //Final puzzle in the game, can be solved at any time if you know the secret number (104)
-        System.out.println("door puzzle GUI 1");
         Map<String, Object> furniture = map.get("door");
         String puzzle_desc = (String) furniture.get("puzzle_desc");
         String puzzle_answer = (String) furniture.get("puzzle_answer");
         String puzzle_reward = (String) furniture.get("puzzle_reward");
-        gHandler.mainFrame.writeToTextArea(puzzle_desc);
-        gHandler.mainFrame.writeToTextArea("What's the password? You have " + max_attempts +
-                " attempts remaining. If you'll like to try later, enter[later]");
+        gHandler.mainFrame.writeToTextArea("Please enter the 3-digit passcode." + "You have " + max_attempts +
+                " attempts remaining. If you'll like to try later, enter 'later' in the test box below");
+        gHandler.mainFrame.SUBMITbtn.addActionListener(e -> {
+            ANSWER = gHandler.mainFrame.inputText.getText();
 
-        ANSWER = gHandler.mainFrame.inputText.getText();
-        System.out.println("door puzzle GUI 2");
-
-//        JFrame frame = new JFrame("Door Puzzle");
-//        frame.setSize(200, 200);
-//        frame.setLocationRelativeTo(null);
-//        frame.setVisible(true);
-//        JOptionPane.showMessageDialog(frame, "What's the password? You have " + max_attempts + " attempts remaining. If you'll like to try later, enter[later]");
-//        int result = JOptionPane.showConfirmDialog(null, "Do wish to solve the puzzle ");
-//        while (0 <= max_attempts && max_attempts <= 3){
-//        switch (result) {
-//            case JOptionPane.YES_OPTION:
-//                String name = JOptionPane.showInputDialog(null,
-//                        "Please enter the passcode");
-//                int num = Integer.parseInt(name);
-//                if (num == 104) {
-//                    System.out.println("door puzzle 6");
-//                    Sounds.changeSoundVolume("open_door.wav", 0, num);
-//                    JOptionPane.showMessageDialog(frame, "Congratulations, you've exited the game");
-//                    frame.dispose();
-//                } else {
-//                    JOptionPane.showMessageDialog(frame, "You entered the wrong number");
-//                    max_attempts = max_attempts - 1;
-//                    JOptionPane.showMessageDialog(frame, "You have " + max_attempts + " left.");
-//                    frame.dispose();
-//                    break;
-//                }
-//                break;
-//            case JOptionPane.NO_OPTION:
-//            case JOptionPane.CANCEL_OPTION:
-//                frame.dispose();
-//                break;
-//        }
-
-        if (ANSWER.trim().equals("later") || ANSWER.trim().equals("")) {
-            System.out.println("door puzzle GUI 3");
-            gHandler.mainFrame.writeToTextArea("No worries! Try next time!");
-            System.out.println("door puzzle GUI 4");
-        } else {
-            while (max_attempts-- > 0) {
-                if (ANSWER.trim().equals(puzzle_answer)) {
-                    gHandler.mainFrame.writeToTextArea(puzzle_reward);
-                    gHandler.mainFrame.writeToTextArea("You won the game! Thanks for playing!");
-                    System.out.println("game won");
-                    gHandler.mainFrame.winScreen("end_game");
-                } else if (max_attempts == 0) {
-                    gHandler.mainFrame.writeToTextArea("You lost the game! You are Trapped. Please try again later.");
-                    gHandler.mainFrame.loseScreen("exploded");
-                } else {
-                    gHandler.mainFrame.writeToTextArea("Wrong password. Try again next time! " + MAGENTA_UNDERLINE + max_attempts + RESET + " attempts remaining");
-                }
+            if (ANSWER.trim().equals("later") || ANSWER.trim().equals("")) {
+                gHandler.mainFrame.writeToTextArea("No worries! Try next time!");
+            } else {
+                    if (ANSWER.trim().equals(puzzle_answer)) {
+                        gHandler.mainFrame.writeToTextArea(puzzle_reward + "You won the game! Thanks for playing!");
+                        System.out.println("game won");
+                        gHandler.mainFrame.winScreen("end_game");
+                    } else if (max_attempts == 0) {
+                        gHandler.mainFrame.writeToTextArea("You lost the game! You are Trapped. Please try again later.");
+                        gHandler.mainFrame.loseScreen("exploded");
+                    } else {
+                        max_attempts--;
+                        gHandler.mainFrame.writeToTextArea("Wrong password. Try again next time! " + max_attempts + " attempts remaining");
+                    }
             }
-        }
+        });
     }
 
     private static List<Boolean> getLocationBoolArr(String location) {

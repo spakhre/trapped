@@ -127,7 +127,7 @@ public class MainFrame extends JFrame {
         MainBG_Panel = createJPanel(10, 40, 460, 500, false);
         itemsPanel = createJPanel(320,550,155,155, false);
         itemsPanel.setBackground(Color.lightGray);
-        itemsPanel.setLayout(new GridLayout(3, 2));
+        //itemsPanel.setLayout(new GridLayout(3, 2));
     }
 
     private void setAllButtons() {
@@ -297,18 +297,16 @@ public class MainFrame extends JFrame {
         JButton lftBtn = createNavButton(0, 400, 80, 80, "resources/SwingArt/left.png", "go left");
         JButton rgtBtn = createNavButton(380, 400, 80, 80, "resources/SwingArt/right.png", "go right");
 
-        keyLabel = createGameObj(350, 550, 50, 50,"drop","","","","","drop key","resources/SwingArt/key.png");
-        matchLabel=createGameObj(350, 550, 50, 50,"drop","","","drop matches","","","resources/SwingArt/matchbox.png");
-        walletLabel = createGameObj(350, 550, 50, 50,"drop","","","drop wallet","","","resources/SwingArt/wallet.png");
-        laptopLabel = createGameObj(350, 550, 50, 50,"drop","","","drop laptop","","","resources/SwingArt/laptop.png");
-        crowbarLabel = createGameObj(350, 550, 50, 50,"drop","","","drop crowbar","","","resources/SwingArt/crowbar.png");
-        paperLabel = createGameObj(350, 550, 50, 50,"drop","","","drop paper","","","resources/SwingArt/folded-paper.png");
-        candleLabel = createGameObj(350, 550, 50, 50,"drop","","","drop candle","","","resources/SwingArt/candle-holder.png");
+        keyLabel = createGameObj(350, 550, 50, 50,"Inspect","Drop","inspect key","drop key","resources/SwingArt/key.png");
+        matchLabel=createGameObj(350, 550, 50, 50,"Inspect","Drop","inspect matches","drop matches","resources/SwingArt/matchbox.png");
+        walletLabel = createGameObj(350, 550, 50, 50,"Inspect","Drop","inspect wallet","drop wallet","resources/SwingArt/wallet.png");
+        crowbarLabel = createGameObj(350, 550, 50, 50,"Inspect","Drop","inspect crowbar","drop crowbar","resources/SwingArt/crowbar.png");
+        paperLabel = createGameObj(350, 550, 50, 50,"Inspect","Drop","inspect paper","drop paper","resources/SwingArt/folded-paper.png");
+        candleLabel = createGameObj(350, 550, 50, 50,"Inspect","Drop","inspect candle","drop candle","resources/SwingArt/candle-holder.png");
 
         keyLabel.setVisible(false);
         matchLabel.setVisible(false);
         walletLabel.setVisible(false);
-        laptopLabel.setVisible(false);
         crowbarLabel.setVisible(false);
         paperLabel.setVisible(false);
         candleLabel.setVisible(false);
@@ -316,7 +314,6 @@ public class MainFrame extends JFrame {
         itemsPanel.add(keyLabel);
         itemsPanel.add(matchLabel);
         itemsPanel.add(walletLabel);
-        itemsPanel.add(laptopLabel);
         itemsPanel.add(crowbarLabel);
         itemsPanel.add(paperLabel);
         itemsPanel.add(candleLabel);
@@ -571,7 +568,6 @@ public class MainFrame extends JFrame {
 
             }
         });
-
         return ObjLabel;
     }
 
