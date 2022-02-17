@@ -20,13 +20,13 @@ public class MainFrame extends JFrame {
 
     GameHandler gHandler;
     public JButton startButton, settingButton, exitButton,SUBMITbtn;
-    public JPanel MenuBG_panel, menuPanel, itemsPanel, MainBG_Panel, TextBox_panel;
-    public JLabel themeLabel, roomLabel, keyLabel, matchLabel, laptopLabel, walletLabel, candleLabel, paperLabel, crowbarLabel;
+    public JPanel MenuBG_panel, menuPanel, itemsPanel, MainBG_Panel, cornerLeftPanel, cornerRightPanel, TextBox_panel;
+    public JLabel themeLabel, roomLabel, cornerLeft, cornerRight, keyLabel, matchLabel, laptopLabel, walletLabel, candleLabel, paperLabel, crowbarLabel;
     public JLabel matches, key, wallet, laptop, candle, paper, crowbar, windowWithKey, windowWithoutKey;
     public JTextArea introText = new JTextArea();
     public JTextArea textArea = new JTextArea();
     public TextField inputText = new TextField(20);
-    static List<Boolean> initArr = Arrays.asList(true, false, false, false, false, false, false, false, false, false, false, false, false, false);
+    static List<Boolean> initArr = Arrays.asList(true, false, false, false, false, false, false, false, false, false, false, false, false, false,false,true,false);
 
 
     public MainFrame(GameHandler gHandler) {
@@ -50,7 +50,11 @@ public class MainFrame extends JFrame {
         MenuBG_panel.add(themeLabel);
 
         roomLabel = createJLabel("resources/SwingArt/room1.png");
+        cornerLeft = createJLabel("resources/SwingArt/room1corner2.png");
+        cornerRight = createJLabel("resources/SwingArt/room1corner.png");
         MainBG_Panel.add(roomLabel);
+        MainBG_Panel.add(cornerRight);
+        MainBG_Panel.add(cornerLeft);
 
         menuPanel.add(startButton);
         menuPanel.add(settingButton);
@@ -69,7 +73,7 @@ public class MainFrame extends JFrame {
 
     public void settingScreen() {
         menuPanel.setVisible(true);
-        startButton.addActionListener(e -> gameScreen((ArrayList<Boolean>) initArr));
+        startButton.addActionListener(e -> gameScreen(initArr));
         exitButton.addActionListener(e -> System.exit(0));
         MainBG_Panel.updateUI();  // reset the panels
         MainBG_Panel.removeAll(); // remove all the layers
@@ -123,7 +127,8 @@ public class MainFrame extends JFrame {
         MenuBG_panel = createJPanel(-10, 0, 500, 750, false);
         menuPanel = createJPanel(150, 350, 100, 180, false);
         menuPanel.setBackground(Color.decode("#302a1e"));
-
+        cornerRightPanel = createJPanel(10, 40, 460, 500, false);
+        cornerLeftPanel = createJPanel(10, 40, 460, 500, false);
         MainBG_Panel = createJPanel(10, 40, 460, 500, false);
         itemsPanel = createJPanel(320,550,155,155, false);
         itemsPanel.setBackground(Color.black);
@@ -143,6 +148,8 @@ public class MainFrame extends JFrame {
     public void showMainMenu() {
         MainBG_Panel.updateUI();
         MainBG_Panel.removeAll();
+        MainBG_Panel.repaint();
+        MainBG_Panel.revalidate();
 
         MenuBG_panel.setVisible(true);
         menuPanel.setVisible(true);
@@ -154,13 +161,17 @@ public class MainFrame extends JFrame {
     }
 
     public void winScreen(String fileName) {
+        MainBG_Panel.updateUI();
+        MainBG_Panel.removeAll();
+        MainBG_Panel.repaint();
+        MainBG_Panel.revalidate();
         menuPanel.setVisible(false);
         textArea.setVisible(false);
         MainBG_Panel.setVisible(false);
         MenuBG_panel.setVisible(false);
         itemsPanel.setVisible(false);
         inputText.setVisible(false);
-
+        SUBMITbtn.setVisible(false);
         introText.setVisible(true);
         writeToIntro(readFileFromResources(fileName));
         introText.addKeyListener(new KeyListener() {
@@ -188,6 +199,10 @@ public class MainFrame extends JFrame {
     }
 
     public void loseScreen(String fileName) {
+        MainBG_Panel.updateUI();
+        MainBG_Panel.removeAll();
+        MainBG_Panel.repaint();
+        MainBG_Panel.revalidate();
         menuPanel.setVisible(false);
         textArea.setVisible(false);
         MainBG_Panel.setVisible(false);
@@ -221,6 +236,10 @@ public class MainFrame extends JFrame {
     }
 
     public void introScreen(String fileName) {
+        MainBG_Panel.updateUI();
+        MainBG_Panel.removeAll();
+        MainBG_Panel.repaint();
+        MainBG_Panel.revalidate();
         menuPanel.setVisible(false);
         textArea.setVisible(false);
         MainBG_Panel.setVisible(false);
@@ -267,11 +286,12 @@ public class MainFrame extends JFrame {
 
     // Create the game sense
     public void gameScreen(List<Boolean> arr) {
-        MainBG_Panel.updateUI();  // reset the panels
-        MainBG_Panel.removeAll(); // remove all the layers
-
-
         introText.setVisible(false);
+        MainBG_Panel.updateUI();
+        MainBG_Panel.removeAll();
+        MainBG_Panel.repaint();
+        MainBG_Panel.revalidate();
+
         MainBG_Panel.setVisible(true);
         MenuBG_panel.setVisible(false);
         menuPanel.setVisible(false);
@@ -338,7 +358,22 @@ public class MainFrame extends JFrame {
         MainBG_Panel.add(rgtBtn);
         MainBG_Panel.setLayout(null);
         MainBG_Panel.add(roomLabel);
+        MainBG_Panel.add(cornerRight);
+        MainBG_Panel.add(cornerLeft);
 
+        if(arr.get(14)){
+            roomLabel.setVisible(true);
+            System.out.println("center triggered");
+        }else if (arr.get(15)) {
+            cornerLeft.setVisible(true);
+            System.out.println("corner left triggered");
+        }
+        else if (arr.get(16)){
+            cornerRight.setVisible(true);
+            System.out.println("corner right triggered");
+        }else{
+            System.out.println("nothing was triggered");
+        }
         bed.setVisible(arr.get(0));
         door.setVisible(arr.get(1));
         safe.setVisible(arr.get(2));

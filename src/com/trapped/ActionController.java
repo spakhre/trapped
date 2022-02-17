@@ -25,13 +25,13 @@ class ActionController implements ActionListener {
         this.gHandler = gHandler;
     }
 
-    static List<Boolean> bedArr = Arrays.asList(true, false, false, false, false, false, false, false, false, false, false, false, false, false);
-    static List<Boolean> doorArr = Arrays.asList(false, true, false, false, false, false, false, false, false, false, false, false, false, false);
-    static List<Boolean> safeArr = Arrays.asList(false, false, true, false, false, false, false, false, false, false, false, false, false, false);
-    static List<Boolean> deskArr = Arrays.asList(false, false, false, true, false, false, false, false, false, false, false, false, false, false);
-    static List<Boolean> lampArr = Arrays.asList(false, false, false, false, true, false, false, false, false, false, false, false, false, false);
-    static List<Boolean> chairArr = Arrays.asList(false, false, false, false, false, true, false, false, false, false, false, false, false, false);
-    static List<Boolean> windowArr = Arrays.asList(false, false, false, false, false, false, true, false, false, false, false, false, false, false);
+    static List<Boolean> bedArr = Arrays.asList(true, false, false, false, false, false, false, false, false, false, false, false, false, false,false,true,false);
+    static List<Boolean> doorArr = Arrays.asList(false, true, false, false, false, false, false, false, false, false, false, false, false, false,true,false,false);
+    static List<Boolean> safeArr = Arrays.asList(false, false, true, false, false, false, false, false, false, false, false, false, false, false,true,false,false);
+    static List<Boolean> deskArr = Arrays.asList(false, false, false, true, false, false, false, false, false, false, false, false, false, false,false,false,true);
+    static List<Boolean> lampArr = Arrays.asList(false, false, false, false, true, false, false, false, false, false, false, false, false, false,true,false,false);
+    static List<Boolean> chairArr = Arrays.asList(false, false, false, false, false, true, false, false, false, false, false, false, false, false,false,false,true);
+    static List<Boolean> windowArr = Arrays.asList(false, false, false, false, false, false, true, false, false, false, false, false, false, false,true,false,false);
 
     public static String verb;
     public static String noun;
