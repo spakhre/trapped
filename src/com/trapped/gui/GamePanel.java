@@ -3,6 +3,7 @@ package com.trapped.gui;
 import com.gui.utility.GuiUtil;
 import com.trapped.player.Inventory;
 import com.trapped.player.Player;
+import com.trapped.utilities.Audio;
 import com.trapped.utilities.Puzzle;
 
 import javax.swing.*;
@@ -35,6 +36,8 @@ public class GamePanel extends GuiPanel {
     JLabel timer;
 
     Player player = Player.getInstance();
+
+    private JSlider volumeSlider;
 
     /**
      * Constructor.
@@ -193,6 +196,8 @@ public class GamePanel extends GuiPanel {
 
         panelY.add(p3);
         panelY.add(new JLabel(" "));
+
+        panelY.add(new VolumeSliderPanel(mainWindow, Audio.DEFAULT_VOLUME_LEVEL));
 
 
         //Set bounds (x, y, width, height) of the panelY same as that of the buttonsPanel

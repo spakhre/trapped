@@ -1,5 +1,7 @@
 package com.trapped.gui;
 
+import com.trapped.utilities.Audio;
+
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -16,6 +18,9 @@ public class MainWindow extends JFrame {
     public static final int GUI_WIDTH = 1200;
     public static final int GUI_HEIGHT = 800;
     private static GamePanel gamePanel = null;
+
+    //AUDIO
+    private Audio audio = new Audio();
 
 
     /**
@@ -69,6 +74,10 @@ public class MainWindow extends JFrame {
 
     public static GamePanel getGamePanel() {
         return gamePanel;
+    }
+
+    public Audio getAudio() {
+        return audio;
     }
 
 //    public void createGameOverLoseScreen(){
