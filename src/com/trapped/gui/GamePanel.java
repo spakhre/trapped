@@ -340,6 +340,7 @@ public class GamePanel extends GuiPanel {
                 String desc = result.get("puzzleDescription");
                 String error = result.get("error");
                 textArea.setText(error != null ? error : desc);
+                displayInventoryDetails();
             }
         });
         p.add(btn);
