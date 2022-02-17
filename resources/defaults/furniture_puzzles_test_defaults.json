@@ -1,7 +1,7 @@
 {
   "bed": {
     "name": "bed",
-    "furniture_desc": "The bed is a normal size, it's made out of light oak. It's very sturdy, well built, and durable. ",
+    "furniture_desc": "The bed is a normal size, it's made out of light oak. It's very sturdy, well built, and durable.",
     "furniture_picture": "bed.txt",
     "furniture_available_directions": [
       "left",
@@ -10,7 +10,7 @@
     "left": "door",
     "right": "safe",
     "furniture_items": [
-      "matches"
+      "matchbox"
     ],
     "puzzle_exist": "N",
     "puzzle_type": "",
@@ -32,7 +32,7 @@
   },
   "door": {
     "name": "door",
-    "furniture_desc": "This door has a keypad and is locked. The only way you can get out of here is if you know the 3-digit password used to unlock it",
+    "furniture_desc": "This door is locked. The only way you can get out of here is if you know the 3-digit password used to unlock it",
     "furniture_available_directions": [
       "left",
       "right"
@@ -60,7 +60,7 @@
   },
   "window": {
     "name": "window",
-    "furniture_desc": "there is a glass window in this room too. You have no idea how to open it. You see a key that's hanging outside of the window, but you must open the window to reach it. ",
+    "furniture_desc": "It's a window. You see a key that's hanging outside of the window. If only you had a tool...",
     "furniture_available_directions": [
       "left",
       "right"
@@ -92,7 +92,7 @@
   },
   "drawer": {
     "name": "desk",
-    "furniture_desc": "It is a locked desk",
+    "furniture_desc": "It is a locked desk. If you had a key you could unlock it!",
     "furniture_items": [
       "wallet"
     ],
@@ -133,7 +133,7 @@
     "left": "bed",
     "right": "drawer",
     "furniture_items": ["candle"],
-    "furniture_desc": "The safe is a name brand with a lot of focus on quality and security. Since this is a very reliable and a high security brand, the only way you can open it is if you answer a question.",
+    "furniture_desc": "It's a weird safe with a keypad and a display. When you press a button on the keypad it wakes up and asks you a riddle.",
     "puzzle_exist": "Y",
     "puzzle_type": "riddles",
     "puzzle_desc": "You need to answer a question to open the safe:",
@@ -181,7 +181,7 @@
   },
   "lamp": {
     "name": "lamp",
-    "furniture_desc": "It is a lamp",
+    "furniture_desc": "The only source of light in here... Better leave it alone!",
     "furniture_available_directions": [
       "left",
       "right"
@@ -208,7 +208,7 @@
   },
   "chair": {
     "name": "chair",
-    "furniture_desc": "the chair is made out of wood, it’s lightweight and painted red. ",
+    "furniture_desc": "An old chair. Its a plush red. ",
     "furniture_available_directions": [
       "left",
       "right"

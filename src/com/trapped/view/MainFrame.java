@@ -126,7 +126,7 @@ public class MainFrame extends JFrame {
 
         MainBG_Panel = createJPanel(10, 40, 460, 500, false);
         itemsPanel = createJPanel(320,550,155,155, false);
-        itemsPanel.setBackground(Color.lightGray);
+        itemsPanel.setBackground(Color.black);
         //itemsPanel.setLayout(new GridLayout(3, 2));
     }
 
@@ -288,7 +288,7 @@ public class MainFrame extends JFrame {
         JLabel desk = createGameObj(220, 230, 200, 200, "Inspect", "Open", "inspect drawer", "tool puzzle", "resources/SwingArt/desk1.png");
         crowbar = createGameObj(200, 380, 120, 103, "Inspect", "Get", "inspect crowbar", "get crowbar", "resources/SwingArt/crowbar_world_item.png");
         candle = createGameObj(100, 380, 24, 51, "Inspect", "Get", "inspect candle", "get candle", "resources/SwingArt/candle_world_item.png");
-        matches = createGameObj(100, 380, 18, 17, "Inspect", "Get", "inspect matches", "get matches", "resources/SwingArt/matches.png");
+        matches = createGameObj(100, 380, 18, 17, "Inspect", "Get", "inspect matchbox", "get matchbox", "resources/SwingArt/matches.png");
         paper = createGameObj(400, 250, 181, 164, "Inspect", "Get", "inspect paper", "get paper", "resources/SwingArt/paper+world_item.png");
         wallet = createGameObj(210, 245, 36, 31, "Inspect", "Get", "inspect wallet", "get wallet", "resources/SwingArt/wallet_world_item.png");
         windowWithKey = createGameObj(100, 210, 100, 100, "inspect", "Break", "inspect window", "tool puzzle", "resources/SwingArt/window_world_item_with_key2.png");
@@ -298,18 +298,18 @@ public class MainFrame extends JFrame {
         JButton rgtBtn = createNavButton(380, 400, 80, 80, "resources/SwingArt/right.png", "go right");
 
         keyLabel = createGameObj(350, 550, 50, 50,"Inspect","Drop","inspect key","drop key","resources/SwingArt/key.png");
-        matchLabel=createGameObj(350, 550, 50, 50,"Inspect","Drop","inspect matches","drop matches","resources/SwingArt/matchbox.png");
+        matchLabel=createGameObj(350, 550, 50, 50,"Inspect","Drop","inspect matchbox","drop matchbox","resources/SwingArt/matchbox.png");
         walletLabel = createGameObj(350, 550, 50, 50,"Inspect","Drop","inspect wallet","drop wallet","resources/SwingArt/wallet.png");
         crowbarLabel = createGameObj(350, 550, 50, 50,"Inspect","Drop","inspect crowbar","drop crowbar","resources/SwingArt/crowbar.png");
         paperLabel = createGameObj(350, 550, 50, 50,"Inspect","Drop","inspect paper","drop paper","resources/SwingArt/folded-paper.png");
         candleLabel = createGameObj(350, 550, 50, 50,"Inspect","Drop","inspect candle","drop candle","resources/SwingArt/candle-holder.png");
 
         keyLabel.setVisible(false);
-        matchLabel.setVisible(false);
         walletLabel.setVisible(false);
-        crowbarLabel.setVisible(false);
         paperLabel.setVisible(false);
+        matchLabel.setVisible(false);
         candleLabel.setVisible(false);
+        crowbarLabel.setVisible(false);
 
         itemsPanel.add(keyLabel);
         itemsPanel.add(matchLabel);

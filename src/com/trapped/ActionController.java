@@ -79,6 +79,9 @@ class ActionController implements ActionListener {
             case "paper":
                 gHandler.mainFrame.writeToTextArea("A Piece of paper with the numbers 104 on it.");
                 break;
+            case "crowbar":
+                gHandler.mainFrame.writeToTextArea("Be careful with that, Mr. Freeman...");
+                break;
             default:
                 gHandler.mainFrame.writeToTextArea("It's just an ordinary " + noun + ".");
         }
@@ -88,9 +91,13 @@ class ActionController implements ActionListener {
         Map<String, Object> furniture = map.get(something);
         ArrayList<String> furniture_items = (ArrayList<String>) furniture.get("furniture_items");
         String furniture_desc = (String) furniture.get("furniture_desc");
-        gHandler.mainFrame.writeToTextArea(furniture_desc + "\nYou see: " + furniture_items + ".");
-        for (String item : furniture_items) {
-            unhideItemOnNavScreen(item, getLocationBoolArr(location));
+        if (location.equals("window") && puzzleSolved()) {
+            gHandler.mainFrame.writeToTextArea("Someone broke this window!..." + "\nYou see: " + furniture_items + ".");
+        } else {
+            gHandler.mainFrame.writeToTextArea(furniture_desc + "\nYou see: " + furniture_items + ".");
+            for (String item : furniture_items) {
+                unhideItemOnNavScreen(item, getLocationBoolArr(location));
+            }
         }
     }
 
@@ -121,7 +128,7 @@ class ActionController implements ActionListener {
                 gHandler.mainFrame.candleLabel.setVisible(false);
                 arr.set(12, true);
                 break;
-            case "matches":
+            case "matchbox":
                 gHandler.mainFrame.matches.setVisible(true);
                 gHandler.mainFrame.matchLabel.setVisible(false);
                 arr.set(11, true);
@@ -156,7 +163,7 @@ class ActionController implements ActionListener {
                 gHandler.mainFrame.candleLabel.setVisible(true);
                 arr.set(12, false);
                 break;
-            case "matches":
+            case "matchbox":
                 gHandler.mainFrame.matches.setVisible(false);
                 gHandler.mainFrame.matchLabel.setVisible(true);
                 arr.set(11, false);
@@ -167,8 +174,12 @@ class ActionController implements ActionListener {
 
     private static void noItemsInRoom(String something) {
         Map<String, Object> furniture = map.get(something);
-        String furniture_desc = (String) furniture.get("furniture_desc");
-        gHandler.mainFrame.writeToTextArea(furniture_desc + "\nNo items found here.");
+        if (location.equals("window") && puzzleSolved()) {
+            gHandler.mainFrame.writeToTextArea("Someone broke this window!..." + "\nNo items found here.");
+        } else {
+            String furniture_desc = (String) furniture.get("furniture_desc");
+            gHandler.mainFrame.writeToTextArea(furniture_desc + "\nNo items found here.");
+        }
     }
 
     // check current inventory
@@ -400,7 +411,7 @@ class ActionController implements ActionListener {
         if (((inventory.contains("crowbar") && location.equals("safe")) ||
                 (inventory.contains("key") && location.equals("window")) ||
                 (inventory.contains("a piece of paper with number 104") && location.equals("drawer")))) {
-            System.out.println("The puzzle has been solved. Please feel free to explore other furniture :)");
+            gHandler.mainFrame.writeToTextArea("The puzzle has been solved. You should focus on escaping!");
             solved = true;
         }
         return solved;
@@ -460,17 +471,17 @@ class ActionController implements ActionListener {
             if (ANSWER.trim().equals("later") || ANSWER.trim().equals("")) {
                 gHandler.mainFrame.writeToTextArea("No worries! Try next time!");
             } else {
-                    if (ANSWER.trim().equals(puzzle_answer)) {
-                        gHandler.mainFrame.writeToTextArea(puzzle_reward + "You won the game! Thanks for playing!");
-                        System.out.println("game won");
-                        gHandler.mainFrame.winScreen("end_game");
-                    } else if (max_attempts == 0) {
-                        gHandler.mainFrame.writeToTextArea("You lost the game! You are Trapped. Please try again later.");
-                        gHandler.mainFrame.loseScreen("exploded");
-                    } else {
-                        max_attempts--;
-                        gHandler.mainFrame.writeToTextArea("Wrong password. Try again next time! " + max_attempts + " attempts remaining");
-                    }
+                if (ANSWER.trim().equals(puzzle_answer)) {
+                    gHandler.mainFrame.writeToTextArea(puzzle_reward + "You won the game! Thanks for playing!");
+                    System.out.println("game won");
+                    gHandler.mainFrame.winScreen("end_game");
+                } else if (max_attempts == 0) {
+                    gHandler.mainFrame.writeToTextArea("You lost the game! You are Trapped. Please try again later.");
+                    gHandler.mainFrame.loseScreen("exploded");
+                } else {
+                    max_attempts--;
+                    gHandler.mainFrame.writeToTextArea("Wrong password. Try again next time! " + max_attempts + " attempts remaining");
+                }
             }
         });
     }
