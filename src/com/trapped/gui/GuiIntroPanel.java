@@ -2,9 +2,11 @@ package com.trapped.gui;
 
 import com.gui.utility.CharacterDisplay;
 import com.gui.utility.GuiUtil;
+import com.trapped.utilities.Audio;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -37,6 +39,7 @@ public class GuiIntroPanel extends GuiPanel {
 
         Timer subsequentTimer = getTextDisplayMonitorTimer();
         GuiUtil.displayText(Arrays.asList(filesArr), displayTextArea, true, mainWindow, subsequentTimer);
+        mainWindow.getAudio().play("resources/sounds/gamemusic.wav", 1);
 
     }
 
@@ -104,7 +107,8 @@ public class GuiIntroPanel extends GuiPanel {
                 panel.createCountdownPanel();
             }
         });
-
+        namePanel.add(new VolumeSliderPanel(mainWindow, Audio.DEFAULT_VOLUME_LEVEL));
+        namePanel.add(new JLabel("                  "));
         namePanel.add(continueButton);
 
         return namePanel;

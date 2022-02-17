@@ -10,19 +10,6 @@ public class CharacterDisplay {
     private int charIndex = 0;
     private JTextArea jTextArea;
     private Timer timer;
-    // function to display string one character at a time, as a type writer effect
-    public CharacterDisplay(JTextArea jTextArea, String text) {
-        this(jTextArea, text, null);
-    }
-
-    /**
-     * Display string one character at a time, a time writer effect
-     *
-     * The subsequentTimer will be started upon completion of the character display timer
-     * @param jTextArea
-     * @param text
-     * @param subsequentTimer
-     */
     public CharacterDisplay(JTextArea jTextArea, String text, Timer subsequentTimer) {
         this.jTextArea = jTextArea;
         timer = new Timer(CHARACTER_DELAY_MILLISECONDS, new ActionListener() {
