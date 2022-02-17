@@ -8,14 +8,13 @@ import com.trapped.player.Inventory;
 import javax.swing.JOptionPane;
 import java.io.IOException;
 import java.io.Reader;
-import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
-import java.util.*;
-
-import static com.trapped.utilities.TextColor.MAGENTA_UNDERLINE;
-import static com.trapped.utilities.TextColor.RESET;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 public class Puzzle{
     private static Gson gson = new Gson();
@@ -105,15 +104,12 @@ public class Puzzle{
             int randomitem = r.nextInt(getConvertedPuzzleFilename().size());
             String randomPuzzle = getConvertedPuzzleFilename().get(randomitem);
             ArrayList<String> randomAnswer = (ArrayList<String>) getMultiplePuzzleAnswer().get(randomitem);
-
             String puzzleText = FileManager.getResource(randomPuzzle);  //print random puzzle.
-            JOptionPane.showMessageDialog(Main.mainWindow, puzzleText, "Puzzle", JOptionPane.OK_CANCEL_OPTION);
-
+            JOptionPane.showMessageDialog(Main.mainWindow, puzzleText, "Puzzle", JOptionPane.OK_OPTION);
             // Scanner scan = new Scanner(System.in);
             //System.out.println("\nYour answer:      (If it's too hard to answer, please enter [easy] to get a easier question.)");
 
             String ans = JOptionPane.showInputDialog(Main.mainWindow, "Your answer: If it's too hard to answer, please enter [easy] to get a easier question. ");
-
             if (randomAnswer.contains(ans.toLowerCase())) {
                 successRiddleAttempt();
                 // if user pick easy question
@@ -143,21 +139,21 @@ public class Puzzle{
             JOptionPane.showMessageDialog(Main.mainWindow, getPuzzleReward());
             Sounds.playSounds(getPuzzleSounds(), 1000);
             JOptionPane.showMessageDialog(Main.mainWindow, "You found " + this.getPuzzleRewardItem().get(0) + ".");
-            inventory.checkInvLimit();
             inventory.addItem(getPuzzleRewardItem().get(0));
-            MainWindow.getGamePanel().displayInventoryDetails();
+        } else {
+            JOptionPane.showMessageDialog(Main.mainWindow, "Your answer was wrong!");
         }
     }
 
     public Map<String, String> useTool(String location, String item) {
         Map<String, String> result = new HashMap<>();
         generatePuzzle(location);
+
         if (!"use tool".equals(getPuzzleType())) {
             System.out.println("Sorry cannot use this item here");
             result.put("error", "Sorry cannot use this item here");
             return result;
         }
-
 
         if(inventory.getInvList().contains(this.getPuzzleRewardItem().get(0))) {
             System.out.println("The puzzle has been solved. Please feel free to explore other furnitures :)");

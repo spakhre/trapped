@@ -51,8 +51,8 @@ public class GuiUtil {
      * @param message
      */
 
-    public static void setMessageSlowly(JTextArea jTextArea, String message) {
-        CharacterDisplay typewriter = new CharacterDisplay(jTextArea, " "+message);
+    public static void setMessageSlowly(JTextArea jTextArea, String message, Timer subsequentTimer) {
+        CharacterDisplay typewriter = new CharacterDisplay(jTextArea, " "+message, subsequentTimer);
         typewriter.startDisplay();
     }
 
@@ -112,11 +112,11 @@ public class GuiUtil {
         return newImage;
     }
 
-    public static void displayText(List<String> filesList, JTextArea jTextArea, boolean append, Component mainWindow) {
-        displayText(null, filesList, jTextArea, append, mainWindow);
+    public static void displayText(List<String> filesList, JTextArea jTextArea, boolean append, Component mainWindow, Timer subsequentTimer) {
+        displayText(null, filesList, jTextArea, append, mainWindow, subsequentTimer);
     }
 
-    public static void displayText(List<String> lines, List<String> filesList, JTextArea jTextArea, boolean append, Component mainWindow) {
+    public static void displayText(List<String> lines, List<String> filesList, JTextArea jTextArea, boolean append, Component mainWindow, Timer subsequentTimer) {
         if(!append) {
             //clear previous text
             jTextArea.setText("");
@@ -134,7 +134,7 @@ public class GuiUtil {
                 lines.add("\n\n");
             }
             String text = String.join("\n", lines);
-            GuiUtil.setMessageSlowly(jTextArea, text);
+            GuiUtil.setMessageSlowly(jTextArea, text, subsequentTimer);
         } catch (IOException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(mainWindow, "Error reading intro text.");

@@ -1,5 +1,6 @@
 package com.trapped.gui;
 
+import com.gui.utility.CharacterDisplay;
 import com.gui.utility.GuiUtil;
 
 import javax.swing.BoxLayout;
@@ -7,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.Timer;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -14,12 +16,12 @@ import java.awt.event.ActionListener;
 import java.util.Arrays;
 
 public class GuiIntroPanel extends GuiPanel {
-    private JTextArea introText;
 
     //Rows and cols of text area to match the size of the map
     private static final int MAIN_PANEL_TEXT_AREA_ROWS = 90;
     private static final int MAIN_PANEL_TEXT_AREA_COLS = 90;
     private static JTextArea displayTextArea;
+    private JButton continueButton;
 
     /**
      * Constructor
@@ -32,8 +34,22 @@ public class GuiIntroPanel extends GuiPanel {
         this.add(createCenterPanel(), BorderLayout.CENTER);
         this.add(createSouthPanel(), BorderLayout.SOUTH);
         String[] filesArr = {"resources/textfile/greeting.txt", "resources/textfile/warning.txt", "resources/textfile/introstory.txt//"};
-        GuiUtil.displayText(Arrays.asList(filesArr), displayTextArea, true, mainWindow);
 
+        Timer subsequentTimer = getTextDisplayMonitorTimer();
+        GuiUtil.displayText(Arrays.asList(filesArr), displayTextArea, true, mainWindow, subsequentTimer);
+
+    }
+
+    private Timer getTextDisplayMonitorTimer() {
+        Timer timer = new Timer(CharacterDisplay.CHARACTER_DELAY_MILLISECONDS, new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //enable continue Button
+                continueButton.setEnabled(true);
+            }
+        });
+        return timer;
     }
 
     private JPanel createCenterPanel() {
@@ -47,10 +63,7 @@ public class GuiIntroPanel extends GuiPanel {
         panel.setBackground(Color.DARK_GRAY);
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-        //panel.add(GuiUtil.getBorderedPanel(createNamePanel()));
-        //panel.add(GuiUtil.getBorderedPanel(getIntroScrollPane()));
         panel.add(GuiUtil.getBorderedPanel(createContinuePanel()));
-
         return panel;
     }
 
@@ -79,14 +92,16 @@ public class GuiIntroPanel extends GuiPanel {
         JPanel namePanel = new JPanel();
         namePanel.setLayout(new BoxLayout(namePanel, BoxLayout.X_AXIS));
 
-        JButton continueButton = new JButton("Continue");
+        continueButton = new JButton("Continue");
 
+        continueButton.setEnabled(false);
 
         continueButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JPanel panel = new GamePanel(mainWindow);
+                GamePanel panel = new GamePanel(mainWindow);
                 mainWindow.setMainPanel(panel);
+                panel.createCountdownPanel();
             }
         });
 

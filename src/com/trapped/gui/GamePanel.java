@@ -11,10 +11,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GamePanel extends GuiPanel {
 
-    private boolean keypadActive = false;
     public static final Font BUTTON_FONT = new Font("Arial", Font.BOLD, 20); // ORIGINAL
 
     private static final int IMAGE_WIDTH = 800;
@@ -32,6 +33,7 @@ public class GamePanel extends GuiPanel {
     JTextArea textArea;
     JPanel instructionsPanel;
     JLabel imageLabel;
+    JLabel timer;
     JButton leftB;
     JButton rightB;
 
@@ -53,7 +55,6 @@ public class GamePanel extends GuiPanel {
         layeredPane.setSize(MainWindow.GUI_WIDTH, MainWindow.GUI_HEIGHT);
         this.add(layeredPane);
         createPanel();
-
         setLocationDetails();
     }
 
@@ -62,7 +63,9 @@ public class GamePanel extends GuiPanel {
         // set location description
         Map<String, Object> currentLoc = Puzzle.MAP.get(player.getLocation());
         String desc = (String) currentLoc.get("furniture_desc");
-        textArea.setText(desc);
+        textArea.setText("Current Location: " + player.getLocation());
+        textArea.append("\n\n");
+        textArea.append(desc);
 
         // set location image
         setLocationImage();
@@ -75,6 +78,37 @@ public class GamePanel extends GuiPanel {
         createImagePanel();
         createButtonsPanel();
         createInventoryPanel();
+    }
+
+
+     public void createCountdownPanel() {
+        timer = new JLabel();
+        timer.setBounds(JLabel.CENTER, JLabel.CENTER, 200, 200);
+        timer.setForeground(Color.black);
+        timer.setVisible(true);
+        startTimer(3000);
+        buttonsPanel.add(timer);
+    }
+
+    private void startTimer(int time) {
+        java.util.Timer count = new Timer();
+
+        count.scheduleAtFixedRate(new TimerTask() {
+            int countdown = 30;
+            @Override
+            public void run() {
+                timer.setText("Time left: " + countdown);
+                --countdown;
+                System.out.println(countdown);
+
+                if (countdown < 0) {
+                    count.cancel();
+                    timer.setText("TIME OVER");
+                }
+
+
+            }
+        }, 0, 1000);
     }
 
     private void createTextPanel() {
@@ -96,7 +130,6 @@ public class GamePanel extends GuiPanel {
     private void createImagePanel() {
         imagePanel = new JPanel();
         imagePanel.setBounds(400, 0, 800, 400);
-
         layeredPane.add(imagePanel);
     }
 
@@ -198,6 +231,7 @@ public class GamePanel extends GuiPanel {
                     rightB.setEnabled(false);
                 } else {
                     player.solvePuzzle(player.getLocation());
+                    displayInventoryDetails();
                 }
             }
         });
@@ -257,6 +291,7 @@ public class GamePanel extends GuiPanel {
 
     private void inspectLocation() {
         List<String> items = JsonMap.getFurnitureItems(player.getLocation());
+        System.out.println(items);
         if (items.isEmpty()) {
             JOptionPane.showMessageDialog(mainWindow, "No items found at: " + player.getLocation());
             return;
@@ -265,7 +300,7 @@ public class GamePanel extends GuiPanel {
         String item = items.get(0);
 
         Inventory inventory = player.getInventory();
-        if(inventory.hasItem(item)) {
+        if (inventory.hasItem(item)) {
             JOptionPane.showMessageDialog(mainWindow, "You already have item: " + item + " from " + player.getLocation());
             return;
         }
@@ -275,9 +310,7 @@ public class GamePanel extends GuiPanel {
         if (response == JOptionPane.NO_OPTION) {
             return;
         }
-
         player.getInventory().addItem(item);
-        displayInventoryDetails();
     }
 
     private JLabel createItemImageLabel(String item) {
