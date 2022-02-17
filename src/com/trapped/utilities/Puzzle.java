@@ -140,7 +140,6 @@ public class Puzzle{
             Sounds.playSounds(getPuzzleSounds(), 1000);
             JOptionPane.showMessageDialog(Main.mainWindow, "You found " + this.getPuzzleRewardItem().get(0) + ".");
             inventory.addItem(getPuzzleRewardItem().get(0));
-           // MainWindow.getGamePanel().displayInventoryDetails();
         } else {
             JOptionPane.showMessageDialog(Main.mainWindow, "Your answer was wrong!");
         }
