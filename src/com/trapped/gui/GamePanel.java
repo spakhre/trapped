@@ -11,6 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GamePanel extends GuiPanel {
 
@@ -30,6 +32,7 @@ public class GamePanel extends GuiPanel {
     JPanel keypadPanel;
     JTextArea textArea;
     JLabel imageLabel;
+    JLabel timer;
 
     Player player = Player.getInstance();
 
@@ -49,7 +52,6 @@ public class GamePanel extends GuiPanel {
         layeredPane.setSize(MainWindow.GUI_WIDTH, MainWindow.GUI_HEIGHT);
         this.add(layeredPane);
         createPanel();
-
         setLocationDetails();
     }
 
@@ -72,6 +74,37 @@ public class GamePanel extends GuiPanel {
         createInventoryPanel();
     }
 
+
+     public void createCountdownPanel() {
+        timer = new JLabel();
+        timer.setBounds(JLabel.CENTER, JLabel.CENTER, 200, 200);
+        timer.setForeground(Color.black);
+        timer.setVisible(true);
+        startTimer(3000);
+        buttonsPanel.add(timer);
+    }
+
+    private void startTimer(int time) {
+        java.util.Timer count = new Timer();
+
+        count.scheduleAtFixedRate(new TimerTask() {
+            int countdown = 30;
+            @Override
+            public void run() {
+                timer.setText("Time left: " + countdown);
+                --countdown;
+                System.out.println(countdown);
+
+                if (countdown < 0) {
+                    count.cancel();
+                    timer.setText("TIME OVER");
+                }
+
+
+            }
+        }, 0, 1000);
+    }
+
     private void createTextPanel() {
         textPanel = new JPanel();
         textPanel.setBounds(0, 0, 400, 400);
@@ -91,7 +124,6 @@ public class GamePanel extends GuiPanel {
     private void createImagePanel() {
         imagePanel = new JPanel();
         imagePanel.setBounds(400, 0, 800, 400);
-
         layeredPane.add(imagePanel);
     }
 
@@ -184,7 +216,7 @@ public class GamePanel extends GuiPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 inspectLocation();
-                if (!"door".equals(player.getLocation())){
+                if (!"door".equals(player.getLocation())) {
                     player.solvePuzzle(player.getLocation());
                     displayInventoryDetails();
                 } else {
@@ -213,7 +245,7 @@ public class GamePanel extends GuiPanel {
         layeredPane.add(buttonsPanel);
     }
 
-    private void createKeypadPanel(){
+    private void createKeypadPanel() {
         keypadPanel = new KeypadPanel(mainWindow);
         keypadPanel.setVisible(false);
         layeredPane.add(keypadPanel);
@@ -230,7 +262,7 @@ public class GamePanel extends GuiPanel {
         String item = items.get(0);
 
         Inventory inventory = player.getInventory();
-        if(inventory.hasItem(item)) {
+        if (inventory.hasItem(item)) {
             JOptionPane.showMessageDialog(mainWindow, "You already have item: " + item + " from " + player.getLocation());
             return;
         }
