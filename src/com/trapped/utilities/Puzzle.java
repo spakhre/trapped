@@ -143,21 +143,19 @@ public class Puzzle{
             JOptionPane.showMessageDialog(Main.mainWindow, getPuzzleReward());
             Sounds.playSounds(getPuzzleSounds(), 1000);
             JOptionPane.showMessageDialog(Main.mainWindow, "You found " + this.getPuzzleRewardItem().get(0) + ".");
-            inventory.checkInvLimit();
             inventory.addItem(getPuzzleRewardItem().get(0));
-            MainWindow.getGamePanel().displayInventoryDetails();
         }
     }
 
     public Map<String, String> useTool(String location, String item) {
         Map<String, String> result = new HashMap<>();
         generatePuzzle(location);
+
         if (!"use tool".equals(getPuzzleType())) {
             System.out.println("Sorry cannot use this item here");
             result.put("error", "Sorry cannot use this item here");
             return result;
         }
-
 
         if(inventory.getInvList().contains(this.getPuzzleRewardItem().get(0))) {
             System.out.println("The puzzle has been solved. Please feel free to explore other furnitures :)");

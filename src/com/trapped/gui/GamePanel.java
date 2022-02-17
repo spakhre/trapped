@@ -186,6 +186,7 @@ public class GamePanel extends GuiPanel {
                 inspectLocation();
                 if (!"door".equals(player.getLocation())){
                     player.solvePuzzle(player.getLocation());
+                    displayInventoryDetails();
                 } else {
 //                    KeypadPane
 //                    createKeypadPanel();
@@ -220,6 +221,7 @@ public class GamePanel extends GuiPanel {
 
     private void inspectLocation() {
         List<String> items = JsonMap.getFurnitureItems(player.getLocation());
+        System.out.println(items);
         if (items.isEmpty()) {
             JOptionPane.showMessageDialog(mainWindow, "No items found at: " + player.getLocation());
             return;
@@ -238,9 +240,7 @@ public class GamePanel extends GuiPanel {
         if (response == JOptionPane.NO_OPTION) {
             return;
         }
-
         player.getInventory().addItem(item);
-        displayInventoryDetails();
     }
 
     private JLabel createItemImageLabel(String item) {
@@ -340,6 +340,7 @@ public class GamePanel extends GuiPanel {
                 String desc = result.get("puzzleDescription");
                 String error = result.get("error");
                 textArea.setText(error != null ? error : desc);
+                displayInventoryDetails();
             }
         });
         p.add(btn);

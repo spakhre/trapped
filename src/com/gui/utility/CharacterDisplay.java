@@ -15,6 +15,7 @@ public class CharacterDisplay {
     public CharacterDisplay(JTextArea jTextArea, String text) {
         this.jTextArea = jTextArea;
         this.text = text;
+
          timer = new Timer(8,new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
