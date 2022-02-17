@@ -26,6 +26,7 @@ public class CharacterDisplay {
     public CharacterDisplay(JTextArea jTextArea, String text, Timer subsequentTimer) {
         this.jTextArea = jTextArea;
         timer = new Timer(CHARACTER_DELAY_MILLISECONDS, new ActionListener() {
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 String jTextAreaString = jTextArea.getText().replace("NL","\n");
@@ -48,10 +49,6 @@ public class CharacterDisplay {
         jTextArea.setText(null);
         charIndex = 0;
         timer.start();
-    }
-
-    public boolean isRunning() {
-        return timer.isRunning();
     }
 }
 
