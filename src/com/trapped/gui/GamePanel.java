@@ -60,7 +60,9 @@ public class GamePanel extends GuiPanel {
         // set location description
         Map<String, Object> currentLoc = Puzzle.MAP.get(player.getLocation());
         String desc = (String) currentLoc.get("furniture_desc");
-        textArea.setText(desc);
+        textArea.setText("Current Location: " + player.getLocation());
+        textArea.append("\n\n");
+        textArea.append(desc);
 
         // set location image
         setLocationImage();
