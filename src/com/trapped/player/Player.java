@@ -1,16 +1,16 @@
 package com.trapped.player;
 
 
-
-
-
-
-import com.trapped.utilities.*;
+import com.trapped.utilities.Puzzle;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Player implements Serializable {
+    private int attemptsLeft = 3;
     private String userInput;
     private String verb;
     private List<String> nouns = new ArrayList<>();
@@ -141,7 +141,8 @@ public class Player implements Serializable {
             } else if ("use tool".equals(puzzle.getPuzzleType())) {
 //                puzzle.useTool(inventory.invList, loc);
             } else if ("final".equals(puzzle.getPuzzleType())) {
-                puzzle.finalPuzzle();
+//                puzzle.finalPuzzle();
+              // new Keypad(3);
             }
         }
 //        new_command();

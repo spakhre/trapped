@@ -4,10 +4,8 @@ import com.trapped.utilities.Prompts;
 import com.trapped.utilities.Sounds;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 
 public class Inventory {
@@ -130,5 +128,9 @@ public class Inventory {
     // getters and setters
     public List<String> getInvList() {
         return invList;
+    }
+
+    public boolean hasItem(String item) {
+        return invList.contains(item);
     }
 }
