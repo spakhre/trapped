@@ -14,6 +14,8 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GuiIntroPanel extends GuiPanel {
 
@@ -99,8 +101,9 @@ public class GuiIntroPanel extends GuiPanel {
         continueButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JPanel panel = new GamePanel(mainWindow);
+                GamePanel panel = new GamePanel(mainWindow);
                 mainWindow.setMainPanel(panel);
+                panel.createCountdownPanel();
             }
         });
 

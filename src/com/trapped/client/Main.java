@@ -7,9 +7,6 @@ import java.io.Serializable;
 public class Main implements Serializable {
     public static MainWindow mainWindow;
     public static void main(String[] args) {
-//        GameEngine game = new GameEngine();
-//        game.startGame();
-//        GuiGameEngine gameEngine = new GuiGameEngine();
          mainWindow = new MainWindow();
     }
 }
