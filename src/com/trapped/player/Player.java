@@ -1,14 +1,13 @@
 package com.trapped.player;
 
 
-
-
-
-
-import com.trapped.utilities.*;
+import com.trapped.utilities.Puzzle;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Player implements Serializable {
     private int attemptsLeft = 3;
