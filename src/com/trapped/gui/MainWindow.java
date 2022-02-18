@@ -1,5 +1,7 @@
 package com.trapped.gui;
 
+import com.trapped.player.Inventory;
+import com.trapped.player.Player;
 import com.trapped.utilities.Audio;
 
 import javax.swing.ImageIcon;
@@ -80,7 +82,19 @@ public class MainWindow extends JFrame {
         return audio;
     }
 
-//    public void createGameOverLoseScreen(){
-//        EndingPanel lockedIn = new
-//    }
+    /**
+     * Reset the location and clear the inventory
+     */
+    public void restartGame() {
+        //Reset the Location
+
+        Player.location = "bed";
+        Player player = Player.getInstance();
+
+        //clear the inventory
+        Inventory inventory = player.getInventory();
+        inventory.getInvList().clear();
+
+        createGameScreen();
+    }
 }

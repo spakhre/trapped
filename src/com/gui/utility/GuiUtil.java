@@ -22,11 +22,11 @@ public class GuiUtil {
      * @return
      */
     public static JScrollPane createScrollPane(Component view) {
-        JScrollPane helpTextAreaScroll;
-        helpTextAreaScroll = new JScrollPane(view, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+
+        JScrollPane scroll = new JScrollPane(view, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        helpTextAreaScroll.setAlignmentX(Component.CENTER_ALIGNMENT);
-        return helpTextAreaScroll;
+        scroll.setAlignmentX(Component.CENTER_ALIGNMENT);
+        return scroll;
     }
 
     /**
@@ -66,7 +66,6 @@ public class GuiUtil {
      */
     public static JLabel getImageLabel(String imagePath, int width, int height) {
         Image img = transformImage(createImageIcon(imagePath, ""), width, height);
-        System.out.println(img);
         ImageIcon icon = new ImageIcon(img); //transform it back
         JLabel imageLabel = new JLabel("", icon, JLabel.CENTER);
         return imageLabel;
@@ -74,7 +73,6 @@ public class GuiUtil {
 
     public static JButton getButtonImage(String imagePath, int width, int height) {
         Image img = transformImage(createImageIcon(imagePath, ""), width, height);
-        System.out.println(img);
         ImageIcon icon = new ImageIcon(img); //transform it back
         JButton imageButton = new JButton();
         imageButton.setIcon(icon);

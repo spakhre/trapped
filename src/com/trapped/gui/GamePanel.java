@@ -318,16 +318,6 @@ public class GamePanel extends GuiPanel {
         player.getInventory().addItem(item);
     }
 
-    private JLabel createItemImageLabel(String item) {
-        String filePath = "/image/items/" + item + ".jpg";
-//        JLabel imageLabel = GuiUtil.getImageLabel(item, filePath, ITEM_IMAGE_WIDTH, ITEM_IMAGE_HEIGHT, SwingConstants.TOP);
-        JLabel imageLabel = GuiUtil.getImageLabel(filePath, ITEM_IMAGE_WIDTH, ITEM_IMAGE_HEIGHT);
-        imageLabel.setText(item);
-        imageLabel.setHorizontalTextPosition(JLabel.CENTER);
-        imageLabel.setVerticalTextPosition(JLabel.BOTTOM);
-        return imageLabel;
-    }
-
     private JButton createButtonImage(String item) {
         String filePath = "/image/items/" + item + ".jpg";
 //        JLabel imageLabel = GuiUtil.getImageLabel(item, filePath, ITEM_IMAGE_WIDTH, ITEM_IMAGE_HEIGHT, SwingConstants.TOP);

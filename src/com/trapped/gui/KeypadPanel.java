@@ -121,7 +121,7 @@ class KeypadPanel extends GuiPanel{
         if ("Success".equals(result)){
             JOptionPane.showMessageDialog(this, "You've unlocked the door!!!");
 //            EndingPanels.createGameWin();
-            System.exit(0);
+            mainWindow.setMainPanel(new ExitPanel(mainWindow));
         }
 
         if (attemptsLeft == 0){
